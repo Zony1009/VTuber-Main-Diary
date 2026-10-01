@@ -39,565 +39,262 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
         body {
-            font-family: 'Noto Sans TC', 'Inter', sans-serif;
-            background-color: #090d16;
-            color: #f1f5f9;
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: #0b0f19;
+            color: #f3f4f6;
         }
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
+
+        .custom-scrollbar::-webkit-scrollbar {
             width: 6px;
             height: 6px;
         }
-        ::-webkit-scrollbar-track {
-            background: #0f172a;
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
         }
-        ::-webkit-scrollbar-thumb {
-            background: #334155;
-            border-radius: 3px;
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(99, 102, 241, 0.4);
+            border-radius: 4px;
         }
-        ::-webkit-scrollbar-thumb:hover {
-            background: #475569;
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: rgba(99, 102, 241, 0.7);
         }
-        .gradient-border {
-            background: linear-gradient(135deg, #d946ef, #8b5cf6, #3b82f6);
+
+        /* Input styling adjustments for mobile tight layout */
+        .tight-input {
+            padding-top: 0.5rem;
+            padding-bottom: 0.5rem;
+            padding-left: 0.75rem;
+            padding-right: 0.75rem;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
         }
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
-        }
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
+        @media (max-width: 640px) {
+            .tight-input {
+                padding-top: 0.375rem;
+                padding-bottom: 0.375rem;
+                font-size: 0.75rem;
+                line-height: 1rem;
+            }
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col bg-[#090d16] text-slate-100 antialiased selection:bg-pink-500 selection:text-white">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
 
-    <!-- Top Layer Navigation: Oshi Switcher Header -->
-    <header class="sticky top-0 z-30 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 shadow-lg">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-16 gap-2">
-                <!-- Logo / Dynamic Title (Requirement 1) -->
-                <div class="flex items-center space-x-3 cursor-pointer shrink-0" onclick="switchTab('home')">
-                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-pink-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-pink-500/30">
-                        <i data-lucide="heart" class="w-6 h-6 fill-current"></i>
-                    </div>
-                    <div>
-                        <!-- Title Swapped: Pink Current Oshi Name (or Fallback), Gray OshiCenter -->
-                        <span id="headerOshiTitle" class="font-bold text-base sm:text-lg bg-gradient-to-r from-pink-400 via-purple-300 to-indigo-400 bg-clip-text text-transparent block truncate max-w-[150px] sm:max-w-xs">
-                            VTuber 應援與收藏管理
-                        </span>
-                        <span class="text-xs text-slate-400 block font-medium">OshiCenter</span>
-                    </div>
+    <!-- Top Navigation Header -->
+    <header class="sticky top-0 z-40 bg-slate-900/80 backdrop-blur-md border-b border-slate-800/80 px-3 sm:px-6 py-2.5 sm:py-3 transition-all duration-200">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
+            
+            <!-- Brand Logo -->
+            <div class="flex items-center gap-2 shrink-0">
+                <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
+                    <i class="fa-solid font-bold text-white text-sm sm:text-base">推</i>
                 </div>
-
-                <!-- First Layer: VTuber Switcher Tabs -->
-                <div class="flex items-center space-x-2 overflow-x-auto py-2 no-scrollbar max-w-[35vw] sm:max-w-md lg:max-w-lg" id="oshiTabsContainer">
-                    <!-- Dynamic Oshi Tabs will be inserted here -->
+                <div class="hidden xs:block">
+                    <h1 class="font-bold text-base sm:text-lg bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent leading-tight">OshiCenter</h1>
+                    <p class="text-[10px] text-indigo-400 font-medium leading-none">VTuber 收藏與推活中心</p>
                 </div>
+            </div>
 
-                <!-- Action Buttons: Add New Oshi & User Account Switcher -->
-                <div class="flex items-center space-x-1.5 sm:space-x-2 shrink-0">
-                    <button onclick="openOshiModal()" class="flex items-center space-x-1.5 px-3 py-2 min-h-[44px] rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white text-xs sm:text-sm font-medium transition shadow-md shadow-pink-500/20 active:scale-95">
-                        <i data-lucide="plus-circle" class="w-4 h-4"></i>
-                        <span class="hidden sm:inline">新增主推</span>
-                        <span class="sm:hidden">新增</span>
-                    </button>
+            <!-- Header Right Controls -->
+            <div class="flex items-center gap-1.5 sm:gap-3 shrink-0">
+                <!-- Add Oshi Button -->
+                <button onclick="openOshiModal()" class="flex items-center gap-1.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-medium text-xs sm:text-sm px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg sm:rounded-xl shadow-md hover:shadow-indigo-500/25 transition-all">
+                    <i class="fa-solid fa-plus text-xs"></i>
+                    <span class="hidden sm:inline">新增推活</span>
+                    <span class="sm:hidden">新增</span>
+                </button>
 
-                    <!-- Fixed Edit Current Oshi Button -->
-                    <button onclick="editCurrentOshi()" id="editOshiBtn" title="編輯當前主推" class="p-2.5 min-h-[44px] min-w-[44px] flex items-center justify-center rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition border border-slate-700 active:scale-95">
-                        <i data-lucide="settings" class="w-4.5 h-4.5"></i>
-                    </button>
-
-                    <!-- User Account Badge / Switcher (Requirement 2) -->
-                    <button onclick="openUserModal()" title="切換帳號" class="flex items-center space-x-1 px-2.5 py-2 min-h-[44px] rounded-xl bg-slate-800/80 hover:bg-slate-700 text-purple-300 hover:text-purple-200 transition border border-purple-500/30 active:scale-95 text-xs">
-                        <i data-lucide="user-check" class="w-4 h-4 text-purple-400"></i>
-                        <span id="currentUsernameDisplay" class="font-semibold max-w-[60px] sm:max-w-[100px] truncate">訪客</span>
-                    </button>
-                </div>
+                <!-- User Switcher Button -->
+                <button onclick="openUserModal()" class="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700/80 text-slate-200 text-xs sm:text-sm px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg sm:rounded-xl border border-slate-700/60 transition-all">
+                    <i class="fa-solid fa-user text-indigo-400 text-xs"></i>
+                    <span id="headerUserName" class="font-medium max-w-[70px] sm:max-w-[120px] truncate">預設使用者</span>
+                    <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
+                </button>
             </div>
         </div>
-
-        <!-- Second Layer: Function Sub-Tabs -->
-        <nav class="bg-slate-950/90 border-t border-slate-800/80">
-            <div class="max-w-7xl mx-auto px-4 flex justify-center sm:justify-start space-x-2 sm:space-x-4">
-                <button onclick="switchTab('home')" id="tabBtn-home" class="subtab-btn flex items-center space-x-2 px-4 py-3 min-h-[44px] text-xs sm:text-sm font-medium border-b-2 border-pink-500 text-pink-400 transition">
-                    <i data-lucide="home" class="w-4 h-4"></i>
-                    <span>主頁</span>
-                </button>
-                <button onclick="switchTab('calendar')" id="tabBtn-calendar" class="subtab-btn flex items-center space-x-2 px-4 py-3 min-h-[44px] text-xs sm:text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition">
-                    <i data-lucide="calendar" class="w-4 h-4"></i>
-                    <span>行事曆</span>
-                </button>
-                <button onclick="switchTab('merch')" id="tabBtn-merch" class="subtab-btn flex items-center space-x-2 px-4 py-3 min-h-[44px] text-xs sm:text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition">
-                    <i data-lucide="shopping-bag" class="w-4 h-4"></i>
-                    <span>周邊紀錄</span>
-                </button>
-            </div>
-        </nav>
     </header>
 
     <!-- Main Content Container -->
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
-
-        <!-- ==================== TAB 1: HOME ==================== -->
-        <section id="view-home" class="space-y-6">
-            <!-- Banner & Profile Header Section -->
-            <div class="relative rounded-2xl overflow-hidden bg-slate-900 border border-slate-800 shadow-2xl">
-                <!-- Cover Image / Banner -->
-                <div class="h-44 sm:h-64 min-h-[180px] w-full bg-gradient-to-r from-purple-900 via-indigo-900 to-slate-900 relative overflow-hidden">
-                    <img id="homeCoverImg" src="" alt="Cover Banner" class="w-full h-full object-cover hidden">
-                    <div id="homeCoverPlaceholder" class="w-full h-full flex items-center justify-center text-slate-600 bg-slate-800/50">
-                        <i data-lucide="image" class="w-12 h-12 stroke-[1.5]"></i>
-                    </div>
-                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-black/20"></div>
-                </div>
-
-                <!-- Profile Info Overlay Container -->
-                <div class="relative px-4 sm:px-6 pb-6 pt-0 sm:pt-4">
-                    <div class="flex flex-col sm:flex-row items-center sm:items-end space-y-4 sm:space-y-0 sm:space-x-6 -mt-16 sm:-mt-24 mb-4">
-                        <!-- Avatar -->
-                        <div class="relative w-28 h-28 sm:w-36 sm:h-36 rounded-2xl p-1 gradient-border shadow-xl shrink-0 bg-slate-900">
-                            <div class="w-full h-full rounded-xl overflow-hidden bg-slate-800 flex items-center justify-center">
-                                <img id="homeAvatarImg" src="" alt="Avatar" class="w-full h-full object-cover hidden">
-                                <div id="homeAvatarPlaceholder" class="text-slate-500">
-                                    <i data-lucide="user" class="w-14 h-14"></i>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Name & Dates -->
-                        <div class="flex-1 text-center sm:text-left space-y-2">
-                            <h1 id="homeName" class="text-2xl sm:text-3xl font-extrabold text-white tracking-wide"></h1>
-                            <div class="flex flex-wrap justify-center sm:justify-start gap-2 text-xs sm:text-sm">
-                                <span id="homeBirthdayBadge" class="hidden items-center px-3 py-1.5 rounded-full bg-pink-500/10 border border-pink-500/30 text-pink-300">
-                                    <i data-lucide="cake" class="w-3.5 h-3.5 mr-1.5"></i>
-                                    <span id="homeBirthdayText"></span>
-                                </span>
-                                <span id="homeDebutBadge" class="hidden items-center px-3 py-1.5 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300">
-                                    <i data-lucide="sparkles" class="w-3.5 h-3.5 mr-1.5"></i>
-                                    <span id="homeDebutText"></span>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Tags Bar -->
-                    <div id="homeTagsContainer" class="flex flex-wrap gap-2 mb-4 justify-center sm:justify-start"></div>
-
-                    <!-- Bio Section -->
-                    <div id="homeBioCard" class="hidden mt-4 p-4 rounded-xl bg-slate-800/50 border border-slate-700/60 text-slate-300 text-xs sm:text-sm leading-relaxed">
-                        <p id="homeBioText" class="whitespace-pre-line"></p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Social Links & Live Stream Section Grid -->
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- Social Links -->
-                <div class="lg:col-span-1 bg-slate-900 rounded-2xl border border-slate-800 p-4 sm:p-5 shadow-lg flex flex-col justify-between">
-                    <div>
-                        <h2 class="text-base sm:text-lg font-bold text-white mb-4 flex items-center space-x-2">
-                            <i data-lucide="share-2" class="w-5 h-5 text-pink-400"></i>
-                            <span>社群連結</span>
-                        </h2>
-                        <div id="socialLinksContainer" class="space-y-2.5">
-                            <!-- Dynamic Social Buttons -->
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Live Stream Preview Zone -->
-                <div class="lg:col-span-2 bg-slate-900 rounded-2xl border border-slate-800 p-4 sm:p-5 shadow-lg flex flex-col justify-between">
-                    <div>
-                        <div class="flex items-center justify-between mb-4">
-                            <h2 class="text-base sm:text-lg font-bold text-white flex items-center space-x-2">
-                                <i data-lucide="tv" class="w-5 h-5 text-red-400"></i>
-                                <span>直播預告 / 待機所</span>
-                            </h2>
-                            <span id="streamStatusBadge" class="text-xs px-2.5 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700">未設定</span>
-                        </div>
-
-                        <div id="streamEmbedCard" class="rounded-xl overflow-hidden bg-slate-950 border border-slate-800 aspect-video flex flex-col items-center justify-center p-6 text-center">
-                            <i data-lucide="video-off" class="w-12 h-12 text-slate-600 mb-3"></i>
-                            <p class="text-slate-400 text-sm" id="streamMessage">目前暫無設定直播資訊，點擊右上角⚙️按鈕進行設定</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- ==================== TAB 2: CALENDAR ==================== -->
-        <section id="view-calendar" class="hidden space-y-6">
-            <div class="bg-slate-900 rounded-2xl border border-slate-800 p-4 sm:p-6 shadow-xl">
-                <!-- Calendar Header & Navigation -->
-                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
-                    <div class="flex items-center space-x-3 w-full sm:w-auto">
-                        <div class="p-2.5 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20 shrink-0">
-                            <i data-lucide="calendar-days" class="w-6 h-6"></i>
-                        </div>
-                        <div>
-                            <h2 id="calendarMonthYear" class="text-lg sm:text-xl font-bold text-white">2026 年 10 月</h2>
-                            <p class="text-xs text-slate-400">活動記錄、紀念日與重大事項</p>
-                        </div>
-                    </div>
-
-                    <div class="flex items-center space-x-2 w-full sm:w-auto justify-between sm:justify-end">
-                        <div class="flex items-center space-x-1 bg-slate-800 rounded-xl p-1 border border-slate-700">
-                            <button onclick="changeMonth(-1)" class="p-2 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-slate-700 rounded-lg text-slate-300 transition"><i data-lucide="chevron-left" class="w-5 h-5"></i></button>
-                            <button onclick="resetToToday()" class="px-3 py-2 min-h-[44px] hover:bg-slate-700 rounded-lg text-xs font-medium text-slate-300 transition">今天</button>
-                            <button onclick="changeMonth(1)" class="p-2 min-h-[44px] min-w-[44px] flex items-center justify-center hover:bg-slate-700 rounded-lg text-slate-300 transition"><i data-lucide="chevron-right" class="w-5 h-5"></i></button>
-                        </div>
-                        <button onclick="openEventModal()" class="flex items-center space-x-1.5 px-3 py-2.5 min-h-[44px] rounded-xl bg-pink-600 hover:bg-pink-700 text-white text-xs sm:text-sm font-medium transition shadow-md">
-                            <i data-lucide="plus" class="w-4 h-4"></i>
-                            <span>新增事件</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Calendar Grid -->
-                <div class="grid grid-cols-7 gap-1 sm:gap-2 mb-2 text-center text-xs font-bold text-slate-400 border-b border-slate-800 pb-2">
-                    <div class="text-red-400">日</div>
-                    <div>一</div>
-                    <div>二</div>
-                    <div>三</div>
-                    <div>四</div>
-                    <div>五</div>
-                    <div class="text-indigo-400">六</div>
-                </div>
-                
-                <div id="calendarGrid" class="grid grid-cols-7 gap-1 sm:gap-2 min-h-[320px]">
-                    <!-- Dynamic Calendar Days -->
-                </div>
-            </div>
-
-            <!-- Event Details / List Card -->
-            <div class="bg-slate-900 rounded-2xl border border-slate-800 p-4 sm:p-5 shadow-lg">
-                <h3 class="text-sm sm:text-base font-bold text-slate-200 mb-3 flex items-center space-x-2">
-                    <i data-lucide="list-todo" class="w-4 h-4 text-pink-400"></i>
-                    <span>本月事件明細</span>
-                </h3>
-                <div id="monthlyEventsList" class="space-y-2">
-                    <!-- Dynamic Event Items -->
-                </div>
-            </div>
-        </section>
-
-        <!-- ==================== TAB 3: MERCH TRACKER ==================== -->
-        <section id="view-merch" class="hidden space-y-6">
-            <!-- Total Expense Banner Card -->
-            <div class="bg-gradient-to-r from-purple-900/40 via-slate-900 to-pink-900/30 rounded-2xl border border-purple-500/30 p-5 sm:p-6 shadow-xl flex flex-col sm:flex-row justify-between items-center gap-4">
-                <div class="flex items-center space-x-4 w-full sm:w-auto">
-                    <div class="p-3.5 rounded-2xl bg-pink-500/20 text-pink-400 border border-pink-500/30 shrink-0">
-                        <i data-lucide="wallet" class="w-7 h-7 sm:w-8 sm:h-8"></i>
-                    </div>
-                    <div>
-                        <div class="text-xs text-slate-400 font-medium">全站累積總消費金額</div>
-                        <div id="totalSpendAmount" class="text-2xl sm:text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-300">NT$ 0</div>
-                    </div>
-                </div>
-                <button onclick="openMerchModal()" class="w-full sm:w-auto flex items-center justify-center space-x-2 px-5 py-3 min-h-[44px] rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-medium text-xs sm:text-sm shadow-lg transition active:scale-95">
-                    <i data-lucide="plus-circle" class="w-5 h-5"></i>
-                    <span>紀錄新周邊</span>
-                </button>
-            </div>
-
-            <!-- Merch Items Grouped by Event -->
-            <div id="merchGroupContainer" class="space-y-6">
-                <!-- Grouped Merch Tables rendered dynamically -->
-            </div>
-        </section>
+    <!-- Main Oshi Section View -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-4 sm:py-6 space-y-4 sm:space-y-6">
+        
+        <!-- Main Card Section Container -->
+        <div id="oshiDetailContainer" class="bg-slate-900/70 border border-slate-800/80 rounded-2xl overflow-hidden shadow-xl backdrop-blur-sm transition-all">
+            <!-- Dynamic Content Injected Here -->
+        </div>
 
     </main>
 
-    <!-- ==================== MODALS ==================== -->
+    <!-- Add/Edit Oshi Modal -->
+    <div id="oshiModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-2.5 sm:p-4 hidden overflow-y-auto">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden my-auto">
+            
+            <!-- Modal Header -->
+            <div class="px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-800 flex items-center justify-between shrink-0 bg-slate-900/90">
+                <h3 id="oshiModalTitle" class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-heart text-pink-500"></i>
+                    <span>新增推 VTuber</span>
+                </h3>
+                <button onclick="closeOshiModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
 
-    <!-- 0. USER LOGIN / SWITCHER MODAL (Requirement 2) -->
-    <div id="userModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-700/80 rounded-2xl max-w-sm w-full p-6 shadow-2xl relative">
-            <h2 class="text-lg font-bold text-white mb-1 flex items-center space-x-2">
-                <i data-lucide="users" class="w-5 h-5 text-purple-400"></i>
-                <span>使用者帳號登入 / 切換</span>
-            </h2>
-            <p class="text-xs text-slate-400 mb-5">請輸入您的個人帳號名稱（如：Zony）。每個帳號將隔離儲存各自的主推資料與周邊花費。</p>
+            <!-- Modal Form Body -->
+            <form id="oshiForm" onsubmit="handleOshiSubmit(event)" class="p-3 sm:p-6 overflow-y-auto space-y-3 sm:space-y-4 custom-scrollbar text-xs sm:text-sm">
+                <input type="hidden" id="oshiId" value="">
 
-            <form onsubmit="switchUserAccount(event)" class="space-y-4">
+                <!-- Basic Info Grid -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-4">
+                    <div>
+                        <label class="block text-slate-300 font-medium mb-1">VTuber 名字 <span class="text-pink-500">*</span></label>
+                        <input type="text" id="oshiName" required placeholder="例如：星街彗星 / Hoshimachi Suisei" class="w-full bg-slate-950 border border-slate-800 rounded-lg tight-input text-slate-100 focus:outline-none focus:border-indigo-500 transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-slate-300 font-medium mb-1">所屬社團 / 箱</label>
+                        <input type="text" id="oshiGroup" placeholder="例如：hololive 0期生" class="w-full bg-slate-950 border border-slate-800 rounded-lg tight-input text-slate-100 focus:outline-none focus:border-indigo-500 transition-colors">
+                    </div>
+                </div>
+
+                <!-- Images & Media URLs -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-4">
+                    <div>
+                        <label class="block text-slate-300 font-medium mb-1">頭像圖片網址</label>
+                        <input type="url" id="oshiAvatar" placeholder="https://..." class="w-full bg-slate-950 border border-slate-800 rounded-lg tight-input text-slate-100 focus:outline-none focus:border-indigo-500 transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-slate-300 font-medium mb-1">背景封面網址</label>
+                        <input type="url" id="oshiCover" placeholder="https://..." class="w-full bg-slate-950 border border-slate-800 rounded-lg tight-input text-slate-100 focus:outline-none focus:border-indigo-500 transition-colors">
+                    </div>
+                </div>
+
+                <!-- YouTube & Social Links -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-4">
+                    <div>
+                        <label class="block text-slate-300 font-medium mb-1">YouTube 頻道連結 / ID</label>
+                        <input type="text" id="oshiYoutube" placeholder="頻道網址或 @handle" class="w-full bg-slate-950 border border-slate-800 rounded-lg tight-input text-slate-100 focus:outline-none focus:border-indigo-500 transition-colors">
+                    </div>
+                    <div>
+                        <label class="block text-slate-300 font-medium mb-1">Twitter / X 帳號</label>
+                        <input type="text" id="oshiTwitter" placeholder="@username" class="w-full bg-slate-950 border border-slate-800 rounded-lg tight-input text-slate-100 focus:outline-none focus:border-indigo-500 transition-colors">
+                    </div>
+                </div>
+
+                <!-- Tag Input Component (Mobile Flow Adjusted) -->
                 <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1.5">帳號名稱 / 暱稱 *</label>
-                    <input type="text" id="usernameInput" required placeholder="例如：Zony 或 Mith" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-white focus:outline-none focus:border-pink-500 min-h-[44px]">
-                </div>
-
-                <div class="flex justify-end space-x-2 pt-2">
-                    <button type="button" onclick="closeUserModal()" id="closeUserModalBtn" class="px-4 py-2.5 min-h-[44px] rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs sm:text-sm font-medium">取消</button>
-                    <button type="submit" class="px-5 py-2.5 min-h-[44px] rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-medium text-xs sm:text-sm shadow-md transition">切換並載入</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- 1. OSHI SETUP MODAL (Requirement 3: Enhanced Form & UI/UX) -->
-    <div id="oshiModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-xl w-full p-4 sm:p-6 shadow-2xl relative my-6">
-            <button onclick="closeOshiModal()" id="closeOshiModalBtn" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition min-h-[44px] min-w-[44px] flex items-center justify-center">
-                <i data-lucide="x" class="w-5 h-5"></i>
-            </button>
-
-            <h2 id="oshiModalTitle" class="text-lg sm:text-xl font-bold text-white mb-1 flex items-center space-x-2">
-                <i data-lucide="user-plus" class="w-5 h-5 text-pink-400"></i>
-                <span>新增主推 VTuber</span>
-            </h2>
-            <p class="text-xs text-slate-400 mb-5">填寫基本資料與設定，支援預覽圖片上傳與自訂社群連結。</p>
-
-            <form id="oshiForm" onsubmit="saveOshiData(event)" class="space-y-4">
-                <input type="hidden" id="oshiIdInput">
-
-                <!-- Avatar Upload & Cover Upload with Realtime Preview (Requirement 3) -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                    <!-- Avatar Upload -->
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">形象大頭貼 (圖片檔)</label>
-                        <div class="flex items-center space-x-3 bg-slate-900/80 border border-slate-700 rounded-xl p-2">
-                            <div id="avatarPreviewContainer" class="w-12 h-12 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center overflow-hidden shrink-0">
-                                <i data-lucide="user" class="w-6 h-6 text-slate-500" id="avatarPreviewFallback"></i>
-                                <img id="avatarPreviewImg" class="w-full h-full object-cover hidden" alt="Avatar Preview">
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <input type="file" id="oshiAvatarFile" accept="image/*" onchange="previewFile(this, 'avatarPreviewImg', 'avatarPreviewFallback')" class="hidden">
-                                <label for="oshiAvatarFile" class="inline-block px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-600 text-xs text-slate-200 cursor-pointer transition font-medium">選擇圖片</label>
-                                <button type="button" onclick="clearImagePreview('oshiAvatarFile', 'avatarPreviewImg', 'avatarPreviewFallback')" class="text-[11px] text-red-400 hover:underline ml-2">清除</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Cover Upload -->
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1.5">背景封面圖 (圖片檔)</label>
-                        <div class="flex items-center space-x-3 bg-slate-900/80 border border-slate-700 rounded-xl p-2">
-                            <div id="coverPreviewContainer" class="w-16 h-12 rounded-lg bg-slate-800 border border-slate-700 flex items-center justify-center overflow-hidden shrink-0">
-                                <i data-lucide="image" class="w-6 h-6 text-slate-500" id="coverPreviewFallback"></i>
-                                <img id="coverPreviewImg" class="w-full h-full object-cover hidden" alt="Cover Preview">
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <input type="file" id="oshiCoverFile" accept="image/*" onchange="previewFile(this, 'coverPreviewImg', 'coverPreviewFallback')" class="hidden">
-                                <label for="oshiCoverFile" class="inline-block px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-600 text-xs text-slate-200 cursor-pointer transition font-medium">選擇圖片</label>
-                                <button type="button" onclick="clearImagePreview('oshiCoverFile', 'coverPreviewImg', 'coverPreviewFallback')" class="text-[11px] text-red-400 hover:underline ml-2">清除</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Name & Date Pickers (Requirement 3: Date Picker) -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1">名稱 *</label>
-                        <input type="text" id="oshiNameInput" required placeholder="如：浠 Mizuki" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500 min-h-[44px]">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1">生日 (Date Picker)</label>
-                        <input type="date" id="oshiBirthdayInput" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500 min-h-[44px]">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1">出道日期 (Date Picker)</label>
-                        <input type="date" id="oshiDebutInput" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500 min-h-[44px]">
-                    </div>
-                </div>
-
-                <!-- Interactive Tag Input (Requirement 3) -->
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">標籤 (按 Enter 或按鈕新增 Chip)</label>
-                    <div class="flex items-center space-x-2 mb-2">
-                        <input type="text" id="tagInputField" placeholder="如：歌姬、極狐..." onkeydown="handleTagInputKey(event)" class="flex-1 bg-slate-900/80 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500 min-h-[44px]">
-                        <button type="button" onclick="addTagFromInput()" class="px-3 py-2 min-h-[44px] rounded-xl bg-slate-800 hover:bg-slate-700 border border-slate-600 text-xs text-slate-200 font-medium">新增標籤</button>
-                    </div>
-                    <!-- Chip Display Area -->
-                    <div id="tagsChipContainer" class="flex flex-wrap gap-1.5 min-h-[32px] p-2 rounded-xl bg-slate-950 border border-slate-800">
-                        <span class="text-xs text-slate-500 italic self-center px-1">尚未建立標籤</span>
-                    </div>
-                </div>
-
-                <!-- Bio -->
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">個人簡介</label>
-                    <textarea id="oshiBioInput" rows="2" placeholder="填寫主推的特色或簡介..." class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500"></textarea>
-                </div>
-
-                <!-- Dynamic Social Links Management (Requirement 3) -->
-                <div class="border-t border-slate-800 pt-3">
-                    <span class="text-xs font-bold text-slate-300 block mb-2">社群連結動態設定</span>
-                    
-                    <div class="flex flex-col sm:flex-row gap-2 mb-3">
-                        <select id="socialPlatformSelect" class="bg-slate-900/80 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-pink-500 min-h-[44px]">
-                            <option value="youtube">YouTube</option>
-                            <option value="twitter">X (Twitter)</option>
-                            <option value="twitch">Twitch</option>
-                            <option value="instagram">Instagram</option>
-                            <option value="tiktok">TikTok</option>
-                            <option value="discord">Discord</option>
-                            <option value="marshmallow">棉花糖 (Marshmallow)</option>
-                        </select>
-                        <input type="url" id="socialUrlInput" placeholder="輸入個人頁面或頻道完整網址..." class="flex-1 bg-slate-900/80 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-pink-500 min-h-[44px]">
-                        <button type="button" onclick="addSocialLinkFromForm()" class="px-4 py-2 min-h-[44px] rounded-xl bg-purple-600 hover:bg-purple-700 text-white text-xs font-medium shrink-0">新增連結</button>
-                    </div>
-
-                    <div id="socialDynamicList" class="space-y-1.5 max-h-36 overflow-y-auto pr-1">
-                        <!-- Dynamic Social Items -->
-                    </div>
-                </div>
-
-                <!-- Stream Video URL -->
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">直播預告 YouTube 網址 / Embed ID</label>
-                    <input type="text" id="oshiStreamInput" placeholder="https://www.youtube.com/watch?v=... 或 影片ID" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500 min-h-[44px]">
-                </div>
-
-                <!-- Footer Buttons -->
-                <div class="flex items-center justify-between border-t border-slate-800 pt-4 mt-6">
-                    <button type="button" onclick="deleteOshi()" id="deleteOshiBtn" class="hidden text-xs text-red-400 hover:text-red-300 px-3 py-2.5 min-h-[44px] rounded-xl bg-red-500/10 hover:bg-red-500/20 transition">
-                        刪除此主推
-                    </button>
-                    <div class="flex space-x-2 ml-auto">
-                        <button type="submit" class="px-5 py-2.5 min-h-[44px] rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-medium text-xs sm:text-sm transition shadow-md">
-                            儲存變更
+                    <label class="block text-slate-300 font-medium mb-1">推標籤 / 特色標籤</label>
+                    <div class="flex items-center gap-2">
+                        <input type="text" id="oshiTagInput" placeholder="輸入後點擊新增" class="flex-1 bg-slate-950 border border-slate-800 rounded-lg tight-input text-slate-100 focus:outline-none focus:border-indigo-500 transition-colors">
+                        <button type="button" onclick="addOshiTag()" class="shrink-0 bg-slate-800 hover:bg-slate-700 text-indigo-300 border border-slate-700 font-medium px-3 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm whitespace-nowrap transition-colors flex items-center gap-1">
+                            <i class="fa-solid fa-plus text-[10px]"></i>
+                            <span>新增標籤</span>
                         </button>
                     </div>
+                    <!-- Tags Container -->
+                    <div id="oshiTagsList" class="flex flex-wrap gap-1.5 mt-2 min-h-[28px]">
+                        <!-- Dynamic Tags -->
+                    </div>
+                </div>
+
+                <!-- Description & Notes -->
+                <div>
+                    <label class="block text-slate-300 font-medium mb-1">個人簡介 / 應援心得</label>
+                    <textarea id="oshiBio" rows="2" placeholder="寫下對這位 VTuber 的介紹或心得..." class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs sm:text-sm text-slate-100 focus:outline-none focus:border-indigo-500 transition-colors resize-none"></textarea>
+                </div>
+
+                <!-- Submit Buttons -->
+                <div class="pt-2 border-t border-slate-800/80 flex items-center justify-end gap-2.5 shrink-0">
+                    <button type="button" onclick="closeOshiModal()" class="px-3.5 py-1.5 sm:py-2 rounded-lg text-slate-400 hover:text-white bg-slate-800/50 hover:bg-slate-800 font-medium transition-colors">取消</button>
+                    <button type="submit" class="px-4 py-1.5 sm:py-2 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-medium shadow-md shadow-indigo-500/20 transition-all flex items-center gap-1.5">
+                        <i class="fa-solid fa-check text-xs"></i>
+                        <span>儲存資料</span>
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!-- 2. CALENDAR EVENT MODAL -->
-    <div id="eventModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
-        <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl relative">
-            <button onclick="closeEventModal()" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition min-h-[44px] min-w-[44px] flex items-center justify-center">
-                <i data-lucide="x" class="w-5 h-5"></i>
-            </button>
-
-            <h2 id="eventModalTitle" class="text-base sm:text-lg font-bold text-white mb-4">新增行事曆事件</h2>
-
-            <form id="eventForm" onsubmit="saveEventData(event)" class="space-y-4">
-                <input type="hidden" id="eventIdInput">
-                
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">日期 *</label>
-                    <input type="date" id="eventDateInput" required class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500 min-h-[44px]">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">事件標題 *</label>
-                    <input type="text" id="eventTitleInput" required placeholder="如：會員扣款日 / 週年直播" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500 min-h-[44px]">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">事件類型</label>
-                    <select id="eventTypeInput" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500 min-h-[44px]">
-                        <option value="stream">🔴 直播 / 活動</option>
-                        <option value="member">💳 會員扣款</option>
-                        <option value="wallpaper">🖼️ 桌布領取</option>
-                        <option value="anniversary">🎉 週年 / 生誕祭</option>
-                        <option value="other">📌 其他備忘</option>
-                    </select>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">備註資訊</label>
-                    <textarea id="eventNoteInput" rows="2" placeholder="相關連結或詳細備忘..." class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500"></textarea>
-                </div>
-
-                <div class="flex justify-end space-x-2 border-t border-slate-800 pt-4">
-                    <button type="button" onclick="closeEventModal()" class="px-4 py-2.5 min-h-[44px] rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs sm:text-sm">取消</button>
-                    <button type="submit" class="px-5 py-2.5 min-h-[44px] rounded-xl bg-pink-600 hover:bg-pink-700 text-white font-medium text-xs sm:text-sm transition">儲存</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- 3. MERCH ITEM MODAL -->
-    <div id="merchModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto">
-        <div class="bg-slate-900 border border-slate-700 rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl relative my-6">
-            <button onclick="closeMerchModal()" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-white rounded-xl hover:bg-slate-800 transition min-h-[44px] min-w-[44px] flex items-center justify-center">
-                <i data-lucide="x" class="w-5 h-5"></i>
-            </button>
-
-            <h2 id="merchModalTitle" class="text-base sm:text-lg font-bold text-white mb-4">紀錄周邊購買</h2>
-
-            <form id="merchForm" onsubmit="saveMerchData(event)" class="space-y-4">
-                <input type="hidden" id="merchIdInput">
-
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">活動/系列名稱 *</label>
-                    <input type="text" id="merchEventInput" required placeholder="如：子午四週年, FF46, 生誕祭" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500 min-h-[44px]">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">商品名稱 *</label>
-                    <input type="text" id="merchNameInput" required placeholder="如：壓克力立牌, 紀念桌墊" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500 min-h-[44px]">
-                </div>
-
-                <div class="grid grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1">單價 (NT$) *</label>
-                        <input type="number" id="merchPriceInput" required min="0" placeholder="0" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500 min-h-[44px]">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1">數量 *</label>
-                        <input type="number" id="merchQtyInput" required min="1" value="1" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500 min-h-[44px]">
-                    </div>
-                </div>
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1">購買管道</label>
-                        <input type="text" id="merchChannelInput" placeholder="如：官方蝦皮, Buyee, 現場" class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500 min-h-[44px]">
-                    </div>
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-300 mb-1">周邊照片 (圖片檔)</label>
-                        <input type="file" id="merchImgFile" accept="image/*" class="block w-full text-xs text-slate-400 file:mr-2 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-pink-400 hover:file:bg-slate-700 cursor-pointer bg-slate-900/80 rounded-xl border border-slate-700 p-1 min-h-[44px]">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-xs font-semibold text-slate-300 mb-1">備註說明</label>
-                    <textarea id="merchNoteInput" rows="2" placeholder="預購出貨時間、實體到貨狀況等..." class="w-full bg-slate-900/80 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500"></textarea>
-                </div>
-
-                <div class="flex justify-end space-x-2 border-t border-slate-800 pt-4">
-                    <button type="button" onclick="closeMerchModal()" class="px-4 py-2.5 min-h-[44px] rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs sm:text-sm">取消</button>
-                    <button type="submit" class="px-5 py-2.5 min-h-[44px] rounded-xl bg-pink-600 hover:bg-pink-700 text-white font-medium text-xs sm:text-sm transition">新增紀錄</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- ==================== JAVASCRIPT LOGIC ==================== -->
     <script>
         // Multi-user Account State (Requirement 2)
-        let currentUser = localStorage.getItem('OSHI_CENTER_CURRENT_USER') || '';
-        
-        // Global App Data State
-        let appData = {
-            currentOshiId: null,
-            oshis: []
-        };
+        /* 
+         * STREAMING_CHUNK: Fixing User Switch & Onboarding Loop Logic
+         */
+        function switchUserAccount(username) {
+            if (!username || !username.trim()) return;
+            const cleanUser = username.trim();
+            
+            // Save current username
+            currentUser = cleanUser;
+            localStorage.setItem('oshicenter_current_user', currentUser);
+            
+            // Update UI Header
+            const headerNameEl = document.getElementById('headerUserName');
+            if (headerNameEl) headerNameEl.textContent = currentUser;
 
-        // Form Temporary States for Tags and Social Links (Requirement 3)
-        let tempTagsList = [];
-        let tempSocialList = [];
+            // Load user oshis
+            const savedData = localStorage.getItem(`oshicenter_oshis_${currentUser}`);
+            oshis = savedData ? JSON.parse(savedData) : [];
 
-        // Calendar Logic State
-        let calendarDate = new Date();
+            // Close User Modal
+            closeUserModal();
 
-        // --- Core Startup & Initialization ---
-        window.addEventListener('DOMContentLoaded', () => {
-            if (!currentUser) {
-                openUserModal(true);
-            } else {
-                loadUserData(currentUser);
+            // Render current data
+            renderOshiCenterView();
+
+            // ONBOARDING BUG FIX: Check if current user has 0 oshis, trigger Add Oshi modal without looping
+            if (oshis.length === 0) {
+                openOshiModal();
             }
-        });
+        }
 
-        // Requirement 2: Account Multi-user Storage Management
-        function getStorageKey(username) {
-            return `oshi_data_${username.toLowerCase().trim()}`;
+        /* 
+         * STREAMING_CHUNK: Saving Oshi Data Safely
+         */
+        function saveOshiData(oshiDataObject) {
+            if (!oshiDataObject) return;
+
+            const existingIndex = oshis.findIndex(o => o.id === oshiDataObject.id);
+            if (existingIndex >= 0) {
+                oshis[existingIndex] = oshiDataObject;
+            } else {
+                oshis.push(oshiDataObject);
+            }
+
+            // Save to localStorage under current user
+            localStorage.setItem(`oshicenter_oshis_${currentUser}`, JSON.stringify(oshis));
+
+            // Select newly created/updated oshi as active
+            activeOshiId = oshiDataObject.id;
+
+            // CLOSE MODAL PROPERLY to prevent looping
+            closeOshiModal();
+
+            // Re-render UI
+            renderOshiCenterView();
+        }
+
+        function handleOshiSubmit(e) {
+            e.preventDefault();
+            const id = document.getElementById('oshiId').value || 'oshi_' + Date.now();
+            const name = document.getElementById('oshiName').value.trim();
+            if (!name) return;
+
+            const newOshi = {
+                id: id,
+                name: name,
+                group: document.getElementById('oshiGroup').value.trim(),
+                avatar: document.getElementById('oshiAvatar').value.trim() || 'https://placehold.co/150x150/334155/f8fafc?text=VTuber',
+                cover: document.getElementById('oshiCover').value.trim() || 'https://placehold.co/800x300/1e293b/64748b?text=Cover',
+                youtube: document.getElementById('oshiYoutube').value.trim(),
+                twitter: document.getElementById('oshiTwitter').value.trim(),
+                bio: document.getElementById('oshiBio').value.trim(),
+                tags: [...tempTagsList]
+            };
+
+            saveOshiData(newOshi);
         }
 
         function loadUserData(username) {
