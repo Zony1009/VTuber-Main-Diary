@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="zh-TW" class="dark scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>幸 Sachi ‧ Official Fan Hub</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Quicksand:wght@500;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        sachi: {
+                            pink: '#ff66c4',
+                            purple: '#8c52ff',
+                            dark: '#0d0918',
+                            card: '#161126',
+                            accent: '#ff3385',
+                            glow: 'rgba(255, 102, 196, 0.15)'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'Quicksand', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glow-text {
+            text-shadow: 0 0 16px rgba(255, 102, 196, 0.6);
+        }
+        .glow-card {
+            box-shadow: 0 4px 20px -2px rgba(140, 82, 255, 0.2);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glow-card:hover {
+            box-shadow: 0 8px 30px 0px rgba(255, 102, 196, 0.35);
+            transform: translateY(-3px);
+        }
+        .gradient-border {
+            border: 1px solid transparent;
+            background: linear-gradient(#161126, #161126) padding-box,
+                        linear-gradient(135deg, rgba(255, 102, 196, 0.6), rgba(140, 82, 255, 0.6)) border-box;
+        }
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0d0918;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2b2142;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #ff66c4;
+        }
+    </style>
+</head>
+<body class="bg-sachi-dark text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-pink-500 selection:text-white">
+
+    <!-- Header Navbar -->
+    <header class="sticky top-0 z-50 backdrop-blur-md bg-sachi-dark/85 border-b border-purple-900/40">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                
+                <!-- Main Title Branding -->
+                <div class="flex items-center gap-4">
+                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-sachi-pink via-purple-500 to-indigo-500 flex items-center justify-center text-white shadow-lg shadow-pink-500/30 text-xl font-bold transition-transform hover:scale-105">
+                        ✨
+                    </div>
+                    <div>
+                        <h1 class="text-xl sm:text-2xl font-black bg-gradient-to-r from-pink-400 via-purple-300 to-indigo-200 bg-clip-text text-transparent glow-text tracking-wide">
+                            幸 Sachi <span class="text-sm sm:text-base font-semibold text-slate-300">Official Fan Hub</span>
+                        </h1>
+                        <p class="text-[11px] sm:text-xs text-slate-400 font-medium tracking-wider">
+                            Meridian Project | 幸 Sachi Fan Base & Live Schedule
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Navigation Links -->
+                <nav class="hidden md:flex items-center space-x-1">
+                    <a href="#profile" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-all">主推檔案</a>
+                    <a href="#links" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-all">社群頻道</a>
+                    <a href="#schedule" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-all">直播行程</a>
+                    <a href="#fanwall" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-all">應援留言</a>
+                </nav>
+
+                <!-- Status & Action Button -->
+                <div class="flex items-center gap-3">
+                    <a href="https://youtube.com" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-red-600 via-pink-600 to-purple-600 text-white text-xs sm:text-sm font-bold hover:brightness-110 shadow-lg shadow-pink-500/20 transition-all">
+                        <span class="w-2 h-2 rounded-full bg-white animate-ping"></span>
+                        <i class="fab fa-youtube text-base"></i> <span class="hidden sm:inline">前往 YouTube 頻道</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+
+        <!-- Hero & Profile Section -->
+        <section id="profile" class="relative rounded-3xl overflow-hidden gradient-border p-6 sm:p-10 bg-sachi-card/90">
+            <!-- Background Decorative Glows -->
+            <div class="absolute -top-24 -right-24 w-96 h-96 bg-sachi-pink/20 rounded-full blur-3xl pointer-events-none"></div>
+            <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-sachi-purple/20 rounded-full blur-3xl pointer-events-none"></div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
+                <!-- Avatar Showcase -->
+                <div class="lg:col-span-5 flex flex-col items-center">
+                    <div class="relative group">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-pink-500 to-purple-600 rounded-3xl blur opacity-75 group-hover:opacity-100 transition duration-500"></div>
+                        <img src="https://placehold.co/400x400/2a1b3d/ff66c4?text=Sachi+VTuber+Avatar" alt="幸 Sachi Avatar" class="relative rounded-3xl w-72 h-72 sm:w-80 sm:h-80 object-cover shadow-2xl">
+                        <span class="absolute bottom-3 right-3 bg-emerald-500 border-2 border-sachi-dark text-white text-xs px-3 py-1 rounded-full font-bold flex items-center gap-1.5 shadow-lg">
+                            <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span> 今日活動中
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Info Details -->
+                <div class="lg:col-span-7 space-y-6">
+                    <div>
+                        <div class="flex flex-wrap items-center gap-2 mb-3">
+                            <span class="px-3 py-1 bg-purple-500/20 text-purple-300 text-xs font-semibold rounded-full border border-purple-500/30">🌸 治癒系 Live 歌姬</span>
+                            <span class="px-3 py-1 bg-pink-500/20 text-pink-300 text-xs font-semibold rounded-full border border-pink-500/30">✨ 繁中 / 日文對應</span>
+                        </div>
+                        <h2 class="text-3xl sm:text-5xl font-black text-white tracking-tight">
+                            幸 <span class="text-2xl sm:text-3xl font-bold text-pink-400">Sachi</span>
+                        </h2>
+                        <p class="mt-3 text-slate-300 leading-relaxed text-sm sm:text-base">
+                            「來自星空花園的歌姬 VTuber！用溫暖的歌聲與元氣十足的直播，帶給每一位幸運兒最滿滿的幸運能量 ✨」
+                        </p>
+                    </div>
+
+                    <!-- Profile Specs Table/Grid -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs sm:text-sm">
+                        <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10">
+                            <p class="text-slate-400 font-medium">🎂 生日</p>
+                            <p class="text-slate-100 font-bold mt-0.5">10 月 24 日</p>
+                        </div>
+                        <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10">
+                            <p class="text-slate-400 font-medium">🎨 應援色</p>
+                            <p class="text-pink-400 font-bold mt-0.5 flex items-center gap-1.5">
+                                <span class="w-3 h-3 rounded-full bg-pink-400 inline-block"></span> 櫻花霓虹粉
+                            </p>
+                        </div>
+                        <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10">
+                            <p class="text-slate-400 font-medium">💖 粉絲名</p>
+                            <p class="text-slate-100 font-bold mt-0.5">幸運草 (Sachi-clover)</p>
+                        </div>
+                        <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10">
+                            <p class="text-slate-400 font-medium">🏷️ 直播 Tag</p>
+                            <p class="text-purple-300 font-bold mt-0.5">#SachiLive</p>
+                        </div>
+                        <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10">
+                            <p class="text-slate-400 font-medium">🎨 二創 Tag</p>
+                            <p class="text-purple-300 font-bold mt-0.5">#SachiArt</p>
+                        </div>
+                        <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10">
+                            <p class="text-slate-400 font-medium">🥐 迷因 Tag</p>
+                            <p class="text-purple-300 font-bold mt-0.5">#SachiMemes</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Quick Social Portals -->
+        <section id="links" class="space-y-4">
+            <h3 class="text-xl font-bold text-slate-100 flex items-center gap-2">
+                <i class="fas fa-paper-plane text-pink-400"></i> 社群與官方頻道
+            </h3>
+            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                <a href="https://youtube.com" target="_blank" class="glow-card p-5 rounded-2xl bg-sachi-card border border-slate-800 flex flex-col items-center text-center group">
+                    <div class="w-12 h-12 rounded-2xl bg-red-500/10 text-red-500 flex items-center justify-center text-2xl mb-3 group-hover:scale-110 transition-transform">
+                        <i class="fab fa-youtube"></i>
+                    </div>
+                    <span class="font-bold text-slate-200">YouTube</span>
+                    <span class="text-xs text-slate-400 mt-1">每週歌枠 & 遊戲直播</span>
+                </a>
+
+                <a href="https://x.com" target="_blank" class="glow-card p-5 rounded-2xl bg-sachi-card border border-slate-800 flex flex-col items-center text-center group">
+                    <div class="w-12 h-12 rounded-2xl bg-sky-500/10 text-sky-400 flex items-center justify-center text-2xl mb-3 group-hover:scale-110 transition-transform">
+                        <i class="fab fa-x-twitter"></i>
+                    </div>
+                    <span class="font-bold text-slate-200">X (Twitter)</span>
+                    <span class="text-xs text-slate-400 mt-1">最新動態與日常廢文</span>
+                </a>
+
+                <a href="https://discord.com" target="_blank" class="glow-card p-5 rounded-2xl bg-sachi-card border border-slate-800 flex flex-col items-center text-center group">
+                    <div class="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-2xl mb-3 group-hover:scale-110 transition-transform">
+                        <i class="fab fa-discord"></i>
+                    </div>
+                    <span class="font-bold text-slate-200">Discord 粉絲群</span>
+                    <span class="text-xs text-slate-400 mt-1">幸運草官方討論交流區</span>
+                </a>
+
+                <a href="#" target="_blank" class="glow-card p-5 rounded-2xl bg-sachi-card border border-slate-800 flex flex-col items-center text-center group">
+                    <div class="w-12 h-12 rounded-2xl bg-pink-500/10 text-pink-400 flex items-center justify-center text-2xl mb-3 group-hover:scale-110 transition-transform">
+                        <i class="fas fa-store"></i>
+                    </div>
+                    <span class="font-bold text-slate-200">官方周邊 Shop</span>
+                    <span class="text-xs text-slate-400 mt-1">官方紀念品與語音專區</span>
+                </a>
+            </div>
+        </section>
+
+        <!-- Weekly Stream Schedule -->
+        <section id="schedule" class="space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                <div>
+                    <h3 class="text-xl font-bold text-slate-100 flex items-center gap-2">
+                        <i class="fas fa-calendar-week text-purple-400"></i> 本週直播預告 (Weekly Schedule)
+                    </h3>
+                    <p class="text-xs text-slate-400 mt-1">所有時間皆為 GMT+8，點擊卡片可獲得提醒或預約連結</p>
+                </div>
+                <span class="px-3.5 py-1 bg-sachi-purple/20 text-purple-300 text-xs font-semibold rounded-full border border-purple-500/30 self-start sm:self-auto">
+                    📅 更新時間：本週最新行程
+                </span>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Schedule Card 1 -->
+                <div class="bg-sachi-card rounded-2xl border border-slate-800 p-5 space-y-4 hover:border-pink-500/40 transition-all group">
+                    <div class="flex items-center justify-between">
+                        <span class="px-3 py-1 bg-pink-500/10 text-pink-400 text-xs font-bold rounded-lg border border-pink-500/20">週三 20:00</span>
+                        <span class="text-xs text-emerald-400 font-medium flex items-center gap-1">
+                            <i class="fas fa-microphone"></i> 歌枠 Live
+                        </span>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg text-slate-100 group-hover:text-pink-300 transition-colors">夜間深夜歌枠！聽歌聊天夜 🎶</h4>
+                        <p class="text-xs text-slate-400 mt-1">陪伴大家度過週三小週末，開放點歌與閒聊！</p>
+                    </div>
+                    <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs">
+                        <span class="text-slate-500">平台: YouTube</span>
+                        <a href="https://youtube.com" target="_blank" class="text-pink-400 font-semibold hover:underline flex items-center gap-1">開啟待機所 <i class="fas fa-external-link-alt text-[10px]"></i></a>
+                    </div>
+                </div>
+
+                <!-- Schedule Card 2 -->
+                <div class="bg-sachi-card rounded-2xl border border-slate-800 p-5 space-y-4 hover:border-purple-500/40 transition-all group">
+                    <div class="flex items-center justify-between">
+                        <span class="px-3 py-1 bg-purple-500/10 text-purple-400 text-xs font-bold rounded-lg border border-purple-500/20">週五 21:00</span>
+                        <span class="text-xs text-purple-400 font-medium flex items-center gap-1">
+                            <i class="fas fa-gamepad"></i> 遊戲實況
+                        </span>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg text-slate-100 group-hover:text-purple-300 transition-colors">恐怖遊戲挑戰《恐怖怪談》😱</h4>
+                        <p class="text-xs text-slate-400 mt-1">聽說這款超嚇人？希望這晚大家能為 Sachi 加油！</p>
+                    </div>
+                    <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs">
+                        <span class="text-slate-500">平台: YouTube</span>
+                        <a href="https://youtube.com" target="_blank" class="text-purple-400 font-semibold hover:underline flex items-center gap-1">開啟待機所 <i class="fas fa-external-link-alt text-[10px]"></i></a>
+                    </div>
+                </div>
+
+                <!-- Schedule Card 3 -->
+                <div class="bg-sachi-card rounded-2xl border border-slate-800 p-5 space-y-4 hover:border-indigo-500/40 transition-all group">
+                    <div class="flex items-center justify-between">
+                        <span class="px-3 py-1 bg-indigo-500/10 text-indigo-400 text-xs font-bold rounded-lg border border-indigo-500/20">週日 19:00</span>
+                        <span class="text-xs text-indigo-400 font-medium flex items-center gap-1">
+                            <i class="fas fa-users"></i> 連動雜談
+                        </span>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-lg text-slate-100 group-hover:text-indigo-300 transition-colors">週末客串合作雜談！秘密企劃 ✨</h4>
+                        <p class="text-xs text-slate-400 mt-1">神秘嘉賓即將登場！精彩問答與互動不要錯過。</p>
+                    </div>
+                    <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs">
+                        <span class="text-slate-500">平台: YouTube</span>
+                        <a href="https://youtube.com" target="_blank" class="text-indigo-400 font-semibold hover:underline flex items-center gap-1">開啟待機所 <i class="fas fa-external-link-alt text-[10px]"></i></a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Interactive Fan Wall Section -->
+        <section id="fanwall" class="space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <h3 class="text-xl font-bold text-slate-100 flex items-center gap-2">
+                    <i class="fas fa-heart text-pink-500"></i> 幸運草專屬應援牆 (Fan Wall)
+                </h3>
+                <p class="text-xs text-slate-400">留下您對 幸 Sachi 的祝福與應援話語！</p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Message Form -->
+                <div class="lg:col-span-5 bg-sachi-card rounded-2xl border border-slate-800 p-6 space-y-4">
+                    <h4 class="font-bold text-slate-200 text-sm">✍️ 寫下應援訊息</h4>
+                    <form id="commentForm" class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">您的暱稱 / 粉絲名</label>
+                            <input type="text" id="authorInput" required placeholder="例：忠實幸運草草" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-pink-500">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">應援留言內容</label>
+                            <textarea id="messageInput" required rows="3" placeholder="幸醬加油！最喜歡妳的歌聲了～" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-pink-500 resize-none"></textarea>
+                        </div>
+                        <button type="submit" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-600 text-white font-bold text-sm shadow-lg shadow-pink-500/25 hover:brightness-110 transition-all">
+                            發送應援祝福 ✨
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Comments Display -->
+                <div class="lg:col-span-7 bg-sachi-card rounded-2xl border border-slate-800 p-6 space-y-4 max-h-[380px] overflow-y-auto" id="commentsList">
+                    <!-- Sample Comment 1 -->
+                    <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-xs text-pink-400">✨ 狂熱幸運草 A 粉</span>
+                            <span class="text-[10px] text-slate-500">剛剛</span>
+                        </div>
+                        <p class="text-sm text-slate-200">幸醬上週的歌枠真的太好聽了！一直重播中，本週歌枠絕對會準時報到！💖</p>
+                    </div>
+
+                    <!-- Sample Comment 2 -->
+                    <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-xs text-purple-400">✨ 星空打卡員</span>
+                            <span class="text-[10px] text-slate-500">2 小時前</span>
+                        </div>
+                        <p class="text-sm text-slate-200">週五恐怖遊戲感覺會尖叫連連哈哈哈！期待 Sachi 壓驚！加油！</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/80 bg-sachi-dark py-8 mt-12 text-center text-xs text-slate-500">
+        <div class="max-w-7xl mx-auto px-4 space-y-2">
+            <p>© 2026 Meridian Project | 幸 Sachi Official Fan Hub.</p>
+            <p class="text-slate-600">本網站為 幸 Sachi 粉絲專屬應援門戶，專注於動態更新、直播日程與粉絲交流。</p>
+        </div>
+    </footer>
+
+    <script>
+        // Handle Fan Wall Message Submission
+        document.getElementById('commentForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const author = document.getElementById('authorInput').value.trim();
+            const message = document.getElementById('messageInput').value.trim();
+            
+            if(!author || !message) return;
+
+            const commentsList = document.getElementById('commentsList');
+            
+            const newComment = document.createElement('div');
+            newComment.className = 'p-4 rounded-xl bg-slate-900/80 border border-pink-500/30 space-y-1 transition-all duration-300 opacity-0 transform translate-y-2';
+            newComment.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <span class="font-bold text-xs text-pink-400">✨ ${escapeHtml(author)}</span>
+                    <span class="text-[10px] text-slate-500">剛剛</span>
+                </div>
+                <p class="text-sm text-slate-200">${escapeHtml(message)}</p>
+            `;
+
+            commentsList.insertBefore(newComment, commentsList.firstChild);
+
+            setTimeout(() => {
+                newComment.classList.remove('opacity-0', 'translate-y-2');
+            }, 10);
+
+            document.getElementById('authorInput').value = '';
+            document.getElementById('messageInput').value = '';
+        });
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.innerText = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
