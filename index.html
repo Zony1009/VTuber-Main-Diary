@@ -1,390 +1,1306 @@
 <!DOCTYPE html>
-<html lang="zh-TW" class="dark scroll-smooth">
+<html lang="zh-TW" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>幸 Sachi ‧ Official Fan Hub</title>
-    <!-- Tailwind CSS -->
+    <title>VTuber Oshi Center - 我的主推應援站</title>
+    <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700;900&family=Quicksand:wght@500;700;800&display=swap" rel="stylesheet">
-    
     <script>
         tailwind.config = {
             darkMode: 'class',
             theme: {
                 extend: {
                     colors: {
-                        sachi: {
-                            pink: '#ff66c4',
-                            purple: '#8c52ff',
-                            dark: '#0d0918',
-                            card: '#161126',
-                            accent: '#ff3385',
-                            glow: 'rgba(255, 102, 196, 0.15)'
-                        }
-                    },
-                    fontFamily: {
-                        sans: ['"Noto Sans TC"', 'Quicksand', 'sans-serif'],
+                        primary: {
+                            50: '#fdf4ff',
+                            100: '#fae8ff',
+                            200: '#f5d0fe',
+                            300: '#f0abfc',
+                            400: '#e879f9',
+                            500: '#d946ef',
+                            600: '#c026d3',
+                            700: '#a21caf',
+                            800: '#86198f',
+                            900: '#701a75',
+                            950: '#4a044e',
+                        },
+                        darkbg: '#0f172a',
+                        cardbg: '#1e293b',
                     }
                 }
             }
         }
     </script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Google Fonts Inter & Noto Sans TC -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
     <style>
-        .glow-text {
-            text-shadow: 0 0 16px rgba(255, 102, 196, 0.6);
+        body {
+            font-family: 'Noto Sans TC', 'Inter', sans-serif;
+            background-color: #090d16;
+            color: #f1f5f9;
         }
-        .glow-card {
-            box-shadow: 0 4px 20px -2px rgba(140, 82, 255, 0.2);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-        .glow-card:hover {
-            box-shadow: 0 8px 30px 0px rgba(255, 102, 196, 0.35);
-            transform: translateY(-3px);
-        }
-        .gradient-border {
-            border: 1px solid transparent;
-            background: linear-gradient(#161126, #161126) padding-box,
-                        linear-gradient(135deg, rgba(255, 102, 196, 0.6), rgba(140, 82, 255, 0.6)) border-box;
-        }
-        /* Custom scrollbar */
+        /* Custom Scrollbar */
         ::-webkit-scrollbar {
-            width: 8px;
+            width: 6px;
+            height: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: #0d0918;
+            background: #0f172a;
         }
         ::-webkit-scrollbar-thumb {
-            background: #2b2142;
-            border-radius: 4px;
+            background: #334155;
+            border-radius: 3px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: #ff66c4;
+            background: #475569;
+        }
+        .gradient-border {
+            background: linear-gradient(135deg, #d946ef, #8b5cf6, #3b82f6);
         }
     </style>
 </head>
-<body class="bg-sachi-dark text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-pink-500 selection:text-white">
+<body class="min-h-screen flex flex-col bg-[#090d16] text-slate-100 antialiased selection:bg-pink-500 selection:text-white">
 
-    <!-- Header Navbar -->
-    <header class="sticky top-0 z-50 backdrop-blur-md bg-sachi-dark/85 border-b border-purple-900/40">
+    <!-- Top Layer Navigation: Oshi Switcher Header -->
+    <header class="sticky top-0 z-30 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 shadow-lg">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex items-center justify-between h-20">
-                
-                <!-- Main Title Branding -->
-                <div class="flex items-center gap-4">
-                    <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-sachi-pink via-purple-500 to-indigo-500 flex items-center justify-center text-white shadow-lg shadow-pink-500/30 text-xl font-bold transition-transform hover:scale-105">
-                        ✨
+            <div class="flex items-center justify-between h-16">
+                <!-- Logo / App Title -->
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('home')">
+                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-pink-500 to-purple-600 flex items-center justify-center text-white shadow-lg shadow-pink-500/30">
+                        <i data-lucide="heart" class="w-6 h-6 fill-current"></i>
                     </div>
                     <div>
-                        <h1 class="text-xl sm:text-2xl font-black bg-gradient-to-r from-pink-400 via-purple-300 to-indigo-200 bg-clip-text text-transparent glow-text tracking-wide">
-                            幸 Sachi <span class="text-sm sm:text-base font-semibold text-slate-300">Official Fan Hub</span>
-                        </h1>
-                        <p class="text-[11px] sm:text-xs text-slate-400 font-medium tracking-wider">
-                            Meridian Project | 幸 Sachi Fan Base & Live Schedule
-                        </p>
+                        <span class="font-bold text-lg bg-gradient-to-r from-pink-400 via-purple-300 to-indigo-400 bg-clip-text text-transparent">OshiCenter</span>
+                        <span class="text-xs text-slate-400 block hidden sm:block">VTuber 應援與收藏管理</span>
                     </div>
                 </div>
 
-                <!-- Navigation Links -->
-                <nav class="hidden md:flex items-center space-x-1">
-                    <a href="#profile" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-all">主推檔案</a>
-                    <a href="#links" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-all">社群頻道</a>
-                    <a href="#schedule" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-all">直播行程</a>
-                    <a href="#fanwall" class="px-4 py-2 rounded-xl text-sm font-medium text-slate-300 hover:text-white hover:bg-white/5 transition-all">應援留言</a>
-                </nav>
+                <!-- First Layer: VTuber Switcher Tabs -->
+                <div class="flex items-center space-x-2 overflow-x-auto py-2 no-scrollbar max-w-[50vw] sm:max-w-md lg:max-w-lg" id="oshiTabsContainer">
+                    <!-- Dynamic Oshi Tabs will be inserted here -->
+                </div>
 
-                <!-- Status & Action Button -->
-                <div class="flex items-center gap-3">
-                    <a href="https://youtube.com" target="_blank" class="inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-red-600 via-pink-600 to-purple-600 text-white text-xs sm:text-sm font-bold hover:brightness-110 shadow-lg shadow-pink-500/20 transition-all">
-                        <span class="w-2 h-2 rounded-full bg-white animate-ping"></span>
-                        <i class="fab fa-youtube text-base"></i> <span class="hidden sm:inline">前往 YouTube 頻道</span>
-                    </a>
+                <!-- Action Buttons: Add New Oshi -->
+                <div class="flex items-center space-x-2">
+                    <button onclick="openOshiModal()" class="flex items-center space-x-1.5 px-3 py-1.5 rounded-lg bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white text-xs sm:text-sm font-medium transition shadow-md shadow-pink-500/20 active:scale-95">
+                        <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                        <span class="hidden sm:inline">新增主推</span>
+                        <span class="sm:hidden">新增</span>
+                    </button>
+                    <button onclick="openOshiModal(currentOshiId)" id="editOshiBtn" title="編輯當前主推" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition border border-slate-700">
+                        <i data-lucide="settings" class="w-4 h-4"></i>
+                    </button>
                 </div>
             </div>
         </div>
+
+        <!-- Second Layer: Function Sub-Tabs -->
+        <nav class="bg-slate-950/80 border-t border-slate-800/80">
+            <div class="max-w-7xl mx-auto px-4 flex justify-center sm:justify-start space-x-1 sm:space-x-4">
+                <button onclick="switchTab('home')" id="tabBtn-home" class="subtab-btn flex items-center space-x-2 px-4 py-2.5 text-sm font-medium border-b-2 border-pink-500 text-pink-400 transition">
+                    <i data-lucide="home" class="w-4 h-4"></i>
+                    <span>🏠 主頁</span>
+                </button>
+                <button onclick="switchTab('calendar')" id="tabBtn-calendar" class="subtab-btn flex items-center space-x-2 px-4 py-2.5 text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition">
+                    <i data-lucide="calendar" class="w-4 h-4"></i>
+                    <span>📅 行事曆</span>
+                </button>
+                <button onclick="switchTab('merch')" id="tabBtn-merch" class="subtab-btn flex items-center space-x-2 px-4 py-2.5 text-sm font-medium border-b-2 border-transparent text-slate-400 hover:text-slate-200 transition">
+                    <i data-lucide="shopping-bag" class="w-4 h-4"></i>
+                    <span>🛍️ 周邊紀錄</span>
+                </button>
+            </div>
+        </nav>
     </header>
 
-    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-12">
+    <!-- Main Content Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
-        <!-- Hero & Profile Section -->
-        <section id="profile" class="relative rounded-3xl overflow-hidden gradient-border p-6 sm:p-10 bg-sachi-card/90">
-            <!-- Background Decorative Glows -->
-            <div class="absolute -top-24 -right-24 w-96 h-96 bg-sachi-pink/20 rounded-full blur-3xl pointer-events-none"></div>
-            <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-sachi-purple/20 rounded-full blur-3xl pointer-events-none"></div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center relative z-10">
-                <!-- Avatar Showcase -->
-                <div class="lg:col-span-5 flex flex-col items-center">
-                    <div class="relative group">
-                        <div class="absolute -inset-1 bg-gradient-to-r from-pink-500 to-purple-600 rounded-3xl blur opacity-75 group-hover:opacity-100 transition duration-500"></div>
-                        <img src="https://placehold.co/400x400/2a1b3d/ff66c4?text=Sachi+VTuber+Avatar" alt="幸 Sachi Avatar" class="relative rounded-3xl w-72 h-72 sm:w-80 sm:h-80 object-cover shadow-2xl">
-                        <span class="absolute bottom-3 right-3 bg-emerald-500 border-2 border-sachi-dark text-white text-xs px-3 py-1 rounded-full font-bold flex items-center gap-1.5 shadow-lg">
-                            <span class="w-2 h-2 rounded-full bg-white animate-pulse"></span> 今日活動中
-                        </span>
+        <!-- ==================== TAB 1: HOME ==================== -->
+        <section id="view-home" class="space-y-6">
+            <!-- Banner & Profile Header Section -->
+            <div class="relative rounded-2xl overflow-hidden bg-slate-900 border border-slate-800 shadow-2xl">
+                <!-- Cover Image / Banner -->
+                <div class="h-48 sm:h-64 sm:min-h-[260px] w-full bg-gradient-to-r from-purple-900 via-indigo-900 to-slate-900 relative overflow-hidden">
+                    <img id="homeCoverImg" src="" alt="Cover Banner" class="w-full h-full object-cover hidden">
+                    <div id="homeCoverPlaceholder" class="w-full h-full flex items-center justify-center text-slate-600 bg-slate-800/50">
+                        <i data-lucide="image" class="w-12 h-12 stroke-[1.5]"></i>
                     </div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-slate-900 via-transparent to-black/20"></div>
                 </div>
 
-                <!-- Info Details -->
-                <div class="lg:col-span-7 space-y-6">
-                    <div>
-                        <div class="flex flex-wrap items-center gap-2 mb-3">
-                            <span class="px-3 py-1 bg-purple-500/20 text-purple-300 text-xs font-semibold rounded-full border border-purple-500/30">🌸 治癒系 Live 歌姬</span>
-                            <span class="px-3 py-1 bg-pink-500/20 text-pink-300 text-xs font-semibold rounded-full border border-pink-500/30">✨ 繁中 / 日文對應</span>
+                <!-- Profile Info Overlay Container -->
+                <div class="relative px-6 pb-6 pt-0 sm:pt-4">
+                    <div class="flex flex-col sm:flex-row items-center sm:items-end space-y-4 sm:space-y-0 sm:space-x-6 -mt-20 sm:-mt-24 mb-4">
+                        <!-- Avatar -->
+                        <div class="relative w-32 h-32 sm:w-36 sm:h-36 rounded-2xl p-1 gradient-border shadow-xl shrink-0 bg-slate-900">
+                            <div class="w-full h-full rounded-xl overflow-hidden bg-slate-800 flex items-center justify-center">
+                                <img id="homeAvatarImg" src="" alt="Avatar" class="w-full h-full object-cover hidden">
+                                <div id="homeAvatarPlaceholder" class="text-slate-500">
+                                    <i data-lucide="user" class="w-16 h-16"></i>
+                                </div>
+                            </div>
                         </div>
-                        <h2 class="text-3xl sm:text-5xl font-black text-white tracking-tight">
-                            幸 <span class="text-2xl sm:text-3xl font-bold text-pink-400">Sachi</span>
+
+                        <!-- Name & Dates -->
+                        <div class="flex-1 text-center sm:text-left space-y-2">
+                            <h1 id="homeName" class="text-2xl sm:text-3xl font-extrabold text-white tracking-wide"></h1>
+                            <div class="flex flex-wrap justify-center sm:justify-start gap-2 text-xs sm:text-sm">
+                                <span id="homeBirthdayBadge" class="hidden items-center px-3 py-1 rounded-full bg-pink-500/10 border border-pink-500/30 text-pink-300">
+                                    <i data-lucide="cake" class="w-3.5 h-3.5 mr-1.5"></i>
+                                    <span id="homeBirthdayText"></span>
+                                </span>
+                                <span id="homeDebutBadge" class="hidden items-center px-3 py-1 rounded-full bg-purple-500/10 border border-purple-500/30 text-purple-300">
+                                    <i data-lucide="sparkles" class="w-3.5 h-3.5 mr-1.5"></i>
+                                    <span id="homeDebutText"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tags Bar -->
+                    <div id="homeTagsContainer" class="flex flex-wrap gap-2 mb-4 justify-center sm:justify-start"></div>
+
+                    <!-- Bio Section -->
+                    <div id="homeBioCard" class="hidden mt-4 p-4 rounded-xl bg-slate-800/50 border border-slate-700/50 text-slate-300 text-sm leading-relaxed">
+                        <p id="homeBioText" class="whitespace-pre-line"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Social Links & Live Stream Section Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- Social Links -->
+                <div class="lg:col-span-1 bg-slate-900 rounded-2xl border border-slate-800 p-5 shadow-lg flex flex-col justify-between">
+                    <div>
+                        <h2 class="text-lg font-bold text-white mb-4 flex items-center space-x-2">
+                            <i data-lucide="share-2" class="w-5 h-5 text-pink-400"></i>
+                            <span>社群連結</span>
                         </h2>
-                        <p class="mt-3 text-slate-300 leading-relaxed text-sm sm:text-base">
-                            「來自星空花園的歌姬 VTuber！用溫暖的歌聲與元氣十足的直播，帶給每一位幸運兒最滿滿的幸運能量 ✨」
-                        </p>
+                        <div id="socialLinksContainer" class="space-y-3">
+                            <!-- Social Buttons Rendered Dynamically -->
+                        </div>
                     </div>
+                </div>
 
-                    <!-- Profile Specs Table/Grid -->
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs sm:text-sm">
-                        <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10">
-                            <p class="text-slate-400 font-medium">🎂 生日</p>
-                            <p class="text-slate-100 font-bold mt-0.5">10 月 24 日</p>
+                <!-- Live Stream Preview Zone -->
+                <div class="lg:col-span-2 bg-slate-900 rounded-2xl border border-slate-800 p-5 shadow-lg flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <h2 class="text-lg font-bold text-white flex items-center space-x-2">
+                                <i data-lucide="tv" class="w-5 h-5 text-red-400"></i>
+                                <span>直播預告 / 待機所</span>
+                            </h2>
+                            <span id="streamStatusBadge" class="text-xs px-2.5 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700">未設定</span>
                         </div>
-                        <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10">
-                            <p class="text-slate-400 font-medium">🎨 應援色</p>
-                            <p class="text-pink-400 font-bold mt-0.5 flex items-center gap-1.5">
-                                <span class="w-3 h-3 rounded-full bg-pink-400 inline-block"></span> 櫻花霓虹粉
-                            </p>
-                        </div>
-                        <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10">
-                            <p class="text-slate-400 font-medium">💖 粉絲名</p>
-                            <p class="text-slate-100 font-bold mt-0.5">幸運草 (Sachi-clover)</p>
-                        </div>
-                        <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10">
-                            <p class="text-slate-400 font-medium">🏷️ 直播 Tag</p>
-                            <p class="text-purple-300 font-bold mt-0.5">#SachiLive</p>
-                        </div>
-                        <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10">
-                            <p class="text-slate-400 font-medium">🎨 二創 Tag</p>
-                            <p class="text-purple-300 font-bold mt-0.5">#SachiArt</p>
-                        </div>
-                        <div class="p-3.5 rounded-2xl bg-white/5 border border-white/10">
-                            <p class="text-slate-400 font-medium">🥐 迷因 Tag</p>
-                            <p class="text-purple-300 font-bold mt-0.5">#SachiMemes</p>
+
+                        <div id="streamEmbedCard" class="rounded-xl overflow-hidden bg-slate-950 border border-slate-800 aspect-video flex flex-col items-center justify-center p-6 text-center">
+                            <i data-lucide="video-off" class="w-12 h-12 text-slate-600 mb-3"></i>
+                            <p class="text-slate-400 text-sm" id="streamMessage">目前暫無設定直播資訊，點擊右上角設定按鈕編輯</p>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Quick Social Portals -->
-        <section id="links" class="space-y-4">
-            <h3 class="text-xl font-bold text-slate-100 flex items-center gap-2">
-                <i class="fas fa-paper-plane text-pink-400"></i> 社群與官方頻道
-            </h3>
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                <a href="https://youtube.com" target="_blank" class="glow-card p-5 rounded-2xl bg-sachi-card border border-slate-800 flex flex-col items-center text-center group">
-                    <div class="w-12 h-12 rounded-2xl bg-red-500/10 text-red-500 flex items-center justify-center text-2xl mb-3 group-hover:scale-110 transition-transform">
-                        <i class="fab fa-youtube"></i>
-                    </div>
-                    <span class="font-bold text-slate-200">YouTube</span>
-                    <span class="text-xs text-slate-400 mt-1">每週歌枠 & 遊戲直播</span>
-                </a>
-
-                <a href="https://x.com" target="_blank" class="glow-card p-5 rounded-2xl bg-sachi-card border border-slate-800 flex flex-col items-center text-center group">
-                    <div class="w-12 h-12 rounded-2xl bg-sky-500/10 text-sky-400 flex items-center justify-center text-2xl mb-3 group-hover:scale-110 transition-transform">
-                        <i class="fab fa-x-twitter"></i>
-                    </div>
-                    <span class="font-bold text-slate-200">X (Twitter)</span>
-                    <span class="text-xs text-slate-400 mt-1">最新動態與日常廢文</span>
-                </a>
-
-                <a href="https://discord.com" target="_blank" class="glow-card p-5 rounded-2xl bg-sachi-card border border-slate-800 flex flex-col items-center text-center group">
-                    <div class="w-12 h-12 rounded-2xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center text-2xl mb-3 group-hover:scale-110 transition-transform">
-                        <i class="fab fa-discord"></i>
-                    </div>
-                    <span class="font-bold text-slate-200">Discord 粉絲群</span>
-                    <span class="text-xs text-slate-400 mt-1">幸運草官方討論交流區</span>
-                </a>
-
-                <a href="#" target="_blank" class="glow-card p-5 rounded-2xl bg-sachi-card border border-slate-800 flex flex-col items-center text-center group">
-                    <div class="w-12 h-12 rounded-2xl bg-pink-500/10 text-pink-400 flex items-center justify-center text-2xl mb-3 group-hover:scale-110 transition-transform">
-                        <i class="fas fa-store"></i>
-                    </div>
-                    <span class="font-bold text-slate-200">官方周邊 Shop</span>
-                    <span class="text-xs text-slate-400 mt-1">官方紀念品與語音專區</span>
-                </a>
-            </div>
-        </section>
-
-        <!-- Weekly Stream Schedule -->
-        <section id="schedule" class="space-y-6">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-                <div>
-                    <h3 class="text-xl font-bold text-slate-100 flex items-center gap-2">
-                        <i class="fas fa-calendar-week text-purple-400"></i> 本週直播預告 (Weekly Schedule)
-                    </h3>
-                    <p class="text-xs text-slate-400 mt-1">所有時間皆為 GMT+8，點擊卡片可獲得提醒或預約連結</p>
-                </div>
-                <span class="px-3.5 py-1 bg-sachi-purple/20 text-purple-300 text-xs font-semibold rounded-full border border-purple-500/30 self-start sm:self-auto">
-                    📅 更新時間：本週最新行程
-                </span>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <!-- Schedule Card 1 -->
-                <div class="bg-sachi-card rounded-2xl border border-slate-800 p-5 space-y-4 hover:border-pink-500/40 transition-all group">
-                    <div class="flex items-center justify-between">
-                        <span class="px-3 py-1 bg-pink-500/10 text-pink-400 text-xs font-bold rounded-lg border border-pink-500/20">週三 20:00</span>
-                        <span class="text-xs text-emerald-400 font-medium flex items-center gap-1">
-                            <i class="fas fa-microphone"></i> 歌枠 Live
-                        </span>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-lg text-slate-100 group-hover:text-pink-300 transition-colors">夜間深夜歌枠！聽歌聊天夜 🎶</h4>
-                        <p class="text-xs text-slate-400 mt-1">陪伴大家度過週三小週末，開放點歌與閒聊！</p>
-                    </div>
-                    <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs">
-                        <span class="text-slate-500">平台: YouTube</span>
-                        <a href="https://youtube.com" target="_blank" class="text-pink-400 font-semibold hover:underline flex items-center gap-1">開啟待機所 <i class="fas fa-external-link-alt text-[10px]"></i></a>
-                    </div>
-                </div>
-
-                <!-- Schedule Card 2 -->
-                <div class="bg-sachi-card rounded-2xl border border-slate-800 p-5 space-y-4 hover:border-purple-500/40 transition-all group">
-                    <div class="flex items-center justify-between">
-                        <span class="px-3 py-1 bg-purple-500/10 text-purple-400 text-xs font-bold rounded-lg border border-purple-500/20">週五 21:00</span>
-                        <span class="text-xs text-purple-400 font-medium flex items-center gap-1">
-                            <i class="fas fa-gamepad"></i> 遊戲實況
-                        </span>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-lg text-slate-100 group-hover:text-purple-300 transition-colors">恐怖遊戲挑戰《恐怖怪談》😱</h4>
-                        <p class="text-xs text-slate-400 mt-1">聽說這款超嚇人？希望這晚大家能為 Sachi 加油！</p>
-                    </div>
-                    <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs">
-                        <span class="text-slate-500">平台: YouTube</span>
-                        <a href="https://youtube.com" target="_blank" class="text-purple-400 font-semibold hover:underline flex items-center gap-1">開啟待機所 <i class="fas fa-external-link-alt text-[10px]"></i></a>
-                    </div>
-                </div>
-
-                <!-- Schedule Card 3 -->
-                <div class="bg-sachi-card rounded-2xl border border-slate-800 p-5 space-y-4 hover:border-indigo-500/40 transition-all group">
-                    <div class="flex items-center justify-between">
-                        <span class="px-3 py-1 bg-indigo-500/10 text-indigo-400 text-xs font-bold rounded-lg border border-indigo-500/20">週日 19:00</span>
-                        <span class="text-xs text-indigo-400 font-medium flex items-center gap-1">
-                            <i class="fas fa-users"></i> 連動雜談
-                        </span>
-                    </div>
-                    <div>
-                        <h4 class="font-bold text-lg text-slate-100 group-hover:text-indigo-300 transition-colors">週末客串合作雜談！秘密企劃 ✨</h4>
-                        <p class="text-xs text-slate-400 mt-1">神秘嘉賓即將登場！精彩問答與互動不要錯過。</p>
-                    </div>
-                    <div class="pt-2 border-t border-slate-800/80 flex items-center justify-between text-xs">
-                        <span class="text-slate-500">平台: YouTube</span>
-                        <a href="https://youtube.com" target="_blank" class="text-indigo-400 font-semibold hover:underline flex items-center gap-1">開啟待機所 <i class="fas fa-external-link-alt text-[10px]"></i></a>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Interactive Fan Wall Section -->
-        <section id="fanwall" class="space-y-6">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                <h3 class="text-xl font-bold text-slate-100 flex items-center gap-2">
-                    <i class="fas fa-heart text-pink-500"></i> 幸運草專屬應援牆 (Fan Wall)
-                </h3>
-                <p class="text-xs text-slate-400">留下您對 幸 Sachi 的祝福與應援話語！</p>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                <!-- Message Form -->
-                <div class="lg:col-span-5 bg-sachi-card rounded-2xl border border-slate-800 p-6 space-y-4">
-                    <h4 class="font-bold text-slate-200 text-sm">✍️ 寫下應援訊息</h4>
-                    <form id="commentForm" class="space-y-3">
-                        <div>
-                            <label class="block text-xs font-medium text-slate-400 mb-1">您的暱稱 / 粉絲名</label>
-                            <input type="text" id="authorInput" required placeholder="例：忠實幸運草草" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-pink-500">
+        <!-- ==================== TAB 2: CALENDAR ==================== -->
+        <section id="view-calendar" class="hidden space-y-6">
+            <div class="bg-slate-900 rounded-2xl border border-slate-800 p-4 sm:p-6 shadow-xl">
+                <!-- Calendar Header & Navigation -->
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4 mb-6">
+                    <div class="flex items-center space-x-3">
+                        <div class="p-2.5 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20">
+                            <i data-lucide="calendar-days" class="w-6 h-6"></i>
                         </div>
                         <div>
-                            <label class="block text-xs font-medium text-slate-400 mb-1">應援留言內容</label>
-                            <textarea id="messageInput" required rows="3" placeholder="幸醬加油！最喜歡妳的歌聲了～" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3.5 py-2.5 text-sm text-slate-100 focus:outline-none focus:border-pink-500 resize-none"></textarea>
+                            <h2 id="calendarMonthYear" class="text-xl font-bold text-white">2026 年 10 月</h2>
+                            <p class="text-xs text-slate-400">活動記錄、紀念日與重大事項</p>
                         </div>
-                        <button type="submit" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-pink-500 via-purple-600 to-indigo-600 text-white font-bold text-sm shadow-lg shadow-pink-500/25 hover:brightness-110 transition-all">
-                            發送應援祝福 ✨
+                    </div>
+
+                    <div class="flex items-center space-x-2 w-full sm:w-auto justify-between sm:justify-end">
+                        <div class="flex items-center space-x-1 bg-slate-800 rounded-lg p-1 border border-slate-700">
+                            <button onclick="changeMonth(-1)" class="p-1.5 hover:bg-slate-700 rounded-md text-slate-300 transition"><i data-lucide="chevron-left" class="w-5 h-5"></i></button>
+                            <button onclick="resetToToday()" class="px-3 py-1 hover:bg-slate-700 rounded-md text-xs font-medium text-slate-300 transition">今天</button>
+                            <button onclick="changeMonth(1)" class="p-1.5 hover:bg-slate-700 rounded-md text-slate-300 transition"><i data-lucide="chevron-right" class="w-5 h-5"></i></button>
+                        </div>
+                        <button onclick="openEventModal()" class="flex items-center space-x-1.5 px-3 py-2 rounded-lg bg-pink-600 hover:bg-pink-700 text-white text-sm font-medium transition shadow-md">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                            <span>新增事件</span>
                         </button>
-                    </form>
-                </div>
-
-                <!-- Comments Display -->
-                <div class="lg:col-span-7 bg-sachi-card rounded-2xl border border-slate-800 p-6 space-y-4 max-h-[380px] overflow-y-auto" id="commentsList">
-                    <!-- Sample Comment 1 -->
-                    <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
-                        <div class="flex items-center justify-between">
-                            <span class="font-bold text-xs text-pink-400">✨ 狂熱幸運草 A 粉</span>
-                            <span class="text-[10px] text-slate-500">剛剛</span>
-                        </div>
-                        <p class="text-sm text-slate-200">幸醬上週的歌枠真的太好聽了！一直重播中，本週歌枠絕對會準時報到！💖</p>
-                    </div>
-
-                    <!-- Sample Comment 2 -->
-                    <div class="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
-                        <div class="flex items-center justify-between">
-                            <span class="font-bold text-xs text-purple-400">✨ 星空打卡員</span>
-                            <span class="text-[10px] text-slate-500">2 小時前</span>
-                        </div>
-                        <p class="text-sm text-slate-200">週五恐怖遊戲感覺會尖叫連連哈哈哈！期待 Sachi 壓驚！加油！</p>
                     </div>
                 </div>
+
+                <!-- Calendar Grid -->
+                <div class="grid grid-cols-7 gap-1 sm:gap-2 mb-2 text-center text-xs font-bold text-slate-400 border-b border-slate-800 pb-2">
+                    <div class="text-red-400">日</div>
+                    <div>一</div>
+                    <div>二</div>
+                    <div>三</div>
+                    <div>四</div>
+                    <div>五</div>
+                    <div class="text-indigo-400">六</div>
+                </div>
+                
+                <div id="calendarGrid" class="grid grid-cols-7 gap-1 sm:gap-2 min-h-[360px]">
+                    <!-- Dynamic Calendar Days rendered via JS -->
+                </div>
+            </div>
+
+            <!-- Event Details / List Card -->
+            <div class="bg-slate-900 rounded-2xl border border-slate-800 p-5 shadow-lg">
+                <h3 class="text-md font-bold text-slate-200 mb-3 flex items-center space-x-2">
+                    <i data-lucide="list-todo" class="w-4 h-4 text-pink-400"></i>
+                    <span>本月事件明細</span>
+                </h3>
+                <div id="monthlyEventsList" class="space-y-2">
+                    <!-- Dynamic Event Items -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TAB 3: MERCH TRACKER ==================== -->
+        <section id="view-merch" class="hidden space-y-6">
+            <!-- Total Expense Banner Card -->
+            <div class="bg-gradient-to-r from-purple-900/40 via-slate-900 to-pink-900/30 rounded-2xl border border-purple-500/30 p-6 shadow-xl flex flex-col sm:flex-row justify-between items-center gap-4">
+                <div class="flex items-center space-x-4">
+                    <div class="p-3.5 rounded-2xl bg-pink-500/20 text-pink-400 border border-pink-500/30">
+                        <i data-lucide="wallet" class="w-8 h-8"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs text-slate-400 font-medium">全站累積總消費金額</div>
+                        <div id="totalSpendAmount" class="text-3xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-300">NT$ 0</div>
+                    </div>
+                </div>
+                <button onclick="openMerchModal()" class="w-full sm:w-auto flex items-center justify-center space-x-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-medium shadow-lg transition active:scale-95">
+                    <i data-lucide="plus-circle" class="w-5 h-5"></i>
+                    <span>紀錄新周邊</span>
+                </button>
+            </div>
+
+            <!-- Merch Items Grouped by Event -->
+            <div id="merchGroupContainer" class="space-y-6">
+                <!-- Grouped Merch Tables rendered dynamically -->
             </div>
         </section>
 
     </main>
 
-    <!-- Footer -->
-    <footer class="border-t border-slate-800/80 bg-sachi-dark py-8 mt-12 text-center text-xs text-slate-500">
-        <div class="max-w-7xl mx-auto px-4 space-y-2">
-            <p>© 2026 Meridian Project | 幸 Sachi Official Fan Hub.</p>
-            <p class="text-slate-600">本網站為 幸 Sachi 粉絲專屬應援門戶，專注於動態更新、直播日程與粉絲交流。</p>
-        </div>
-    </footer>
+    <!-- ==================== MODALS ==================== -->
 
-    <script>
-        // Handle Fan Wall Message Submission
-        document.getElementById('commentForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const author = document.getElementById('authorInput').value.trim();
-            const message = document.getElementById('messageInput').value.trim();
-            
-            if(!author || !message) return;
+    <!-- 1. OSHI SETUP MODAL (Onboarding / Edit) -->
+    <div id="oshiModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-xl w-full p-6 shadow-2xl relative my-8">
+            <button onclick="closeOshiModal()" id="closeOshiModalBtn" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
 
-            const commentsList = document.getElementById('commentsList');
-            
-            const newComment = document.createElement('div');
-            newComment.className = 'p-4 rounded-xl bg-slate-900/80 border border-pink-500/30 space-y-1 transition-all duration-300 opacity-0 transform translate-y-2';
-            newComment.innerHTML = `
-                <div class="flex items-center justify-between">
-                    <span class="font-bold text-xs text-pink-400">✨ ${escapeHtml(author)}</span>
-                    <span class="text-[10px] text-slate-500">剛剛</span>
+            <h2 id="oshiModalTitle" class="text-xl font-bold text-white mb-2 flex items-center space-x-2">
+                <i data-lucide="user-plus" class="w-5 h-5 text-pink-400"></i>
+                <span>新增主推 VTuber</span>
+            </h2>
+            <p class="text-xs text-slate-400 mb-6">填寫基本資料與設定。預設欄位皆留白，可依需求填寫。</p>
+
+            <form id="oshiForm" onsubmit="saveOshiData(event)" class="space-y-4">
+                <input type="hidden" id="oshiIdInput">
+
+                <!-- Avatar Upload & Cover Upload -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">形象大頭貼 (圖片檔)</label>
+                        <input type="file" id="oshiAvatarFile" accept="image/*" class="block w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-pink-400 hover:file:bg-slate-700 cursor-pointer bg-slate-950 rounded-xl border border-slate-800 p-1">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">背景封面圖 (圖片檔)</label>
+                        <input type="file" id="oshiCoverFile" accept="image/*" class="block w-full text-xs text-slate-400 file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-pink-400 hover:file:bg-slate-700 cursor-pointer bg-slate-950 rounded-xl border border-slate-800 p-1">
+                    </div>
                 </div>
-                <p class="text-sm text-slate-200">${escapeHtml(message)}</p>
-            `;
 
-            commentsList.insertBefore(newComment, commentsList.firstChild);
+                <!-- Name & Dates -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">名稱 *</label>
+                        <input type="text" id="oshiNameInput" required placeholder="如：浠 Mizuki" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">生日 (MM-DD)</label>
+                        <input type="text" id="oshiBirthdayInput" placeholder="如：12-25" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">出道日期 (YYYY-MM-DD)</label>
+                        <input type="date" id="oshiDebutInput" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500">
+                    </div>
+                </div>
 
-            setTimeout(() => {
-                newComment.classList.remove('opacity-0', 'translate-y-2');
-            }, 10);
+                <!-- Tags & Bio -->
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">標籤 (以半角逗點分割)</label>
+                    <input type="text" id="oshiTagsInput" placeholder="如：歌姬, 極狐, 子午計畫" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500">
+                </div>
 
-            document.getElementById('authorInput').value = '';
-            document.getElementById('messageInput').value = '';
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">個人簡介</label>
+                    <textarea id="oshiBioInput" rows="2" placeholder="填寫主推的特色或簡介..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500"></textarea>
+                </div>
+
+                <!-- Social URLs -->
+                <div class="border-t border-slate-800 pt-3">
+                    <span class="text-xs font-bold text-slate-400 block mb-2">社群連結網址 (選填)</span>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                        <input type="url" id="socialYouTube" placeholder="YouTube 頻道網址" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-pink-500">
+                        <input type="url" id="socialTwitter" placeholder="X (Twitter) 網址" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-pink-500">
+                        <input type="url" id="socialTwitch" placeholder="Twitch 網址" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-pink-500">
+                        <input type="url" id="socialInstagram" placeholder="Instagram 網址" class="bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-pink-500">
+                    </div>
+                </div>
+
+                <!-- Stream Video URL -->
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">直播預告 YouTube 網址 / Embed ID (選填)</label>
+                    <input type="text" id="oshiStreamInput" placeholder="https://www.youtube.com/watch?v=... 或 影片ID" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500">
+                </div>
+
+                <!-- Footer Buttons -->
+                <div class="flex items-center justify-between border-t border-slate-800 pt-4 mt-6">
+                    <button type="button" onclick="deleteOshi()" id="deleteOshiBtn" class="hidden text-xs text-red-400 hover:text-red-300 px-3 py-2 rounded-lg bg-red-500/10 hover:bg-red-500/20 transition">
+                        刪除此主推
+                    </button>
+                    <div class="flex space-x-2 ml-auto">
+                        <button type="submit" class="px-5 py-2 rounded-xl bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white font-medium text-sm transition shadow-md">
+                            儲存變更
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. CALENDAR EVENT MODAL -->
+    <div id="eventModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 shadow-2xl relative">
+            <button onclick="closeEventModal()" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <h2 id="eventModalTitle" class="text-lg font-bold text-white mb-4">新增行事曆事件</h2>
+
+            <form id="eventForm" onsubmit="saveEventData(event)" class="space-y-4">
+                <input type="hidden" id="eventIdInput">
+                
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">日期 *</label>
+                    <input type="date" id="eventDateInput" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">事件標題 *</label>
+                    <input type="text" id="eventTitleInput" required placeholder="如：會員扣款日 / 週年直播" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">事件類型</label>
+                    <select id="eventTypeInput" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500">
+                        <option value="stream">🔴 直播 / 活動</option>
+                        <option value="member">💳 會員扣款</option>
+                        <option value="wallpaper">🖼️ 桌布領取</option>
+                        <option value="anniversary">🎉 週年 / 生誕祭</option>
+                        <option value="other">📌 其他備忘</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">備註資訊</label>
+                    <textarea id="eventNoteInput" rows="2" placeholder="相關連結或詳細備忘..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500"></textarea>
+                </div>
+
+                <div class="flex justify-end space-x-2 border-t border-slate-800 pt-4">
+                    <button type="button" onclick="closeEventModal()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm">取消</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-pink-600 hover:bg-pink-700 text-white font-medium text-sm transition">儲存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 3. MERCH ITEM MODAL -->
+    <div id="merchModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4 overflow-y-auto">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-6 shadow-2xl relative my-8">
+            <button onclick="closeMerchModal()" class="absolute top-4 right-4 p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+
+            <h2 id="merchModalTitle" class="text-lg font-bold text-white mb-4">紀錄周邊購買</h2>
+
+            <form id="merchForm" onsubmit="saveMerchData(event)" class="space-y-4">
+                <input type="hidden" id="merchIdInput">
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">活動/系列名稱 *</label>
+                    <input type="text" id="merchEventInput" required placeholder="如：子午四週年, FF46, 生誕祭" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">商品名稱 *</label>
+                    <input type="text" id="merchNameInput" required placeholder="如：壓克力立牌, 紀念桌墊" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">單價 (NT$) *</label>
+                        <input type="number" id="merchPriceInput" required min="0" placeholder="0" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">數量 *</label>
+                        <input type="number" id="merchQtyInput" required min="1" value="1" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500">
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">購買管道</label>
+                        <input type="text" id="merchChannelInput" placeholder="如：官方蝦皮, Buyee, 現場" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-medium text-slate-300 mb-1">周邊照片 (圖片檔)</label>
+                        <input type="file" id="merchImgFile" accept="image/*" class="block w-full text-xs text-slate-400 file:mr-2 file:py-1.5 file:px-2.5 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-slate-800 file:text-pink-400 hover:file:bg-slate-700 cursor-pointer bg-slate-950 rounded-xl border border-slate-800 p-1">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-medium text-slate-300 mb-1">備註說明</label>
+                    <textarea id="merchNoteInput" rows="2" placeholder="預購出貨時間、實體到貨狀況等..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-pink-500"></textarea>
+                </div>
+
+                <div class="flex justify-end space-x-2 border-t border-slate-800 pt-4">
+                    <button type="button" onclick="closeMerchModal()" class="px-4 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-sm">取消</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-pink-600 hover:bg-pink-700 text-white font-medium text-sm transition">新增紀錄</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== JAVASCRIPT LOGIC ==================== -->
+    <script>
+        // Storage Key Constants
+        const STORAGE_KEY = 'VTUBER_OSHI_CENTER_DATA_V1';
+
+        // Global State Structure
+        let appData = {
+            currentOshiId: null,
+            oshis: [] // Array of { id, name, birthday, debut, tags, bio, social, streamUrl, avatarBase64, coverBase64, events: [], merches: [] }
+        };
+
+        // Calendar Logic State
+        let calendarDate = new Date();
+
+        // --- Core Startup & Initialization ---
+        window.addEventListener('DOMContentLoaded', () => {
+            loadFromLocalStorage();
+            lucide.createIcons();
+
+            // Onboarding Check: If no Oshi exists, open forced Onboarding Modal
+            if (!appData.oshis || appData.oshis.length === 0) {
+                openOshiModal(null, true);
+            } else {
+                if (!appData.currentOshiId && appData.oshis.length > 0) {
+                    appData.currentOshiId = appData.oshis[0].id;
+                }
+                renderAll();
+            }
         });
 
-        function escapeHtml(text) {
-            const div = document.createElement('div');
-            div.innerText = text;
-            return div.innerHTML;
+        // Save State to LocalStorage
+        function saveToLocalStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(appData));
+            } catch (e) {
+                console.error('LocalStorage quota exceeded or failed:', e);
+                alert('無法儲存資料，可能是上傳之圖片容量過大，請更換較小的圖片檔案。');
+            }
+        }
+
+        // Load State from LocalStorage
+        function loadFromLocalStorage() {
+            const data = localStorage.getItem(STORAGE_KEY);
+            if (data) {
+                try {
+                    appData = JSON.parse(data);
+                } catch (e) {
+                    console.error('Failed to parse local storage data', e);
+                }
+            }
+        }
+
+        // Helper: Helper to convert File object to Compressed Base64 String
+        function fileToBase64(file, maxWidth = 800) {
+            return new Promise((resolve, reject) => {
+                if (!file) {
+                    resolve(null);
+                    return;
+                }
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+
+                        if (width > maxWidth) {
+                            height = Math.round((height * maxWidth) / width);
+                            width = maxWidth;
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+
+                        // Compress quality to 0.75 JPEG
+                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.75);
+                        resolve(compressedBase64);
+                    };
+                    img.onerror = (err) => reject(err);
+                };
+                reader.onerror = (error) => reject(error);
+            });
+        }
+
+        // Helper: Get Current Oshi Object
+        function getCurrentOshi() {
+            return appData.oshis.find(o => o.id === appData.currentOshiId) || null;
+        }
+
+        // --- Render Engine ---
+        function renderAll() {
+            renderOshiTabs();
+            renderHomeView();
+            renderCalendarView();
+            renderMerchView();
+            lucide.createIcons();
+        }
+
+        // --- Render Oshi Header Tabs ---
+        function renderOshiTabs() {
+            const container = document.getElementById('oshiTabsContainer');
+            container.innerHTML = '';
+
+            appData.oshis.forEach(oshi => {
+                const isActive = oshi.id === appData.currentOshiId;
+                const btn = document.createElement('button');
+                btn.onclick = () => switchOshi(oshi.id);
+                btn.className = `flex items-center space-x-2 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium transition whitespace-nowrap border ${
+                    isActive 
+                    ? 'bg-pink-500/20 text-pink-300 border-pink-500/50 shadow-md' 
+                    : 'bg-slate-800/60 text-slate-400 hover:text-slate-200 border-slate-700/50 hover:bg-slate-800'
+                }`;
+
+                let avatarHtml = `<div class="w-5 h-5 rounded-full bg-slate-700 flex items-center justify-center text-[10px] text-slate-300 font-bold">${oshi.name.charAt(0)}</div>`;
+                if (oshi.avatarBase64) {
+                    avatarHtml = `<img src="${oshi.avatarBase64}" class="w-5 h-5 rounded-full object-cover">`;
+                }
+
+                btn.innerHTML = `${avatarHtml}<span>${oshi.name}</span>`;
+                container.appendChild(btn);
+            });
+        }
+
+        // --- Switch Active Oshi ---
+        function switchOshi(id) {
+            appData.currentOshiId = id;
+            saveToLocalStorage();
+            renderAll();
+        }
+
+        // --- SubTab View Switcher ---
+        function switchTab(tabName) {
+            document.querySelectorAll('section[id^="view-"]').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`view-${tabName}`).classList.remove('hidden');
+
+            document.querySelectorAll('.subtab-btn').forEach(btn => {
+                btn.classList.remove('border-pink-500', 'text-pink-400');
+                btn.classList.add('border-transparent', 'text-slate-400');
+            });
+
+            const activeBtn = document.getElementById(`tabBtn-${tabName}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('border-transparent', 'text-slate-400');
+                activeBtn.classList.add('border-pink-500', 'text-pink-400');
+            }
+        }
+
+        // ==================== HOME VIEW RENDERER ====================
+        function renderHomeView() {
+            const oshi = getCurrentOshi();
+            if (!oshi) return;
+
+            // Name
+            document.getElementById('homeName').textContent = oshi.name || '未命名主推';
+
+            // Cover Banner
+            const coverImg = document.getElementById('homeCoverImg');
+            const coverPlaceholder = document.getElementById('homeCoverPlaceholder');
+            if (oshi.coverBase64) {
+                coverImg.src = oshi.coverBase64;
+                coverImg.classList.remove('hidden');
+                coverPlaceholder.classList.add('hidden');
+            } else {
+                coverImg.classList.add('hidden');
+                coverPlaceholder.classList.remove('hidden');
+            }
+
+            // Avatar
+            const avatarImg = document.getElementById('homeAvatarImg');
+            const avatarPlaceholder = document.getElementById('homeAvatarPlaceholder');
+            if (oshi.avatarBase64) {
+                avatarImg.src = oshi.avatarBase64;
+                avatarImg.classList.remove('hidden');
+                avatarPlaceholder.classList.add('hidden');
+            } else {
+                avatarImg.classList.add('hidden');
+                avatarPlaceholder.classList.remove('hidden');
+            }
+
+            // Birthday
+            const bdayBadge = document.getElementById('homeBirthdayBadge');
+            if (oshi.birthday) {
+                document.getElementById('homeBirthdayText').textContent = `生日：${oshi.birthday}`;
+                bdayBadge.classList.remove('hidden');
+                bdayBadge.classList.add('flex');
+            } else {
+                bdayBadge.classList.add('hidden');
+            }
+
+            // Debut Date
+            const debutBadge = document.getElementById('homeDebutBadge');
+            if (oshi.debut) {
+                document.getElementById('homeDebutText').textContent = `出道日：${oshi.debut}`;
+                debutBadge.classList.remove('hidden');
+                debutBadge.classList.add('flex');
+            } else {
+                debutBadge.classList.add('hidden');
+            }
+
+            // Tags
+            const tagsContainer = document.getElementById('homeTagsContainer');
+            tagsContainer.innerHTML = '';
+            if (oshi.tags) {
+                const tagList = oshi.tags.split(',').map(t => t.trim()).filter(Boolean);
+                tagList.forEach(tag => {
+                    const tagEl = document.createElement('span');
+                    tagEl.className = 'px-2.5 py-1 rounded-lg bg-slate-800 border border-slate-700 text-xs text-slate-300 font-medium';
+                    tagEl.textContent = `# ${tag}`;
+                    tagsContainer.appendChild(tagEl);
+                });
+            }
+
+            // Bio
+            const bioCard = document.getElementById('homeBioCard');
+            if (oshi.bio) {
+                document.getElementById('homeBioText').textContent = oshi.bio;
+                bioCard.classList.remove('hidden');
+            } else {
+                bioCard.classList.add('hidden');
+            }
+
+            // Social Buttons
+            const socialContainer = document.getElementById('socialLinksContainer');
+            socialContainer.innerHTML = '';
+            
+            const socialConfigs = [
+                { key: 'youtube', label: 'YouTube 頻道', icon: 'youtube', color: 'hover:bg-red-500/20 hover:border-red-500/50 hover:text-red-300' },
+                { key: 'twitter', label: 'X (Twitter)', icon: 'twitter', color: 'hover:bg-sky-500/20 hover:border-sky-500/50 hover:text-sky-300' },
+                { key: 'twitch', label: 'Twitch 實況', icon: 'tv', color: 'hover:bg-purple-500/20 hover:border-purple-500/50 hover:text-purple-300' },
+                { key: 'instagram', label: 'Instagram', icon: 'instagram', color: 'hover:bg-pink-500/20 hover:border-pink-500/50 hover:text-pink-300' }
+            ];
+
+            let hasSocial = false;
+            socialConfigs.forEach(conf => {
+                const url = oshi.social ? oshi.social[conf.key] : null;
+                if (url) {
+                    hasSocial = true;
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.target = '_blank';
+                    a.rel = 'noopener noreferrer';
+                    a.className = `flex items-center justify-between p-3 rounded-xl bg-slate-950 border border-slate-800 text-sm text-slate-200 transition ${conf.color}`;
+                    a.innerHTML = `
+                        <div class="flex items-center space-x-3">
+                            <i data-lucide="${conf.icon}" class="w-5 h-5"></i>
+                            <span class="font-medium">${conf.label}</span>
+                        </div>
+                        <i data-lucide="external-link" class="w-4 h-4 text-slate-500"></i>
+                    `;
+                    socialContainer.appendChild(a);
+                }
+            });
+
+            if (!hasSocial) {
+                socialContainer.innerHTML = `<p class="text-xs text-slate-500 text-center py-4">尚未設定社群連結</p>`;
+            }
+
+            // Stream Zone Embed
+            const streamCard = document.getElementById('streamEmbedCard');
+            const streamStatus = document.getElementById('streamStatusBadge');
+
+            if (oshi.streamUrl) {
+                let videoId = oshi.streamUrl;
+                // Parse Youtube Video ID if full URL is pasted
+                if (oshi.streamUrl.includes('v=')) {
+                    videoId = oshi.streamUrl.split('v=')[1]?.split('&')[0];
+                } else if (oshi.streamUrl.includes('youtu.be/')) {
+                    videoId = oshi.streamUrl.split('youtu.be/')[1]?.split('?')[0];
+                }
+
+                if (videoId && videoId.length > 5) {
+                    streamCard.className = "rounded-xl overflow-hidden bg-slate-950 border border-slate-800 aspect-video relative";
+                    streamCard.innerHTML = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+                    streamStatus.textContent = "已載入預告";
+                    streamStatus.className = "text-xs px-2.5 py-1 rounded-full bg-red-500/20 text-red-400 border border-red-500/30";
+                } else {
+                    renderEmptyStream();
+                }
+            } else {
+                renderEmptyStream();
+            }
+        }
+
+        function renderEmptyStream() {
+            const streamCard = document.getElementById('streamEmbedCard');
+            const streamStatus = document.getElementById('streamStatusBadge');
+            streamCard.className = "rounded-xl overflow-hidden bg-slate-950 border border-slate-800 aspect-video flex flex-col items-center justify-center p-6 text-center";
+            streamCard.innerHTML = `
+                <i data-lucide="video-off" class="w-12 h-12 text-slate-600 mb-3"></i>
+                <p class="text-slate-400 text-sm">目前暫無設定直播預告資訊</p>
+                <p class="text-xs text-slate-600 mt-1">點擊右上角⚙️編輯主推設定</p>
+            `;
+            streamStatus.textContent = "未設定";
+            streamStatus.className = "text-xs px-2.5 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700";
+        }
+
+        // ==================== CALENDAR ENGINE ====================
+        function changeMonth(delta) {
+            calendarDate.setMonth(calendarDate.getMonth() + delta);
+            renderCalendarView();
+        }
+
+        function resetToToday() {
+            calendarDate = new Date();
+            renderCalendarView();
+        }
+
+        function renderCalendarView() {
+            const oshi = getCurrentOshi();
+            if (!oshi) return;
+
+            const year = calendarDate.getFullYear();
+            const month = calendarDate.getMonth();
+
+            document.getElementById('calendarMonthYear').textContent = `${year} 年 ${month + 1} 月`;
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
+
+            // Empty Leading Slots
+            for (let i = 0; i < firstDay; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = "min-h-[60px] sm:min-h-[80px] bg-slate-950/30 rounded-xl border border-slate-800/40 opacity-30";
+                grid.appendChild(emptyCell);
+            }
+
+            const today = new Date();
+            const events = oshi.events || [];
+
+            // Days Rendering
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
+
+                // Check Debut Anniversary match
+                let isDebutDay = false;
+                if (oshi.debut) {
+                    const debutParts = oshi.debut.split('-');
+                    if (parseInt(debutParts[1]) === (month + 1) && parseInt(debutParts[2]) === day) {
+                        isDebutDay = true;
+                    }
+                }
+
+                // Filter events on this day
+                const dayEvents = events.filter(e => e.date === dateStr);
+
+                const cell = document.createElement('div');
+                cell.className = `min-h-[60px] sm:min-h-[80px] p-1.5 rounded-xl border flex flex-col justify-between transition cursor-pointer hover:border-pink-500/50 ${
+                    isToday 
+                    ? 'bg-pink-950/20 border-pink-500/60 shadow-inner' 
+                    : 'bg-slate-950/80 border-slate-800/80'
+                }`;
+                cell.onclick = () => openEventModal(null, dateStr);
+
+                let badgesHtml = '';
+                if (isDebutDay) {
+                    badgesHtml += `<div class="text-[10px] bg-purple-500/30 text-purple-300 border border-purple-500/40 rounded px-1 py-0.5 truncate">🎉 出道紀念日</div>`;
+                }
+
+                dayEvents.forEach(evt => {
+                    let typeBg = 'bg-pink-500/20 text-pink-300 border-pink-500/30';
+                    if (evt.type === 'member') typeBg = 'bg-blue-500/20 text-blue-300 border-blue-500/30';
+                    if (evt.type === 'wallpaper') typeBg = 'bg-amber-500/20 text-amber-300 border-amber-500/30';
+                    if (evt.type === 'anniversary') typeBg = 'bg-purple-500/20 text-purple-300 border-purple-500/30';
+
+                    badgesHtml += `
+                        <div onclick="event.stopPropagation(); openEventModal('${evt.id}')" class="text-[10px] ${typeBg} border rounded px-1 py-0.5 truncate hover:scale-105 transition" title="${evt.title}">
+                            ${evt.title}
+                        </div>
+                    `;
+                });
+
+                cell.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold ${isToday ? 'text-pink-400' : 'text-slate-300'}">${day}</span>
+                        ${isToday ? '<span class="w-1.5 h-1.5 rounded-full bg-pink-500"></span>' : ''}
+                    </div>
+                    <div class="space-y-1 overflow-hidden mt-1">
+                        ${badgesHtml}
+                    </div>
+                `;
+
+                grid.appendChild(cell);
+            }
+
+            // Render Monthly Event Detailed List
+            renderMonthlyList(year, month + 1);
+        }
+
+        function renderMonthlyList(year, month) {
+            const oshi = getCurrentOshi();
+            const container = document.getElementById('monthlyEventsList');
+            container.innerHTML = '';
+
+            const currentMonthPrefix = `${year}-${String(month).padStart(2, '0')}`;
+            const monthEvents = (oshi.events || []).filter(e => e.date.startsWith(currentMonthPrefix));
+
+            if (monthEvents.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-500 py-3 text-center">本月份尚無自訂事件紀錄</p>`;
+                return;
+            }
+
+            // Sort by date ascending
+            monthEvents.sort((a, b) => a.date.localeCompare(b.date));
+
+            monthEvents.forEach(evt => {
+                const item = document.createElement('div');
+                item.className = "flex items-center justify-between p-3 rounded-xl bg-slate-950 border border-slate-800 text-xs sm:text-sm";
+                
+                item.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <span class="font-mono text-xs px-2 py-1 rounded bg-slate-800 text-slate-300 font-bold">${evt.date}</span>
+                        <div>
+                            <span class="font-semibold text-slate-200 block">${evt.title}</span>
+                            ${evt.note ? `<span class="text-xs text-slate-400 block">${evt.note}</span>` : ''}
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-1">
+                        <button onclick="openEventModal('${evt.id}')" class="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition">
+                            <i data-lucide="edit-2" class="w-3.5 h-3.5"></i>
+                        </button>
+                        <button onclick="deleteEvent('${evt.id}')" class="p-1.5 text-red-400 hover:text-red-300 rounded-lg hover:bg-red-500/10 transition">
+                            <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+            lucide.createIcons();
+        }
+
+        // ==================== MERCH TRACKER ENGINE ====================
+        function renderMerchView() {
+            const oshi = getCurrentOshi();
+            if (!oshi) return;
+
+            const merches = oshi.merches || [];
+
+            // Calculate Grand Total
+            const totalSpend = merches.reduce((sum, item) => sum + (Number(item.price) * Number(item.qty)), 0);
+            document.getElementById('totalSpendAmount').textContent = `NT$ ${totalSpend.toLocaleString()}`;
+
+            const groupContainer = document.getElementById('merchGroupContainer');
+            groupContainer.innerHTML = '';
+
+            if (merches.length === 0) {
+                groupContainer.innerHTML = `
+                    <div class="bg-slate-900 rounded-2xl border border-slate-800 p-8 text-center">
+                        <i data-lucide="shopping-bag" class="w-12 h-12 text-slate-600 mx-auto mb-3"></i>
+                        <p class="text-slate-400 text-sm">尚無任何周邊購買紀錄</p>
+                        <p class="text-xs text-slate-600 mt-1">點擊上方按鈕開始新增第一次戰利品！</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            // Group by Event Name
+            const grouped = {};
+            merches.forEach(m => {
+                const evtName = m.eventName || '一般戰利品';
+                if (!grouped[evtName]) grouped[evtName] = [];
+                grouped[evtName].push(m);
+            });
+
+            // Render Groups
+            Object.keys(grouped).forEach(eventName => {
+                const groupItems = grouped[eventName];
+                const groupSubtotal = groupItems.reduce((sum, item) => sum + (Number(item.price) * Number(item.qty)), 0);
+
+                const groupCard = document.createElement('div');
+                groupCard.className = "bg-slate-900 rounded-2xl border border-slate-800 p-5 shadow-lg space-y-4";
+
+                let rowsHtml = '';
+                groupItems.forEach(item => {
+                    const itemTotal = Number(item.price) * Number(item.qty);
+                    const imgHtml = item.imgBase64 
+                        ? `<img src="${item.imgBase64}" class="w-12 h-12 rounded-lg object-cover border border-slate-700 shrink-0">`
+                        : `<div class="w-12 h-12 rounded-lg bg-slate-800 flex items-center justify-center text-slate-500 shrink-0 border border-slate-700/50"><i data-lucide="package" class="w-6 h-6"></i></div>`;
+
+                    rowsHtml += `
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-xl bg-slate-950 border border-slate-800/80 gap-3">
+                            <div class="flex items-center space-x-3">
+                                ${imgHtml}
+                                <div>
+                                    <span class="font-bold text-slate-200 text-sm block">${item.name}</span>
+                                    <div class="text-xs text-slate-400 flex flex-wrap gap-x-3 gap-y-1 mt-0.5">
+                                        <span>單價: NT$ ${Number(item.price).toLocaleString()}</span>
+                                        <span>數量: ${item.qty}</span>
+                                        ${item.channel ? `<span class="text-purple-400">管道: ${item.channel}</span>` : ''}
+                                    </div>
+                                    ${item.note ? `<p class="text-xs text-slate-500 mt-1">${item.note}</p>` : ''}
+                                </div>
+                            </div>
+
+                            <div class="flex items-center justify-between sm:justify-end space-x-4 border-t sm:border-t-0 border-slate-800 pt-2 sm:pt-0">
+                                <div class="text-right">
+                                    <span class="text-xs text-slate-400 block">小計</span>
+                                    <span class="text-sm font-extrabold text-pink-400">NT$ ${itemTotal.toLocaleString()}</span>
+                                </div>
+                                <button onclick="deleteMerch('${item.id}')" class="p-2 text-red-400 hover:text-red-300 rounded-lg hover:bg-red-500/10 transition" title="刪除紀錄">
+                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                groupCard.innerHTML = `
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <div class="flex items-center space-x-2">
+                            <i data-lucide="tag" class="w-4 h-4 text-pink-400"></i>
+                            <h3 class="font-bold text-white text-base">${eventName}</h3>
+                            <span class="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">${groupItems.length} 項</span>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs text-slate-400 mr-1.5">活動總計:</span>
+                            <span class="text-base font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400">NT$ ${groupSubtotal.toLocaleString()}</span>
+                        </div>
+                    </div>
+                    <div class="space-y-2">
+                        ${rowsHtml}
+                    </div>
+                `;
+
+                groupContainer.appendChild(groupCard);
+            });
+
+            lucide.createIcons();
+        }
+
+        // ==================== MODAL ACTIONS & FORMS ====================
+
+        // 1. OSHI MODAL HANDLERS
+        function openOshiModal(oshiId = null, isOnboarding = false) {
+            const modal = document.getElementById('oshiModal');
+            const form = document.getElementById('oshiForm');
+            const title = document.getElementById('oshiModalTitle');
+            const closeBtn = document.getElementById('closeOshiModalBtn');
+            const deleteBtn = document.getElementById('deleteOshiBtn');
+
+            form.reset();
+
+            if (isOnboarding) {
+                closeBtn.classList.add('hidden');
+                deleteBtn.classList.add('hidden');
+                title.innerHTML = `<i data-lucide="sparkles" class="w-5 h-5 text-pink-400"></i><span>歡迎！請建立您的第一個主推 VTuber</span>`;
+                document.getElementById('oshiIdInput').value = '';
+            } else if (oshiId) {
+                closeBtn.classList.remove('hidden');
+                deleteBtn.classList.remove('hidden');
+                title.innerHTML = `<i data-lucide="settings" class="w-5 h-5 text-pink-400"></i><span>編輯主推資料</span>`;
+
+                const oshi = appData.oshis.find(o => o.id === oshiId);
+                if (oshi) {
+                    document.getElementById('oshiIdInput').value = oshi.id;
+                    document.getElementById('oshiNameInput').value = oshi.name || '';
+                    document.getElementById('oshiBirthdayInput').value = oshi.birthday || '';
+                    document.getElementById('oshiDebutInput').value = oshi.debut || '';
+                    document.getElementById('oshiTagsInput').value = oshi.tags || '';
+                    document.getElementById('oshiBioInput').value = oshi.bio || '';
+                    document.getElementById('oshiStreamInput').value = oshi.streamUrl || '';
+
+                    if (oshi.social) {
+                        document.getElementById('socialYouTube').value = oshi.social.youtube || '';
+                        document.getElementById('socialTwitter').value = oshi.social.twitter || '';
+                        document.getElementById('socialTwitch').value = oshi.social.twitch || '';
+                        document.getElementById('socialInstagram').value = oshi.social.instagram || '';
+                    }
+                }
+            } else {
+                closeBtn.classList.remove('hidden');
+                deleteBtn.classList.add('hidden');
+                title.innerHTML = `<i data-lucide="user-plus" class="w-5 h-5 text-pink-400"></i><span>新增主推 VTuber</span>`;
+                document.getElementById('oshiIdInput').value = '';
+            }
+
+            modal.classList.remove('hidden');
+            lucide.createIcons();
+        }
+
+        function closeOshiModal() {
+            if (!appData.oshis || appData.oshis.length === 0) {
+                alert('請至少新增一位主推資料以開始使用！');
+                return;
+            }
+            document.getElementById('oshiModal').classList.add('hidden');
+        }
+
+        async function saveOshiData(e) {
+            e.preventDefault();
+
+            const id = document.getElementById('oshiIdInput').value;
+            const name = document.getElementById('oshiNameInput').value.trim();
+            const birthday = document.getElementById('oshiBirthdayInput').value.trim();
+            const debut = document.getElementById('oshiDebutInput').value;
+            const tags = document.getElementById('oshiTagsInput').value.trim();
+            const bio = document.getElementById('oshiBioInput').value.trim();
+            const streamUrl = document.getElementById('oshiStreamInput').value.trim();
+
+            const avatarFile = document.getElementById('oshiAvatarFile').files[0];
+            const coverFile = document.getElementById('oshiCoverFile').files[0];
+
+            let avatarBase64 = null;
+            let coverBase64 = null;
+
+            if (avatarFile) avatarBase64 = await fileToBase64(avatarFile, 400);
+            if (coverFile) coverBase64 = await fileToBase64(coverFile, 1000);
+
+            const social = {
+                youtube: document.getElementById('socialYouTube').value.trim(),
+                twitter: document.getElementById('socialTwitter').value.trim(),
+                twitch: document.getElementById('socialTwitch').value.trim(),
+                instagram: document.getElementById('socialInstagram').value.trim()
+            };
+
+            if (id) {
+                // Edit Existing
+                const oshi = appData.oshis.find(o => o.id === id);
+                if (oshi) {
+                    oshi.name = name;
+                    oshi.birthday = birthday;
+                    oshi.debut = debut;
+                    oshi.tags = tags;
+                    oshi.bio = bio;
+                    oshi.streamUrl = streamUrl;
+                    oshi.social = social;
+                    if (avatarBase64) oshi.avatarBase64 = avatarBase64;
+                    if (coverBase64) oshi.coverBase64 = coverBase64;
+                }
+            } else {
+                // Create New
+                const newOshi = {
+                    id: 'oshi_' + Date.now(),
+                    name,
+                    birthday,
+                    debut,
+                    tags,
+                    bio,
+                    streamUrl,
+                    social,
+                    avatarBase64,
+                    coverBase64,
+                    events: [],
+                    merches: []
+                };
+                appData.oshis.push(newOshi);
+                appData.currentOshiId = newOshi.id;
+            }
+
+            saveToLocalStorage();
+            closeOshiModal();
+            renderAll();
+        }
+
+        function deleteOshi() {
+            const id = document.getElementById('oshiIdInput').value;
+            if (!id) return;
+
+            if (confirm('確定要刪除這位主推及所有相關的行事曆與周邊紀錄嗎？此動作無法復原。')) {
+                appData.oshis = appData.oshis.filter(o => o.id !== id);
+                if (appData.oshis.length > 0) {
+                    appData.currentOshiId = appData.oshis[0].id;
+                } else {
+                    appData.currentOshiId = null;
+                }
+
+                saveToLocalStorage();
+                document.getElementById('oshiModal').classList.add('hidden');
+
+                if (appData.oshis.length === 0) {
+                    openOshiModal(null, true);
+                } else {
+                    renderAll();
+                }
+            }
+        }
+
+        // 2. CALENDAR EVENT MODAL HANDLERS
+        function openEventModal(eventId = null, defaultDate = null) {
+            const modal = document.getElementById('eventModal');
+            const form = document.getElementById('eventForm');
+            form.reset();
+
+            if (eventId) {
+                const oshi = getCurrentOshi();
+                const evt = (oshi.events || []).find(e => e.id === eventId);
+                if (evt) {
+                    document.getElementById('eventIdInput').value = evt.id;
+                    document.getElementById('eventDateInput').value = evt.date;
+                    document.getElementById('eventTitleInput').value = evt.title;
+                    document.getElementById('eventTypeInput').value = evt.type || 'stream';
+                    document.getElementById('eventNoteInput').value = evt.note || '';
+                }
+            } else {
+                document.getElementById('eventIdInput').value = '';
+                const todayStr = new Date().toISOString().split('T')[0];
+                document.getElementById('eventDateInput').value = defaultDate || todayStr;
+            }
+
+            modal.classList.remove('hidden');
+        }
+
+        function closeEventModal() {
+            document.getElementById('eventModal').classList.add('hidden');
+        }
+
+        function saveEventData(e) {
+            e.preventDefault();
+            const oshi = getCurrentOshi();
+            if (!oshi) return;
+
+            if (!oshi.events) oshi.events = [];
+
+            const id = document.getElementById('eventIdInput').value;
+            const date = document.getElementById('eventDateInput').value;
+            const title = document.getElementById('eventTitleInput').value.trim();
+            const type = document.getElementById('eventTypeInput').value;
+            const note = document.getElementById('eventNoteInput').value.trim();
+
+            if (id) {
+                const evt = oshi.events.find(e => e.id === id);
+                if (evt) {
+                    evt.date = date;
+                    evt.title = title;
+                    evt.type = type;
+                    evt.note = note;
+                }
+            } else {
+                oshi.events.push({
+                    id: 'evt_' + Date.now(),
+                    date,
+                    title,
+                    type,
+                    note
+                });
+            }
+
+            saveToLocalStorage();
+            closeEventModal();
+            renderCalendarView();
+        }
+
+        function deleteEvent(eventId) {
+            const oshi = getCurrentOshi();
+            if (!oshi) return;
+
+            if (confirm('確定要刪除此行程事件嗎？')) {
+                oshi.events = (oshi.events || []).filter(e => e.id !== eventId);
+                saveToLocalStorage();
+                renderCalendarView();
+            }
+        }
+
+        // 3. MERCH MODAL HANDLERS
+        function openMerchModal() {
+            const modal = document.getElementById('merchModal');
+            document.getElementById('merchForm').reset();
+            document.getElementById('merchIdInput').value = '';
+            modal.classList.remove('hidden');
+        }
+
+        function closeMerchModal() {
+            document.getElementById('merchModal').classList.add('hidden');
+        }
+
+        async function saveMerchData(e) {
+            e.preventDefault();
+            const oshi = getCurrentOshi();
+            if (!oshi) return;
+
+            if (!oshi.merches) oshi.merches = [];
+
+            const eventName = document.getElementById('merchEventInput').value.trim();
+            const name = document.getElementById('merchNameInput').value.trim();
+            const price = Number(document.getElementById('merchPriceInput').value);
+            const qty = Number(document.getElementById('merchQtyInput').value);
+            const channel = document.getElementById('merchChannelInput').value.trim();
+            const note = document.getElementById('merchNoteInput').value.trim();
+
+            const imgFile = document.getElementById('merchImgFile').files[0];
+            let imgBase64 = null;
+            if (imgFile) imgBase64 = await fileToBase64(imgFile, 500);
+
+            oshi.merches.push({
+                id: 'merch_' + Date.now(),
+                eventName,
+                name,
+                price,
+                qty,
+                channel,
+                note,
+                imgBase64
+            });
+
+            saveToLocalStorage();
+            closeMerchModal();
+            renderMerchView();
+        }
+
+        function deleteMerch(merchId) {
+            const oshi = getCurrentOshi();
+            if (!oshi) return;
+
+            if (confirm('確定要刪除此筆周邊紀錄嗎？')) {
+                oshi.merches = (oshi.merches || []).filter(m => m.id !== merchId);
+                saveToLocalStorage();
+                renderMerchView();
+            }
         }
     </script>
 </body>
