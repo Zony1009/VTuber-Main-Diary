@@ -1,51 +1,1063 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW" class="dark">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>OshiVerse｜推活管理所</title>
-<style>
-:root{--bg:#080b16;--panel:#101528;--panel2:#151b31;--line:#252d49;--text:#f3f4ff;--muted:#9ba4c3;--pink:#ff5da8;--purple:#9b7bff;--cyan:#67e8f9;--green:#70e1b2;--danger:#ff718b;--shadow:0 18px 55px #0005}
-*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 80% -10%,#39205d66,transparent 35%),radial-gradient(ellipse at 0 30%,#142d5266,transparent 30%),var(--bg);color:var(--text);font:15px/1.55 Inter,"Noto Sans TC",system-ui,sans-serif;min-height:100vh}button,input,textarea,select{font:inherit}button{cursor:pointer;color:inherit}a{color:inherit;text-decoration:none}.app{max-width:1440px;margin:auto;padding:22px 26px 48px}.topbar{display:flex;align-items:center;gap:18px;margin-bottom:22px}.brand{display:flex;align-items:center;gap:11px;font-weight:900;font-size:20px;letter-spacing:.3px;white-space:nowrap}.logo{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--pink),var(--purple));display:grid;place-items:center;box-shadow:0 7px 25px #bd5bba55;font-size:21px}.brand small{display:block;color:var(--muted);font-size:10px;letter-spacing:2px;font-weight:700}.account{margin-left:auto;display:flex;align-items:center;gap:9px;background:#12182b;border:1px solid var(--line);padding:7px 10px;border-radius:13px}.account input{background:transparent;border:0;color:var(--text);width:115px;outline:0}.account button,.icon-btn{border:0;background:transparent;color:var(--muted);padding:5px;border-radius:8px}.account button:hover,.icon-btn:hover{background:#252d49;color:white}.layout{display:grid;grid-template-columns:245px minmax(0,1fr);gap:22px}.sidebar{background:#0e1324d9;border:1px solid var(--line);border-radius:22px;padding:17px;height:max-content;position:sticky;top:15px}.side-title{font-size:11px;color:var(--muted);letter-spacing:1.7px;font-weight:800;margin:5px 8px 12px}.oshi-list{display:grid;gap:7px}.oshi{display:flex;align-items:center;gap:11px;padding:9px;border:1px solid transparent;background:transparent;border-radius:13px;text-align:left;width:100%;transition:.2s}.oshi:hover{background:#171d34}.oshi.active{background:linear-gradient(100deg,#ff5da81c,#9b7bff20);border-color:#9b7bff66}.avatar{width:39px;height:39px;border-radius:13px;object-fit:cover;background:linear-gradient(135deg,#5d437f,#d65b9a);display:grid;place-items:center;font-weight:900;flex:none}.oshi .meta{min-width:0;flex:1}.oshi strong{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-size:13px}.oshi small{display:block;color:var(--muted);font-size:11px}.add-oshi{width:100%;margin-top:12px;border:1px dashed #4b5275;background:#151a2d;color:#c9c9e9;border-radius:12px;padding:10px}.side-foot{margin-top:20px;padding:12px;background:#151a2d;border-radius:13px;color:var(--muted);font-size:11px}.main{min-width:0}.tabs{display:flex;gap:7px;padding:6px;background:#0e1324;border:1px solid var(--line);border-radius:15px;width:max-content;max-width:100%;margin-bottom:18px}.tab{border:0;background:transparent;color:var(--muted);padding:9px 15px;border-radius:10px;font-weight:700;font-size:13px}.tab.active{background:linear-gradient(110deg,#ff5da8,#9b7bff);color:white;box-shadow:0 5px 18px #a14f9a44}.page-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:12px 0 17px}.eyebrow{color:var(--pink);font-size:11px;letter-spacing:2px;font-weight:900}.page-head h1{font-size:25px;margin:2px 0 0;letter-spacing:-.5px}.muted{color:var(--muted)}.btn{border:1px solid var(--line);background:#171d33;border-radius:11px;padding:9px 13px;font-weight:750;font-size:12px;display:inline-flex;align-items:center;gap:7px}.btn:hover{border-color:#8e78d9;background:#202744}.btn.primary{border:0;background:linear-gradient(110deg,var(--pink),var(--purple));box-shadow:0 7px 20px #a64b9840}.btn.danger{color:#ff9bac;border-color:#77364c;background:#291725}.banner{height:235px;border-radius:22px;position:relative;overflow:hidden;background:linear-gradient(115deg,#382044,#172447 60%,#202c4e);border:1px solid #ffffff12;box-shadow:var(--shadow);margin-bottom:17px}.banner img.cover{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;opacity:.62}.banner:after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#080b16e8 0%,#080b1688 54%,transparent 100%),linear-gradient(0deg,#080b1688,transparent 60%)}.banner-content{position:absolute;z-index:1;inset:0;display:flex;align-items:end;padding:24px 27px;gap:17px}.hero-avatar{width:88px;height:88px;border-radius:24px;object-fit:cover;border:3px solid #ffffffaa;box-shadow:0 9px 28px #0007;background:linear-gradient(135deg,var(--pink),var(--purple))}.hero-info{min-width:0}.hero-info h2{font-size:28px;margin:0 0 3px}.hero-info p{margin:0;color:#d1d5ec;font-size:12px}.pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.pill{padding:4px 9px;border:1px solid #ffffff24;background:#ffffff12;border-radius:99px;font-size:10px;color:#f1eaff}.hero-actions{margin-left:auto;align-self:flex-start;display:flex;gap:7px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:17px}.stat,.card{background:linear-gradient(145deg,#12182b,#0f1425);border:1px solid var(--line);border-radius:17px;padding:17px}.stat{display:flex;align-items:center;gap:13px}.stat-icon{width:39px;height:39px;display:grid;place-items:center;border-radius:12px;background:#a276ff1b;font-size:18px}.stat small{display:block;color:var(--muted);font-size:11px}.stat strong{font-size:20px;letter-spacing:-.5px}.content-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:14px}.card h3{font-size:14px;margin:0 0 12px}.card-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:12px}.card-head h3{margin:0}.bio{color:#c3c9df;white-space:pre-wrap;font-size:13px;min-height:55px}.tag{display:inline-flex;border-radius:8px;padding:4px 8px;margin:0 5px 6px 0;background:#9b7bff18;border:1px solid #9b7bff38;color:#c9b9ff;font-size:11px}.socials{display:flex;flex-wrap:wrap;gap:8px}.social{display:flex;align-items:center;gap:7px;border:1px solid var(--line);background:#151b30;padding:8px 10px;border-radius:10px;font-size:11px}.social:hover{border-color:var(--pink)}.embed{aspect-ratio:16/9;width:100%;border:0;border-radius:12px;background:#080b16}.empty{padding:28px;text-align:center;border:1px dashed #333c5d;border-radius:14px;color:var(--muted);font-size:12px}.empty b{display:block;color:#e5e7f7;font-size:14px;margin-bottom:5px}.calendar-wrap{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(230px,.6fr);gap:14px}.cal-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}.cal-top strong{font-size:17px}.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:5px}.weekday{text-align:center;color:var(--muted);font-size:10px;padding:5px 0}.day{min-height:82px;border:1px solid #242c46;background:#101629;border-radius:10px;padding:7px 5px;text-align:left;min-width:0;overflow:hidden}.day:hover{border-color:#9b7bff}.day.other{opacity:.3}.day.today{border-color:var(--pink);box-shadow:inset 0 0 0 1px #ff5da844}.day.selected{background:#312044;border-color:var(--purple)}.day-num{font-size:11px;font-weight:800}.event-dot{display:block;font-size:9px;padding:3px 4px;border-radius:5px;margin-top:4px;background:#9b7bff24;color:#d9c9ff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.event-dot.直播預告{background:#ff5da820;color:#ff9fc9}.event-dot.會員限定{background:#67e8f920;color:#8eeefa}.event-dot.紀念日{background:#70e1b220;color:#9af1cb}.event-dot.桌布發布{background:#ffca7020;color:#ffdc98}.event-list{display:grid;gap:8px}.event-row,.merch-row{display:flex;gap:10px;align-items:center;padding:10px;border:1px solid #242c46;background:#11172a;border-radius:11px}.event-date{min-width:43px;text-align:center;border-right:1px solid var(--line);padding-right:9px}.event-date b{display:block;font-size:16px}.event-date small{font-size:9px;color:var(--muted)}.event-detail{min-width:0;flex:1}.event-detail b{display:block;font-size:11px}.event-detail small{color:var(--muted);font-size:10px}.merch-summary{display:flex;align-items:center;justify-content:space-between;gap:15px;background:linear-gradient(110deg,#48233e,#28234f);border:1px solid #b35bbd55;padding:19px 22px;border-radius:17px;margin-bottom:15px}.merch-summary small{color:#e6cce9}.merch-summary strong{font-size:27px;display:block}.group-title{font-size:13px;font-weight:800;margin:18px 0 9px;display:flex;justify-content:space-between}.merch-row{align-items:flex-start;margin-bottom:7px}.merch-img{width:61px;height:61px;border-radius:10px;object-fit:cover;background:#252b44;flex:none}.merch-info{flex:1;min-width:0}.merch-info b{font-size:12px;display:block}.merch-info small{display:block;color:var(--muted);font-size:10px}.merch-price{text-align:right;white-space:nowrap}.merch-price b{font-size:12px;display:block}.merch-price small{font-size:10px;color:var(--muted)}.overlay{position:fixed;inset:0;background:#03050bc9;backdrop-filter:blur(8px);z-index:10;display:grid;place-items:center;padding:15px}.modal{width:min(590px,100%);max-height:90vh;overflow:auto;background:#11172a;border:1px solid #343d60;border-radius:20px;padding:22px;box-shadow:var(--shadow)}.modal h2{font-size:18px;margin:0 0 15px}.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:grid;gap:5px}.field.full{grid-column:1/-1}.field label{font-size:10px;color:var(--muted);font-weight:800;letter-spacing:.4px}.field input,.field textarea,.field select{width:100%;border:1px solid #303956;background:#0b1020;color:var(--text);border-radius:10px;padding:10px 11px;outline:0;font-size:12px}.field input:focus,.field textarea:focus,.field select:focus{border-color:var(--purple)}.field textarea{min-height:85px;resize:vertical}.modal-actions{display:flex;justify-content:space-between;gap:8px;margin-top:18px}.modal-actions .right{display:flex;gap:8px}.preview{width:52px;height:52px;border-radius:10px;object-fit:cover;background:#272d46}.toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:#232b43;border:1px solid #58648a;padding:10px 16px;border-radius:12px;z-index:20;box-shadow:var(--shadow);font-size:12px}.hidden{display:none!important}.file-line{display:flex;align-items:center;gap:10px}.file-line input{max-width:220px}.footer{text-align:center;color:#626b89;font-size:10px;margin-top:20px}
-@media(max-width:850px){.layout{grid-template-columns:1fr}.sidebar{position:static;padding:12px}.oshi-list{display:flex;overflow:auto}.oshi{min-width:145px;width:auto}.side-title{margin-bottom:7px}.add-oshi{width:auto;margin-top:9px}.side-foot{display:none}.content-grid,.calendar-wrap{grid-template-columns:1fr}.app{padding:14px}.banner{height:215px}}
-@media(max-width:560px){.brand{font-size:16px}.brand small{font-size:8px}.logo{width:36px;height:36px}.account input{width:75px}.topbar{gap:9px}.stats{grid-template-columns:1fr 1fr}.stat:last-child{grid-column:1/-1}.stat{padding:12px}.stat strong{font-size:17px}.tabs{width:100%;display:grid;grid-template-columns:repeat(3,1fr)}.tab{padding:9px 3px;font-size:11px}.page-head h1{font-size:21px}.banner{height:195px}.banner-content{padding:15px;gap:10px}.hero-avatar{width:65px;height:65px;border-radius:18px}.hero-info h2{font-size:20px}.hero-info p{font-size:10px}.hero-actions{gap:1px}.hero-actions .btn{padding:7px;font-size:10px}.day{min-height:62px;padding:5px 3px}.event-dot{font-size:8px;padding:2px}.form-grid{grid-template-columns:1fr}.field.full{grid-column:auto}.merch-summary strong{font-size:22px}}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VTuber 推活專屬管理 Suite</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            500: '#ec4899',
+                            600: '#db2777',
+                            700: '#be185d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #0f172a; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #475569; }
+    </style>
 </head>
-<body><div class="app">
-<header class="topbar"><div class="brand"><div class="logo">✦</div><div>OshiVerse<small>YOUR PERSONAL OSHI SPACE</small></div></div><div class="account"><span>👤</span><input id="accountName" aria-label="使用者暱稱" maxlength="24" placeholder="使用者暱稱"><button id="switchAccount" title="切換／建立帳號">↵</button></div></header>
-<div class="layout"><aside class="sidebar"><div class="side-title">MY OSHI COLLECTION ✦</div><div id="oshiList" class="oshi-list"></div><button class="add-oshi" id="addOshi">＋ 新增主推</button><div class="side-foot">✧ 每一份喜愛，都值得被好好收藏。<br><br>資料只儲存在目前瀏覽器中。建議定期匯出備份。</div></aside>
-<main class="main"><nav class="tabs"><button class="tab active" data-tab="home">✧ 推活主頁</button><button class="tab" data-tab="calendar">▦ 活動行事曆</button><button class="tab" data-tab="merch">♡ 周邊收藏</button></nav><div id="view"></div></main></div><div class="footer">OSHIVERSE · MADE WITH ♡ FOR YOUR OSHI · 資料儲存於本機瀏覽器</div></div>
-<div id="modalRoot"></div><div id="toast" class="toast hidden"></div>
-<script>
-(()=>{'use strict';
-const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-const uid=()=>Math.random().toString(36).slice(2,10), today=()=>{let d=new Date();return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`}, esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const defaults=()=>({users:{},currentUser:'Guest'});let db;try{db=JSON.parse(localStorage.getItem('oshiverse_v1'))||defaults()}catch{db=defaults()}if(!db.users)db=defaults();let user=db.currentUser||'Guest',tab='home',active=null,calDate=new Date(),selectedDate=today(),modalOshi=null;
-function save(){db.currentUser=user;localStorage.setItem('oshiverse_v1',JSON.stringify(db))}
-function freshOshi(){return{id:uid(),name:'新主推',birthday:'',debut:'',avatar:'',cover:'',tags:[],socials:[],bio:'',stream:'',events:[],merch:[]}}
-function data(){if(!db.users[user])db.users[user]={oshis:[],active:null};return db.users[user]}
-function current(){return data().oshis.find(x=>x.id===data().active)||null}
-function money(n){return 'NT$ '+Number(n||0).toLocaleString('zh-TW',{maximumFractionDigits:2})}
-function toast(s){let t=$('#toast');t.textContent=s;t.classList.remove('hidden');clearTimeout(toast.timer);toast.timer=setTimeout(()=>t.classList.add('hidden'),2300)}
-function imageFile(file,cb){if(!file)return;let r=new FileReader();r.onload=()=>{let im=new Image();im.onload=()=>{let c=document.createElement('canvas'),scale=Math.min(1,1000/Math.max(im.width,im.height));c.width=Math.round(im.width*scale);c.height=Math.round(im.height*scale);c.getContext('2d').drawImage(im,0,0,c.width,c.height);cb(c.toDataURL('image/jpeg',.78))};im.src=r.result};r.readAsDataURL(file)}
-function initials(s){return esc((s||'?').trim().slice(0,2))}
-function avatarHTML(o,cls='avatar'){return o.avatar?`<img class="${cls}" src="${o.avatar}" alt="">`:`<div class="${cls}">${initials(o.name)}</div>`}
-function renderSide(){$('#accountName').value=user;let list=data().oshis;$('#oshiList').innerHTML=list.map(o=>`<button class="oshi ${o.id===data().active?'active':''}" data-oshi="${o.id}">${avatarHTML(o)}<span class="meta"><strong>${esc(o.name)}</strong><small>${o.birthday?'🎂 '+o.birthday:'尚未設定生日'}</small></span>${o.id===data().active?'<span style="color:var(--pink)">✦</span>':''}</button>`).join('')||'<div class="empty" style="padding:15px">還沒有主推<br>新增一位開始收藏吧！</div>';$$('[data-oshi]').forEach(b=>b.onclick=()=>{data().active=b.dataset.oshi;save();render()})}
-function render(){renderSide();$$('.tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===tab));let o=current();if(!o){$('#view').innerHTML=`<div class="empty" style="padding:65px 20px"><div style="font-size:40px;margin-bottom:10px">✧</div><b>建立你的專屬推活宇宙</b>新增第一位主推，開始紀錄每一份喜愛與回憶。<br><br><button class="btn primary" id="emptyAdd">＋ 新增我的主推</button></div>`;$('#emptyAdd').onclick=()=>openOshi();return}$('#view').innerHTML=tab==='home'?home(o):tab==='calendar'?calendar(o):merch(o);wireView(o)}
-function home(o){let video=videoId(o.stream);let days=o.events.filter(e=>e.date>=today()).sort((a,b)=>a.date.localeCompare(b.date)).slice(0,3);return `<section class="banner">${o.cover?`<img class="cover" src="${o.cover}">`:''}<div class="banner-content">${avatarHTML(o,'hero-avatar')}<div class="hero-info"><div class="eyebrow">MY FAVORITE CREATOR</div><h2>${esc(o.name)}</h2><p>把每個閃耀瞬間，都收進專屬收藏。</p><div class="pills">${o.birthday?`<span class="pill">🎂 ${esc(o.birthday)}</span>`:''}${o.debut?`<span class="pill">✦ 出道 ${esc(o.debut)}</span>`:''}${o.tags.slice(0,4).map(t=>`<span class="pill">${esc(t)}</span>`).join('')}</div></div><div class="hero-actions"><button class="btn" id="editOshi">✎ 編輯</button><button class="btn" id="exportBtn" title="匯出備份">⇩</button></div></div></section>
-<div class="stats"><div class="stat"><div class="stat-icon">♡</div><div><small>周邊收藏件數</small><strong>${o.merch.reduce((s,m)=>s+Number(m.qty||0),0)}</strong></div></div><div class="stat"><div class="stat-icon">▦</div><div><small>已記錄行程</small><strong>${o.events.length}</strong></div></div><div class="stat"><div class="stat-icon">✧</div><div><small>周邊累積花費</small><strong>${money(o.merch.reduce((s,m)=>s+Number(m.price||0)*Number(m.qty||0),0))}</strong></div></div></div>
-<div class="content-grid"><section class="card"><div class="card-head"><h3>✦ 關於這位主推</h3><button class="icon-btn" id="editBio">✎</button></div><div class="bio">${o.bio?esc(o.bio):'<span class="muted">寫下你的主推介紹、入坑契機或應援心得…</span>'}</div><div style="margin-top:13px">${o.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div></section><section class="card"><div class="card-head"><h3>⌁ 頻道與社群</h3><button class="icon-btn" id="editSocial">＋</button></div><div class="socials">${o.socials.map(s=>`<a class="social" href="${esc(s.url)}" target="_blank" rel="noopener">↗ ${esc(s.platform)}</a>`).join('')||'<span class="muted" style="font-size:11px">新增社群連結，快速前往頻道。</span>'}</div></section><section class="card" style="grid-column:1/-1"><div class="card-head"><h3>▶ 直播與預告</h3><button class="icon-btn" id="editStream">✎ 設定網址</button></div>${video?`<iframe class="embed" src="https://www.youtube-nocookie.com/embed/${encodeURIComponent(video)}" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe><div class="muted" style="font-size:10px;margin-top:7px">● 已載入預告／直播播放器</div>`:`<div class="empty">尚未設定直播或預告影片<br><small>貼上 YouTube 影片、直播或 Shorts 網址即可嵌入。</small></div>`}</section><section class="card" style="grid-column:1/-1"><div class="card-head"><h3>◷ 即將到來的行程</h3><button class="btn" id="goCalendar">查看行事曆 →</button></div>${days.length?days.map(e=>`<div class="event-row" style="margin-bottom:7px"><div class="event-date"><b>${e.date.slice(8)}</b><small>${e.date.slice(5,7)} 月</small></div><div class="event-detail"><b>${esc(e.title)}</b><small>${esc(e.type)}${e.time?' · '+esc(e.time):''}</small></div></div>`).join(''):'<div class="empty">還沒有即將到來的行程。</div>'}</section></div>`}
-function videoId(url){if(!url)return'';try{let u=new URL(url);if(u.hostname.includes('youtu.be'))return u.pathname.slice(1).split('/')[0];if(u.hostname.includes('youtube.com'))return u.searchParams.get('v')||u.pathname.match(/\/(embed|live|shorts)\/([^/?]+)/)?.[2]||''}catch{}return''}
-function calendar(o){let y=calDate.getFullYear(),m=calDate.getMonth(),first=new Date(y,m,1),start=new Date(y,m,1-first.getDay()),days=[];for(let i=0;i<42;i++){let d=new Date(start);d.setDate(start.getDate()+i);days.push(d)}let key=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`,monthEvents=o.events.filter(e=>e.date.startsWith(`${y}-${String(m+1).padStart(2,'0')}`)).sort((a,b)=>a.date.localeCompare(b.date)||(a.time||'').localeCompare(b.time||'')),chosen=o.events.filter(e=>e.date===selectedDate).sort((a,b)=>(a.time||'').localeCompare(b.time||''));return `<div class="page-head"><div><div class="eyebrow">PLAN YOUR OSHI DAYS</div><h1>活動行事曆</h1></div><button class="btn primary" id="addEvent">＋ 新增行程</button></div><div class="calendar-wrap"><section class="card"><div class="cal-top"><div style="display:flex;gap:7px"><button class="btn" id="prevMonth">‹</button><button class="btn" id="todayMonth">今天</button><button class="btn" id="nextMonth">›</button></div><strong>${y} 年 ${m+1} 月</strong></div><div class="cal-grid">${['日','一','二','三','四','五','六'].map(w=>`<div class="weekday">${w}</div>`).join('')}${days.map(d=>{let k=key(d),ev=o.events.filter(e=>e.date===k);return `<button class="day ${d.getMonth()!==m?'other':''} ${k===today()?'today':''} ${k===selectedDate?'selected':''}" data-date="${k}"><span class="day-num">${d.getDate()}</span>${ev.slice(0,2).map(e=>`<span class="event-dot ${esc(e.type)}">${esc(e.title)}</span>`).join('')}${ev.length>2?`<span class="muted" style="font-size:8px">+${ev.length-2}</span>`:''}</button>`}).join('')}</div></section><section class="card"><div class="card-head"><h3>▦ ${selectedDate===today()?'今日行程':esc(selectedDate)}</h3><button class="icon-btn" id="addSelected">＋</button></div>${chosen.length?`<div class="event-list">${chosen.map(e=>`<div class="event-row"><div class="event-detail"><span class="tag">${esc(e.type)}</span><b>${esc(e.title)}</b><small>${esc(e.time||'時間未定')} ${e.note?'· '+esc(e.note):''}</small></div><button class="icon-btn" data-edit-event="${e.id}">✎</button><button class="icon-btn" data-del-event="${e.id}">×</button></div>`).join('')}</div>`:'<div class="empty">這天還沒有排程<br>點擊＋新增一筆行程。</div>'}</section></div><section class="card" style="margin-top:14px"><div class="card-head"><h3>本月排程清單</h3><span class="muted" style="font-size:10px">${monthEvents.length} 個事件</span></div>${monthEvents.length?`<div class="event-list">${monthEvents.map(e=>`<div class="event-row"><div class="event-date"><b>${e.date.slice(8)}</b><small>${e.date.slice(5,7)} 月</small></div><div class="event-detail"><b>${esc(e.title)}</b><small>${esc(e.type)}${e.time?' · '+esc(e.time):''}</small></div><button class="icon-btn" data-edit-event="${e.id}">✎</button></div>`).join('')}</div>`:'<div class="empty">本月尚無行程紀錄。</div>'}</section>`}
-function merch(o){let total=o.merch.reduce((s,m)=>s+Number(m.price||0)*Number(m.qty||0),0),groups={};o.merch.forEach(m=>(groups[m.group||'未分類主題']??=[]).push(m));return `<div class="page-head"><div><div class="eyebrow">COLLECT MEMORIES</div><h1>周邊戰利品</h1></div><button class="btn primary" id="addMerch">＋ 新增周邊</button></div><div class="merch-summary"><div><small>✧ 累積應援花費</small><strong>${money(total)}</strong><small>共收藏 ${o.merch.reduce((s,m)=>s+Number(m.qty||0),0)} 件商品</small></div><div style="font-size:35px">♡</div></div>${Object.keys(groups).length?Object.entries(groups).map(([g,items])=>`<section><div class="group-title"><span>✦ ${esc(g)}</span><span class="muted">${money(items.reduce((s,m)=>s+Number(m.price||0)*Number(m.qty||0),0))}</span></div>${items.map(m=>`<div class="merch-row">${m.image?`<img class="merch-img" src="${m.image}">`:`<div class="merch-img" style="display:grid;place-items:center;font-size:22px">♡</div>`}<div class="merch-info"><b>${esc(m.name)}</b><small>${esc(m.channel||'購買管道未記錄')} · 數量 ${m.qty}</small>${m.note?`<small>${esc(m.note)}</small>`:''}</div><div class="merch-price"><b>${money(m.price*m.qty)}</b><small>${money(m.price)} × ${m.qty}</small></div><button class="icon-btn" data-edit-merch="${m.id}">✎</button><button class="icon-btn" data-del-merch="${m.id}">×</button></div>`).join('')}</section>`).join(''):'<div class="empty" style="padding:50px"><div style="font-size:34px">♡</div><b>收藏故事，從第一件周邊開始</b>記錄購買主題、數量與花費，建立專屬戰利品清單。</div>'}`}
-function modal(title,body,submit,remove){$('#modalRoot').innerHTML=`<div class="overlay" id="overlay"><form class="modal" id="modalForm"><h2>${title}</h2>${body}<div class="modal-actions">${remove||'<span></span>'}<div class="right"><button type="button" class="btn" id="cancelModal">取消</button><button class="btn primary" type="submit">儲存</button></div></div></form></div>`;$('#cancelModal').onclick=closeModal;$('#overlay').onclick=e=>{if(e.target.id==='overlay')closeModal()};$('#modalForm').onsubmit=e=>{e.preventDefault();submit(new FormData(e.currentTarget))}}
-function closeModal(){$('#modalRoot').innerHTML=''}
-function fileField(label,id,old){return `<div class="field"><label>${label}</label><div class="file-line">${old?`<img class="preview" src="${old}" id="${id}Preview">`:`<div class="preview" id="${id}Preview" style="display:grid;place-items:center">✧</div>`}<input type="file" id="${id}" accept="image/*"></div><small class="muted">圖片會自動縮放壓縮後儲存。</small></div>`}
-function openOshi(id){let o=id?data().oshis.find(x=>x.id===id):freshOshi();modalOshi=o;let tags=o.tags.join(', '),socials=o.socials.map(s=>`${s.platform}|${s.url}`).join('\n');modal(`${id?'編輯主推檔案':'新增主推'}`,`<div class="form-grid"><div class="field full"><label>VTuber 名字 *</label><input name="name" required maxlength="60" value="${esc(o.name)}" placeholder="輸入名字"></div><div class="field"><label>生日 (MM-DD)</label><input name="birthday" placeholder="01-23" pattern="\\d{2}-\\d{2}" value="${esc(o.birthday)}"></div><div class="field"><label>出道日期</label><input name="debut" type="date" value="${esc(o.debut)}"></div>${fileField('頭像圖片','avatarFile',o.avatar)}${fileField('封面圖片','coverFile',o.cover)}<div class="field full"><label>特色標籤（以逗號分隔）</label><input name="tags" value="${esc(tags)}" placeholder="#歌勢, #遊戲勢"></div><div class="field full"><label>社群連結（每行一組：平台|網址）</label><textarea name="socials" placeholder="YouTube|https://youtube.com/@...&#10;X|https://x.com/...">${esc(socials)}</textarea></div><div class="field full"><label>個人簡介／應援心得</label><textarea name="bio">${esc(o.bio)}</textarea></div></div>`,async f=>{let name=f.get('name').trim();if(!name)return;let parse=()=>[...f.get('socials').split('\n')].map(x=>x.trim()).filter(Boolean).map(x=>{let a=x.split('|');return{platform:a[0].trim(),url:(a.slice(1).join('|')||'').trim()}}).filter(x=>x.platform&&/^https?:\\/\\//i.test(x.url));o.name=name;o.birthday=f.get('birthday').trim();o.debut=f.get('debut');o.tags=f.get('tags').split(/[,，]/).map(x=>x.trim()).filter(Boolean);o.socials=parse();o.bio=f.get('bio');let pending=2;for(let [id,key] of [['avatarFile','avatar'],['coverFile','cover']]){let file=$('#'+id).files[0];if(file)imageFile(file,v=>{o[key]=v;if(--pending===0)finish()});else pending--}function finish(){if(!id)data().oshis.push(o);data().active=o.id;save();closeModal();render();toast('主推檔案已儲存')}if(pending===0)finish()},id?`<button type="button" class="btn danger" id="deleteOshi">刪除此主推</button>`:null);for(let id of ['avatarFile','coverFile'])$('#'+id).onchange=e=>imageFile(e.target.files[0],v=>{$('#'+id+'Preview').outerHTML=`<img class="preview" id="${id}Preview" src="${v}">`});if(id)$('#deleteOshi').onclick=()=>{if(confirm(`確定刪除「${o.name}」及其行程、周邊紀錄？`)){data().oshis=data().oshis.filter(x=>x.id!==id);data().active=data().oshis[0]?.id||null;save();closeModal();render();toast('已刪除主推')}}}
-function openEvent(date,id){let o=current(),e=id?o.events.find(x=>x.id===id):{id:uid(),date,title:'',time:'',type:'直播預告',note:''};modal(id?'編輯行程':'新增行程',`<div class="form-grid"><div class="field"><label>日期 *</label><input name="date" type="date" required value="${esc(e.date||date)}"></div><div class="field"><label>時間</label><input name="time" type="time" value="${esc(e.time)}"></div><div class="field full"><label>行程名稱 *</label><input name="title" required maxlength="100" value="${esc(e.title)}" placeholder="例如：生日紀念直播"></div><div class="field"><label>事件分類</label><select name="type">${['直播預告','會員限定','桌布發布','紀念日','其他'].map(t=>`<option ${e.type===t?'selected':''}>${t}</option>`).join('')}</select></div><div class="field"><label>備註</label><input name="note" value="${esc(e.note)}" placeholder="選填"></div></div>`,f=>{Object.assign(e,{date:f.get('date'),time:f.get('time'),title:f.get('title').trim(),type:f.get('type'),note:f.get('note').trim()});if(!id)o.events.push(e);selectedDate=e.date;calDate=new Date(e.date+'T12:00:00');save();closeModal();render();toast('行程已儲存')},id?`<button type="button" class="btn danger" id="deleteEvent">刪除行程</button>`:null);if(id)$('#deleteEvent').onclick=()=>{if(confirm('確定刪除這筆行程？')){o.events=o.events.filter(x=>x.id!==id);save();closeModal();render();toast('行程已刪除')}}}
-function openMerch(id){let o=current(),m=id?o.merch.find(x=>x.id===id):{id:uid(),group:'',name:'',price:0,qty:1,channel:'',note:'',image:''};modal(id?'編輯周邊':'新增周邊',`<div class="form-grid"><div class="field full"><label>活動／主題名稱 *</label><input name="group" required value="${esc(m.group)}" placeholder="例如：2026 生日紀念周邊"></div><div class="field full"><label>商品名稱 *</label><input name="name" required value="${esc(m.name)}" placeholder="輸入商品名稱"></div><div class="field"><label>單價 (NT$) *</label><input name="price" type="number" min="0" step="0.01" required value="${Number(m.price)||0}"></div><div class="field"><label>購買數量 *</label><input name="qty" type="number" min="1" step="1" required value="${Number(m.qty)||1}"></div><div class="field"><label>購買管道</label><input name="channel" value="${esc(m.channel)}" placeholder="官方商城、展覽現場…"></div><div class="field"><label>備註</label><input name="note" value="${esc(m.note)}"></div>${fileField('商品照片','merchFile',m.image)}</div>`,f=>{Object.assign(m,{group:f.get('group').trim(),name:f.get('name').trim(),price:Number(f.get('price')),qty:Number(f.get('qty')),channel:f.get('channel').trim(),note:f.get('note').trim()});let file=$('#merchFile').files[0],finish=()=>{if(!id)o.merch.push(m);save();closeModal();render();toast('周邊紀錄已儲存')};if(file)imageFile(file,v=>{m.image=v;finish()});else finish()},id?`<button type="button" class="btn danger" id="deleteMerch">刪除周邊</button>`:null);$('#merchFile').onchange=e=>imageFile(e.target.files[0],v=>{$('#merchFilePreview').outerHTML=`<img class="preview" id="merchFilePreview" src="${v}">`});if(id)$('#deleteMerch').onclick=()=>{if(confirm('確定刪除這件周邊？')){o.merch=o.merch.filter(x=>x.id!==id);save();closeModal();render();toast('周邊已刪除')}}}
-function exportData(){let blob=new Blob([JSON.stringify({version:1,exportedAt:new Date().toISOString(),user,data:data()},null,2)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`oshiverse-${user.replace(/[^\w\u4e00-\u9fff-]/g,'_')}-backup.json`;a.click();URL.revokeObjectURL(a.href);toast('備份檔已匯出')}
-function wireView(o){$('#editOshi')?.addEventListener('click',()=>openOshi(o.id));$('#editBio')?.addEventListener('click',()=>openOshi(o.id));$('#editSocial')?.addEventListener('click',()=>openOshi(o.id));$('#editStream')?.addEventListener('click',()=>modal('設定 YouTube 直播／預告',`<div class="field"><label>YouTube 網址</label><input name="url" type="url" value="${esc(o.stream)}" placeholder="https://www.youtube.com/watch?v=..."></div><p class="muted" style="font-size:11px">支援一般影片、直播、Shorts 與 youtu.be 連結。</p>`,f=>{let url=f.get('url').trim();if(url&&!videoId(url)){toast('無法辨識 YouTube 影片網址');return}o.stream=url;save();closeModal();render();toast('播放器設定已更新')}));$('#exportBtn')?.addEventListener('click',exportData);$('#goCalendar')?.addEventListener('click',()=>{tab='calendar';render()});$('#addEvent')?.addEventListener('click',()=>openEvent(selectedDate));$('#addSelected')?.addEventListener('click',()=>openEvent(selectedDate));$('#prevMonth')?.addEventListener('click',()=>{calDate.setMonth(calDate.getMonth()-1);selectedDate=`${calDate.getFullYear()}-${String(calDate.getMonth()+1).padStart(2,'0')}-01`;render()});$('#nextMonth')?.addEventListener('click',()=>{calDate.setMonth(calDate.getMonth()+1);selectedDate=`${calDate.getFullYear()}-${String(calDate.getMonth()+1).padStart(2,'0')}-01`;render()});$('#todayMonth')?.addEventListener('click',()=>{calDate=new Date();selectedDate=today();render()});$$('[data-date]').forEach(b=>b.onclick=()=>{selectedDate=b.dataset.date;render()});$$('[data-edit-event]').forEach(b=>b.onclick=()=>openEvent(selectedDate,b.dataset.editEvent));$$('[data-del-event]').forEach(b=>b.onclick=()=>{let e=o.events.find(x=>x.id===b.dataset.delEvent);if(e&&confirm('確定刪除這筆行程？')){o.events=o.events.filter(x=>x.id!==e.id);save();render()}});$('#addMerch')?.addEventListener('click',()=>openMerch());$$('[data-edit-merch]').forEach(b=>b.onclick=()=>openMerch(b.dataset.editMerch));$$('[data-del-merch]').forEach(b=>b.onclick=()=>{if(confirm('確定刪除這件周邊？')){o.merch=o.merch.filter(x=>x.id!==b.dataset.delMerch);save();render()}})}
-$$('.tab').forEach(b=>b.onclick=()=>{tab=b.dataset.tab;render()});$('#addOshi').onclick=()=>openOshi();$('#switchAccount').onclick=()=>{let n=$('#accountName').value.trim();if(!n){toast('請輸入使用者暱稱');return}user=n;if(!db.users[user])db.users[user]={oshis:[],active:null};save();tab='home';render();if(!data().oshis.length)openOshi();else toast(`已切換至 ${user}`)};$('#accountName').addEventListener('keydown',e=>{if(e.key==='Enter')$('#switchAccount').click()});
-if(!data().oshis.length){data().active=null}else if(!data().oshis.some(o=>o.id===data().active))data().active=data().oshis[0].id;save();render();if(!data().oshis.length)openOshi();
-})();
-</script></body></html>
+<body class="bg-slate-950 text-slate-100 min-h-screen font-sans flex flex-col antialiased selection:bg-pink-500 selection:text-white">
+
+    <!-- 頂部導覽列 Header -->
+    <header class="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-40">
+        <div class="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between gap-4">
+            <!-- App Logo -->
+            <div class="flex items-center gap-2 shrink-0">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-pink-500 to-purple-600 flex items-center justify-center font-black text-xl shadow-lg shadow-pink-500/20">推</div>
+                <span class="font-bold text-lg bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent hidden sm:inline">Oshi Suite</span>
+            </div>
+
+            <!-- 主推選擇器 Tab Bar -->
+            <div id="oshiTabBar" class="flex items-center gap-2 overflow-x-auto py-2 no-scrollbar max-w-xl">
+                <!-- 動態渲染主推分頁 -->
+            </div>
+
+            <!-- 右側功能選單 -->
+            <div class="flex items-center gap-2 shrink-0">
+                <button onclick="openAddOshiModal()" class="flex items-center gap-1.5 text-xs bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white font-medium px-3 py-1.5 rounded-lg transition-all shadow-md shadow-pink-600/20">
+                    <i data-lucide="plus" class="w-4 h-4"></i>
+                    <span class="hidden md:inline">新增主推</span>
+                </button>
+                <button onclick="openUserModal()" class="flex items-center gap-1.5 text-xs bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-3 py-1.5 rounded-lg transition-all">
+                    <i data-lucide="user" class="w-4 h-4"></i>
+                    <span id="currentUserLabel" class="max-w-[80px] truncate">使用者</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要內容區塊 Main Layout -->
+    <main id="appContainer" class="flex-1 max-w-7xl w-full mx-auto p-4 md:p-6 space-y-6">
+        <!-- 頁籤導覽 (Home / Calendar / Merch) -->
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+            <nav class="flex space-x-2 bg-slate-900 p-1 rounded-xl border border-slate-800">
+                <button onclick="switchView('home')" id="tab-home" class="px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2">
+                    <i data-lucide="heart" class="w-4 h-4"></i> 推活主頁
+                </button>
+                <button onclick="switchView('calendar')" id="tab-calendar" class="px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2">
+                    <i data-lucide="calendar" class="w-4 h-4"></i> 活動行事曆
+                </button>
+                <button onclick="switchView('merch')" id="tab-merch" class="px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2">
+                    <i data-lucide="shopping-bag" class="w-4 h-4"></i> 戰利品與花費
+                </button>
+            </nav>
+            <div id="oshiEditBtnContainer"></div>
+        </div>
+
+        <!-- 視圖 1: 推活主頁 Home View -->
+        <section id="view-home" class="space-y-6">
+            <!-- 視覺 Banner 區塊 -->
+            <div class="relative rounded-2xl overflow-hidden bg-slate-900 border border-slate-800 shadow-xl">
+                <div id="oshiCover" class="h-48 md:h-64 bg-gradient-to-r from-slate-900 via-purple-950 to-slate-900 bg-cover bg-center opacity-80"></div>
+                <div class="p-6 relative flex flex-col md:flex-row gap-6 items-start md:items-end -mt-20 md:-mt-16 bg-gradient-to-t from-slate-900 via-slate-900/90 to-transparent">
+                    <img id="oshiAvatar" src="" class="w-28 h-28 md:w-36 md:h-36 rounded-2xl border-4 border-slate-900 object-cover shadow-2xl bg-slate-800 shrink-0">
+                    <div class="space-y-2 flex-1">
+                        <div class="flex flex-wrap items-center gap-3">
+                            <h1 id="oshiName" class="text-2xl md:text-4xl font-extrabold text-white">---</h1>
+                            <div id="oshiBirthdayBadge" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-pink-500/10 text-pink-400 border border-pink-500/20 flex items-center gap-1">
+                                <i data-lucide="cake" class="w-3.5 h-3.5"></i> 生日: <span id="oshiBirthday">--/--</span>
+                            </div>
+                            <div id="oshiDebutBadge" class="text-xs font-semibold px-2.5 py-1 rounded-full bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center gap-1">
+                                <i data-lucide="sparkles" class="w-3.5 h-3.5"></i> 出道: <span id="oshiDebut">----/--/--</span>
+                            </div>
+                        </div>
+                        <div id="oshiTags" class="flex flex-wrap gap-1.5 pt-1"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- 左側：個人簡介與社群連結 -->
+                <div class="space-y-6 lg:col-span-1">
+                    <!-- 社群連結快捷入口 -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4">
+                        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                            <i data-lucide="link" class="w-4 h-4 text-pink-400"></i> 社群與頻道
+                        </h3>
+                        <div id="oshiSocialLinks" class="grid grid-cols-1 gap-2"></div>
+                    </div>
+
+                    <!-- 應援心得 / 簡介 -->
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3">
+                        <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                            <i data-lucide="book-open" class="w-4 h-4 text-purple-400"></i> 個人簡介與應援筆記
+                        </h3>
+                        <p id="oshiBio" class="text-sm text-slate-300 leading-relaxed whitespace-pre-line bg-slate-950/50 p-4 rounded-xl border border-slate-800/80">尚未填寫筆記...</p>
+                    </div>
+                </div>
+
+                <!-- 右側：YouTube 直播與預告嵌入 -->
+                <div class="lg:col-span-2 space-y-4">
+                    <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider flex items-center gap-2">
+                                <i data-lucide="tv" class="w-4 h-4 text-red-500"></i> 最新直播 / 預告嵌入
+                            </h3>
+                            <span id="streamStatusBadge" class="text-xs px-2.5 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700">未設定</span>
+                        </div>
+                        <div class="flex gap-2">
+                            <input type="text" id="streamUrlInput" placeholder="貼上 YouTube 影片/直播網址 (例如 https://www.youtube.com/watch?v=...)" class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-slate-200 focus:outline-none focus:border-pink-500">
+                            <button onclick="saveStreamUrl()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700 px-4 py-2 rounded-xl text-sm font-medium transition-all">更新</button>
+                        </div>
+                        <div id="streamEmbedContainer" class="aspect-video bg-slate-950 rounded-xl border border-slate-800 overflow-hidden flex items-center justify-center text-slate-500 text-sm">
+                            <div class="text-center space-y-2">
+                                <i data-lucide="youtube" class="w-12 h-12 mx-auto text-slate-700"></i>
+                                <p>貼上 YouTube 網址即可即時嵌入播放器</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 視圖 2: 活動行事曆 Calendar View -->
+        <section id="view-calendar" class="hidden space-y-6">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6">
+                <!-- 日曆控制器 -->
+                <div class="flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <h2 id="calendarMonthLabel" class="text-xl font-bold text-white">2026 年 10 月</h2>
+                        <button onclick="jumpToToday()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 px-2.5 py-1 rounded-lg">今天</button>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="changeMonth(-1)" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300"><i data-lucide="chevron-left" class="w-4 h-4"></i></button>
+                        <button onclick="changeMonth(1)" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300"><i data-lucide="chevron-right" class="w-4 h-4"></i></button>
+                    </div>
+                </div>
+
+                <!-- 日曆網格 Header -->
+                <div class="grid grid-cols-7 gap-1 text-center text-xs font-semibold text-slate-400 py-2 border-b border-slate-800">
+                    <span class="text-red-400">日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span class="text-blue-400">六</span>
+                </div>
+
+                <!-- 日曆網格 Grid -->
+                <div id="calendarGrid" class="grid grid-cols-7 gap-1"></div>
+            </div>
+
+            <!-- 本月行程清單 -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+                <h3 class="text-base font-bold text-white flex items-center gap-2">
+                    <i data-lucide="list-todo" class="w-5 h-5 text-pink-400"></i> 本月活動行程清單
+                </h3>
+                <div id="monthlyEventsList" class="space-y-2"></div>
+            </div>
+        </section>
+
+        <!-- 視圖 3: 周邊戰利品與花費 Merch View -->
+        <section id="view-merch" class="hidden space-y-6">
+            <!-- 總花費統計 Card -->
+            <div class="bg-gradient-to-r from-slate-900 via-purple-950/40 to-slate-900 border border-purple-500/20 rounded-2xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div>
+                    <span class="text-xs font-semibold uppercase text-purple-400 tracking-wider">Merch Expenditure</span>
+                    <h2 class="text-xl font-bold text-slate-200">累積周邊戰利品總花費</h2>
+                </div>
+                <div class="text-3xl sm:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400">
+                    NT$ <span id="totalMerchCost">0</span>
+                </div>
+            </div>
+
+            <!-- 新增商品與紀錄按鈕 -->
+            <div class="flex justify-between items-center">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i data-lucide="package" class="w-5 h-5 text-purple-400"></i> 周邊收藏清單
+                </h3>
+                <button onclick="openAddMerchModal()" class="flex items-center gap-1.5 text-xs bg-pink-600 hover:bg-pink-500 text-white font-medium px-3.5 py-2 rounded-xl transition-all shadow-md shadow-pink-600/20">
+                    <i data-lucide="plus" class="w-4 h-4"></i> 新增周邊紀錄
+                </button>
+            </div>
+
+            <!-- 周邊紀錄分組清單 -->
+            <div id="merchGroupList" class="space-y-6"></div>
+        </section>
+    </main>
+
+    <!-- Modal: 使用者切換 / 新增 -->
+    <div id="userModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 space-y-5">
+            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                <i data-lucide="users" class="w-5 h-5 text-pink-400"></i> 切換使用者暱稱
+            </h3>
+            <p class="text-xs text-slate-400">不同使用者擁有一整套獨立的推活紀錄與資料庫。</p>
+            <div class="space-y-3">
+                <label class="text-xs text-slate-400">目前已有使用者：</label>
+                <div id="userList" class="space-y-1.5 max-h-40 overflow-y-auto"></div>
+            </div>
+            <div class="space-y-2 border-t border-slate-800 pt-3">
+                <label class="text-xs text-slate-400">新增或直接切換新暱稱：</label>
+                <div class="flex gap-2">
+                    <input type="text" id="newUsernameInput" placeholder="輸入新的使用者名稱" class="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-slate-200 focus:outline-none focus:border-pink-500">
+                    <button onclick="switchUserFromInput()" class="bg-pink-600 hover:bg-pink-500 text-white px-4 py-2 rounded-xl text-sm font-medium transition-all">切換</button>
+                </div>
+            </div>
+            <div class="flex justify-end pt-2">
+                <button onclick="closeModal('userModal')" class="text-xs text-slate-400 hover:text-white">關閉</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: 新增 / 編輯 VTuber 主推 -->
+    <div id="oshiModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 id="oshiModalTitle" class="text-lg font-bold text-white">新增 VTuber 主推</h3>
+                <button onclick="closeModal('oshiModal')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <form id="oshiForm" onsubmit="handleSaveOshi(event)" class="space-y-4">
+                <input type="hidden" id="oshiFormId">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">VTuber 名字 *</label>
+                    <input type="text" id="oshiFormName" required placeholder="例如: 櫻巫女 / Sakura Miko" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-slate-200 focus:outline-none focus:border-pink-500">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">生日 (MM-DD)</label>
+                        <input type="text" id="oshiFormBirthday" placeholder="03-05" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-slate-200 focus:outline-none focus:border-pink-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">出道日期 (YYYY-MM-DD)</label>
+                        <input type="date" id="oshiFormDebut" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-slate-200 focus:outline-none focus:border-pink-500">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">頭像圖片</label>
+                        <input type="file" id="oshiFormAvatarFile" accept="image/*" class="w-full text-xs text-slate-400 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">背景封面圖片</label>
+                        <input type="file" id="oshiFormCoverFile" accept="image/*" class="w-full text-xs text-slate-400 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-slate-800 file:text-slate-200 hover:file:bg-slate-700">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">特色標籤 (用逗號或空格分隔)</label>
+                    <input type="text" id="oshiFormTags" placeholder="#歌勢, #遊戲勢, #Hololive" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-slate-200 focus:outline-none focus:border-pink-500">
+                </div>
+                <div class="space-y-2">
+                    <label class="block text-xs font-semibold text-slate-300">社群與頻道網址</label>
+                    <div class="grid grid-cols-2 gap-2 text-xs">
+                        <input type="url" id="oshiSocialYoutube" placeholder="YouTube 網址" class="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-slate-200">
+                        <input type="url" id="oshiSocialTwitter" placeholder="X (Twitter) 網址" class="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-slate-200">
+                        <input type="url" id="oshiSocialTwitch" placeholder="Twitch 網址" class="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-slate-200">
+                        <input type="url" id="oshiSocialInstagram" placeholder="Instagram 網址" class="bg-slate-950 border border-slate-800 rounded-lg px-3 py-1.5 text-slate-200">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">個人簡介 / 應援筆記</label>
+                    <textarea id="oshiFormBio" rows="3" placeholder="記錄這一位 VTuber 的特色、迷因或應援心得..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-200 focus:outline-none focus:border-pink-500"></textarea>
+                </div>
+                <div class="flex items-center justify-between pt-2">
+                    <button type="button" id="deleteOshiBtn" onclick="handleDeleteOshi()" class="text-xs text-red-400 hover:text-red-300 hidden">刪除此主推</button>
+                    <div class="flex gap-2 ml-auto">
+                        <button type="button" onclick="closeModal('oshiModal')" class="px-4 py-2 rounded-xl text-xs bg-slate-800 text-slate-300">取消</button>
+                        <button type="submit" class="px-4 py-2 rounded-xl text-xs bg-pink-600 hover:bg-pink-500 text-white font-medium">儲存</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: 行程新增/編輯 -->
+    <div id="eventModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-md w-full p-6 space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 class="text-lg font-bold text-white">新增活動行程</h3>
+                <button onclick="closeModal('eventModal')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <form onsubmit="handleSaveEvent(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">行程日期</label>
+                    <input type="date" id="eventDateInput" required class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-slate-200">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">行程標題 *</label>
+                    <input type="text" id="eventTitleInput" required placeholder="例如: 3D 新衣裝發表會" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-slate-200">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">事件分類標籤</label>
+                    <select id="eventTypeInput" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-slate-200">
+                        <option value="直播預告">直播預告</option>
+                        <option value="會員限定">會員限定</option>
+                        <option value="桌布發布">桌布發布</option>
+                        <option value="紀念日">紀念日</option>
+                        <option value="其他">其他</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">備註說明</label>
+                    <input type="text" id="eventNoteInput" placeholder="例如: 晚上 20:00 開始" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-slate-200">
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeModal('eventModal')" class="px-4 py-2 rounded-xl text-xs bg-slate-800 text-slate-300">取消</button>
+                    <button type="submit" class="px-4 py-2 rounded-xl text-xs bg-pink-600 hover:bg-pink-500 text-white font-medium">儲存行程</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: 周邊戰利品新增 -->
+    <div id="merchModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl max-w-lg w-full p-6 space-y-4 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center border-b border-slate-800 pb-3">
+                <h3 class="text-lg font-bold text-white">新增周邊收藏</h3>
+                <button onclick="closeModal('merchModal')" class="text-slate-400 hover:text-white"><i data-lucide="x" class="w-5 h-5"></i></button>
+            </div>
+            <form onsubmit="handleSaveMerch(event)" class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">活動/主題分類名稱 *</label>
+                    <input type="text" id="merchGroupInput" required placeholder="例如: 2026 生日紀念周邊" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-slate-200">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">周邊商品名稱 *</label>
+                    <input type="text" id="merchNameInput" required placeholder="例如: 複製簽名壓克力牌" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-slate-200">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">單價 (NT$) *</label>
+                        <input type="number" id="merchPriceInput" required min="0" placeholder="500" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-slate-200">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">數量 *</label>
+                        <input type="number" id="merchQtyInput" required min="1" value="1" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-slate-200">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">購買管道</label>
+                        <input type="text" id="merchChannelInput" placeholder="例如: 官方線上商城 / Booth" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-slate-200">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-300 mb-1">商品照片照片</label>
+                        <input type="file" id="merchPhotoInput" accept="image/*" class="w-full text-xs text-slate-400 file:mr-2 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-slate-800 file:text-slate-200">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1">備註說明</label>
+                    <input type="text" id="merchNoteInput" placeholder="例如: 預計 11 月出貨" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-sm text-slate-200">
+                </div>
+                <div class="flex justify-end gap-2 pt-2">
+                    <button type="button" onclick="closeModal('merchModal')" class="px-4 py-2 rounded-xl text-xs bg-slate-800 text-slate-300">取消</button>
+                    <button type="submit" class="px-4 py-2 rounded-xl text-xs bg-pink-600 hover:bg-pink-500 text-white font-medium">新增至戰利品區</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- JavaScript 邏輯機制 -->
+    <script>
+        // === 狀態管理 State ===
+        let currentUser = '預設推活粉';
+        let currentOshiId = null;
+        let currentView = 'home';
+        let currentCalendarDate = new Date();
+
+        // 預設主推結構樣板
+        const createDefaultOshi = (name) => ({
+            id: 'oshi_' + Date.now(),
+            name: name,
+            birthday: '03-05',
+            debut: '2022-08-01',
+            avatar: '',
+            cover: '',
+            tags: ['#歌勢', '#遊戲勢'],
+            socials: { youtube: '', twitter: '', twitch: '', instagram: '' },
+            bio: '歡迎使用 VTuber 推活 Suite！這是一個紀錄主推行程、直播與周邊戰利品的專屬空間。',
+            streamUrl: '',
+            events: [],
+            merch: []
+        });
+
+        // === 初始化數據 Initialization ===
+        window.addEventListener('DOMContentLoaded', () => {
+            initUserData();
+            lucide.createIcons();
+        });
+
+        function initUserData() {
+            const savedUser = localStorage.getItem('oshi_app_current_user');
+            if (savedUser) currentUser = savedUser;
+            document.getElementById('currentUserLabel').innerText = currentUser;
+
+            let data = getStorageData();
+            if (!data.oshis || data.oshis.length === 0) {
+                // 初次引導：自動建立第一位主推
+                const defaultOshi = createDefaultOshi('櫻巫女 (Sakura Miko)');
+                data.oshis = [defaultOshi];
+                saveStorageData(data);
+                currentOshiId = defaultOshi.id;
+            } else {
+                currentOshiId = data.oshis[0].id;
+            }
+
+            renderAll();
+        }
+
+        // LocalStorage Helpers
+        function getStorageData() {
+            const raw = localStorage.getItem(`oshi_data_${currentUser}`);
+            return raw ? JSON.parse(raw) : { oshis: [] };
+        }
+
+        function saveStorageData(data) {
+            localStorage.setItem(`oshi_data_${currentUser}`, JSON.stringify(data));
+        }
+
+        function getCurrentOshi() {
+            const data = getStorageData();
+            return data.oshis.find(o => o.id === currentOshiId) || data.oshis[0];
+        }
+
+        function updateCurrentOshi(updatedOshi) {
+            const data = getStorageData();
+            const index = data.oshis.findIndex(o => o.id === updatedOshi.id);
+            if (index !== -1) {
+                data.oshis[index] = updatedOshi;
+                saveStorageData(data);
+            }
+        }
+
+        // === 畫面渲染總控 Render Manager ===
+        function renderAll() {
+            renderOshiTabs();
+            renderHomeView();
+            renderCalendarView();
+            renderMerchView();
+            renderOshiEditButton();
+            lucide.createIcons();
+        }
+
+        // 切換主頁籤 View Switcher
+        function switchView(viewName) {
+            currentView = viewName;
+            ['home', 'calendar', 'merch'].forEach(v => {
+                const el = document.getElementById(`view-${v}`);
+                const tab = document.getElementById(`tab-${v}`);
+                if (v === viewName) {
+                    el.classList.remove('hidden');
+                    tab.classList.add('bg-pink-600', 'text-white', 'shadow-md');
+                    tab.classList.remove('text-slate-400', 'hover:text-white');
+                } else {
+                    el.classList.add('hidden');
+                    tab.classList.remove('bg-pink-600', 'text-white', 'shadow-md');
+                    tab.classList.add('text-slate-400', 'hover:text-white');
+                }
+            });
+            lucide.createIcons();
+        }
+
+        // 渲染頂部主推 Tabs
+        function renderOshiTabs() {
+            const data = getStorageData();
+            const container = document.getElementById('oshiTabBar');
+            container.innerHTML = '';
+
+            data.oshis.forEach(oshi => {
+                const isActive = oshi.id === currentOshiId;
+                const btn = document.createElement('button');
+                btn.onclick = () => {
+                    currentOshiId = oshi.id;
+                    renderAll();
+                };
+                btn.className = `flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-semibold transition-all shrink-0 border ${
+                    isActive 
+                    ? 'bg-slate-800 border-pink-500/80 text-white shadow-lg shadow-pink-500/10' 
+                    : 'bg-slate-900/60 border-slate-800 text-slate-400 hover:bg-slate-800'
+                }`;
+
+                const avatarSrc = oshi.avatar || 'data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="%2394a3b8" stroke-width="2"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+                btn.innerHTML = `
+                    <img src="${avatarSrc}" class="w-5 h-5 rounded-full object-cover border border-slate-700">
+                    <span>${oshi.name}</span>
+                `;
+                container.appendChild(btn);
+            });
+        }
+
+        function renderOshiEditButton() {
+            const container = document.getElementById('oshiEditBtnContainer');
+            container.innerHTML = `
+                <button onclick="openEditOshiModal()" class="text-xs text-slate-400 hover:text-white flex items-center gap-1 bg-slate-900 px-3 py-1.5 rounded-lg border border-slate-800">
+                    <i data-lucide="edit-3" class="w-3.5 h-3.5"></i> 編輯主推檔案
+                </button>
+            `;
+        }
+
+        // === 視圖 1: 推活主頁 Logic ===
+        function renderHomeView() {
+            const oshi = getCurrentOshi();
+            if (!oshi) return;
+
+            document.getElementById('oshiName').innerText = oshi.name;
+            document.getElementById('oshiBirthday').innerText = oshi.birthday || '--/--';
+            document.getElementById('oshiDebut').innerText = oshi.debut || '----/--/--';
+            document.getElementById('oshiBio').innerText = oshi.bio || '尚未填寫個人簡介或筆記...';
+
+            // 頭像與封面
+            const avatarEl = document.getElementById('oshiAvatar');
+            avatarEl.src = oshi.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=200&auto=format&fit=crop&q=80';
+            
+            const coverEl = document.getElementById('oshiCover');
+            if (oshi.cover) {
+                coverEl.style.backgroundImage = `url('${oshi.cover}')`;
+            } else {
+                coverEl.style.backgroundImage = 'linear-gradient(to right, #0f172a, #3b0764, #0f172a)';
+            }
+
+            // 特色標籤 Tags
+            const tagsContainer = document.getElementById('oshiTags');
+            tagsContainer.innerHTML = '';
+            (oshi.tags || []).forEach(tag => {
+                if (!tag.trim()) return;
+                const span = document.createElement('span');
+                span.className = 'text-xs font-medium px-2.5 py-0.5 rounded-md bg-slate-800 text-slate-300 border border-slate-700';
+                span.innerText = tag.startsWith('#') ? tag : `#${tag}`;
+                tagsContainer.appendChild(span);
+            });
+
+            // 社群連結 Socials
+            const socialContainer = document.getElementById('oshiSocialLinks');
+            socialContainer.innerHTML = '';
+            const socials = [
+                { key: 'youtube', label: 'YouTube 頻道', icon: 'youtube', color: 'text-red-500' },
+                { key: 'twitter', label: 'X (Twitter)', icon: 'twitter', color: 'text-sky-400' },
+                { key: 'twitch', label: 'Twitch 實況', icon: 'tv', color: 'text-purple-400' },
+                { key: 'instagram', label: 'Instagram', icon: 'instagram', color: 'text-pink-400' },
+            ];
+
+            let hasSocial = false;
+            socials.forEach(s => {
+                const url = oshi.socials?.[s.key];
+                if (url) {
+                    hasSocial = true;
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.target = '_blank';
+                    a.className = 'flex items-center justify-between p-2.5 rounded-xl bg-slate-950/60 border border-slate-800 hover:border-slate-700 hover:bg-slate-800/50 transition-all text-xs font-medium text-slate-300';
+                    a.innerHTML = `
+                        <span class="flex items-center gap-2"><i data-lucide="${s.icon}" class="w-4 h-4 ${s.color}"></i> ${s.label}</span>
+                        <i data-lucide="external-link" class="w-3.5 h-3.5 text-slate-500"></i>
+                    `;
+                    socialContainer.appendChild(a);
+                }
+            });
+            if (!hasSocial) {
+                socialContainer.innerHTML = '<span class="text-xs text-slate-500">尚無社群連結</span>';
+            }
+
+            // YouTube 直播嵌入 Stream Embed
+            document.getElementById('streamUrlInput').value = oshi.streamUrl || '';
+            renderStreamEmbed(oshi.streamUrl);
+        }
+
+        function saveStreamUrl() {
+            const url = document.getElementById('streamUrlInput').value.trim();
+            const oshi = getCurrentOshi();
+            oshi.streamUrl = url;
+            updateCurrentOshi(oshi);
+            renderStreamEmbed(url);
+        }
+
+        function renderStreamEmbed(url) {
+            const container = document.getElementById('streamEmbedContainer');
+            const badge = document.getElementById('streamStatusBadge');
+            
+            const videoId = extractYouTubeId(url);
+            if (videoId) {
+                badge.innerText = '已載入預告/直播';
+                badge.className = 'text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20';
+                container.innerHTML = `
+                    <iframe class="w-full h-full" src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                `;
+            } else {
+                badge.innerText = '未設定';
+                badge.className = 'text-xs px-2.5 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700';
+                container.innerHTML = `
+                    <div class="text-center space-y-2">
+                        <i data-lucide="youtube" class="w-12 h-12 mx-auto text-slate-700"></i>
+                        <p>貼上 YouTube 網址即可即時嵌入播放器</p>
+                    </div>
+                `;
+            }
+            lucide.createIcons();
+        }
+
+        function extractYouTubeId(url) {
+            if (!url) return null;
+            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+            const match = url.match(regExp);
+            return (match && match[2].length === 11) ? match[2] : null;
+        }
+
+        // === 視圖 2: 活動行事曆 Logic ===
+        function renderCalendarView() {
+            const oshi = getCurrentOshi();
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
+
+            const year = currentCalendarDate.getFullYear();
+            const month = currentCalendarDate.getMonth();
+
+            document.getElementById('calendarMonthLabel').innerText = `${year} 年 ${month + 1} 月`;
+
+            const firstDayIndex = new Date(year, month, 1).getDay();
+            const totalDays = new Date(year, month + 1, 0).getDate();
+
+            const today = new Date();
+            const isCurrentMonth = today.getFullYear() === year && today.getMonth() === month;
+
+            // 填補月初空白
+            for (let i = 0; i < firstDayIndex; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'min-h-[90px] bg-slate-950/20 border border-slate-900 rounded-xl p-1 opacity-30';
+                grid.appendChild(emptyCell);
+            }
+
+            // 渲染每日 Cell
+            for (let day = 1; day <= totalDays; day++) {
+                const cell = document.createElement('div');
+                const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                const isToday = isCurrentMonth && today.getDate() === day;
+
+                cell.className = `min-h-[90px] bg-slate-950/80 border ${isToday ? 'border-pink-500/80 bg-pink-950/10' : 'border-slate-800/80'} rounded-xl p-2 flex flex-col justify-between hover:border-slate-700 cursor-pointer transition-all`;
+                cell.onclick = () => openAddEventModal(dateStr);
+
+                // 當日 events
+                const dayEvents = (oshi.events || []).filter(e => e.date === dateStr);
+
+                let eventsHtml = '';
+                dayEvents.forEach(e => {
+                    const tagClass = getEventTypeColor(e.type);
+                    eventsHtml += `
+                        <div class="text-[10px] ${tagClass} px-1.5 py-0.5 rounded truncate font-medium mb-1">
+                            ${e.title}
+                        </div>
+                    `;
+                });
+
+                cell.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold ${isToday ? 'text-pink-400 bg-pink-500/20 px-1.5 py-0.5 rounded-full' : 'text-slate-400'}">${day}</span>
+                        ${dayEvents.length > 0 ? `<span class="w-1.5 h-1.5 rounded-full bg-pink-500"></span>` : ''}
+                    </div>
+                    <div class="space-y-0.5 mt-1 overflow-hidden">${eventsHtml}</div>
+                `;
+                grid.appendChild(cell);
+            }
+
+            // 渲染本月行程清單
+            renderMonthlyEventsList(year, month + 1);
+        }
+
+        function changeMonth(delta) {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + delta);
+            renderCalendarView();
+        }
+
+        function jumpToToday() {
+            currentCalendarDate = new Date();
+            renderCalendarView();
+        }
+
+        function getEventTypeColor(type) {
+            switch(type) {
+                case '直播預告': return 'bg-red-500/20 text-red-300 border border-red-500/30';
+                case '會員限定': return 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30';
+                case '桌布發布': return 'bg-sky-500/20 text-sky-300 border border-sky-500/30';
+                case '紀念日': return 'bg-purple-500/20 text-purple-300 border border-purple-500/30';
+                default: return 'bg-slate-800 text-slate-300';
+            }
+        }
+
+        function renderMonthlyEventsList(year, month) {
+            const oshi = getCurrentOshi();
+            const container = document.getElementById('monthlyEventsList');
+            container.innerHTML = '';
+
+            const prefix = `${year}-${String(month).padStart(2, '0')}`;
+            const monthlyEvents = (oshi.events || [])
+                .filter(e => e.date.startsWith(prefix))
+                .sort((a, b) => a.date.localeCompare(b.date));
+
+            if (monthlyEvents.length === 0) {
+                container.innerHTML = '<p class="text-xs text-slate-500 py-2">本月份尚無預定的活動或行程。</p>';
+                return;
+            }
+
+            monthlyEvents.forEach(e => {
+                const div = document.createElement('div');
+                div.className = 'flex items-center justify-between p-3 rounded-xl bg-slate-950/50 border border-slate-800 text-xs';
+                div.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="font-mono font-bold text-pink-400">${e.date}</span>
+                        <span class="font-semibold text-slate-200">${e.title}</span>
+                        <span class="px-2 py-0.5 rounded text-[10px] ${getEventTypeColor(e.type)}">${e.type}</span>
+                        ${e.note ? `<span class="text-slate-500 text-[11px]">${e.note}</span>` : ''}
+                    </div>
+                    <button onclick="deleteEvent('${e.id}')" class="text-slate-500 hover:text-red-400 p-1"><i data-lucide="trash-2" class="w-3.5 h-3.5"></i></button>
+                `;
+                container.appendChild(div);
+            });
+            lucide.createIcons();
+        }
+
+        // === 視圖 3: 周邊戰利品與花費 Logic ===
+        function renderMerchView() {
+            const oshi = getCurrentOshi();
+            const merchList = oshi.merch || [];
+
+            // 計算總金額
+            const totalCost = merchList.reduce((acc, curr) => acc + (Number(curr.price) * Number(curr.qty)), 0);
+            document.getElementById('totalMerchCost').innerText = totalCost.toLocaleString();
+
+            const container = document.getElementById('merchGroupList');
+            container.innerHTML = '';
+
+            if (merchList.length === 0) {
+                container.innerHTML = '<div class="text-center py-12 text-slate-500 border border-dashed border-slate-800 rounded-2xl"><i data-lucide="package-open" class="w-10 h-10 mx-auto text-slate-700 mb-2"></i><p class="text-xs">尚未紀錄任何周邊戰利品</p></div>';
+                lucide.createIcons();
+                return;
+            }
+
+            // 依據「活動/主題 group」進行 Grouping
+            const grouped = {};
+            merchList.forEach(item => {
+                const groupName = item.group || '一般購買紀錄';
+                if (!grouped[groupName]) grouped[groupName] = [];
+                grouped[groupName].push(item);
+            });
+
+            Object.keys(grouped).forEach(groupName => {
+                const groupItems = grouped[groupName];
+                const groupSubtotal = groupItems.reduce((acc, curr) => acc + (Number(curr.price) * Number(curr.qty)), 0);
+
+                const groupCard = document.createElement('div');
+                groupCard.className = 'bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-4';
+
+                let itemsHtml = '';
+                groupItems.forEach(item => {
+                    const subtotal = Number(item.price) * Number(item.qty);
+                    const photoHtml = item.photo 
+                        ? `<img src="${item.photo}" class="w-12 h-12 rounded-lg object-cover border border-slate-800 shrink-0">`
+                        : `<div class="w-12 h-12 rounded-lg bg-slate-950 border border-slate-800 flex items-center justify-center text-slate-700 shrink-0"><i data-lucide="image" class="w-5 h-5"></i></div>`;
+
+                    itemsHtml += `
+                        <div class="flex items-center justify-between p-3 rounded-xl bg-slate-950/60 border border-slate-800/80 gap-3">
+                            <div class="flex items-center gap-3 min-w-0">
+                                ${photoHtml}
+                                <div class="min-w-0">
+                                    <h5 class="text-xs font-bold text-slate-200 truncate">${item.name}</h5>
+                                    <p class="text-[11px] text-slate-400">NT$ ${Number(item.price).toLocaleString()} × ${item.qty}件 ${item.channel ? `• <span class="text-slate-500">${item.channel}</span>` : ''}</p>
+                                    ${item.note ? `<p class="text-[10px] text-slate-500 truncate">${item.note}</p>` : ''}
+                                </div>
+                            </div>
+                            <div class="flex items-center gap-4 shrink-0">
+                                <span class="text-xs font-bold text-pink-400">NT$ ${subtotal.toLocaleString()}</span>
+                                <button onclick="deleteMerchItem('${item.id}')" class="text-slate-500 hover:text-red-400 transition-colors"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                groupCard.innerHTML = `
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                        <div class="flex items-center gap-2">
+                            <span class="w-2 h-2 rounded-full bg-purple-500"></span>
+                            <h4 class="text-sm font-bold text-white">${groupName}</h4>
+                        </div>
+                        <span class="text-xs text-slate-400">小計: <strong class="text-slate-200">NT$ ${groupSubtotal.toLocaleString()}</strong></span>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">${itemsHtml}</div>
+                `;
+                container.appendChild(groupCard);
+            });
+
+            lucide.createIcons();
+        }
+
+        // === Modal & Form Actions ===
+        function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
+        function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+
+        // 使用者管理
+        function openUserModal() {
+            const userList = document.getElementById('userList');
+            userList.innerHTML = '';
+
+            // 掃描所有 user
+            const users = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('oshi_data_')) {
+                    users.push(key.replace('oshi_data_', ''));
+                }
+            }
+
+            users.forEach(u => {
+                const div = document.createElement('div');
+                div.className = `flex items-center justify-between p-2 rounded-xl text-xs ${u === currentUser ? 'bg-pink-500/10 border border-pink-500/30 text-pink-300' : 'bg-slate-950 border border-slate-800 text-slate-300 hover:bg-slate-800'}`;
+                div.innerHTML = `
+                    <span>${u}</span>
+                    ${u !== currentUser ? `<button onclick="switchUser('${u}')" class="text-pink-400 hover:underline">切換</button>` : '<span class="text-[10px] text-pink-500 font-bold">當前</span>'}
+                `;
+                userList.appendChild(div);
+            });
+
+            openModal('userModal');
+        }
+
+        function switchUser(username) {
+            currentUser = username;
+            localStorage.setItem('oshi_app_current_user', currentUser);
+            closeModal('userModal');
+            initUserData();
+        }
+
+        function switchUserFromInput() {
+            const input = document.getElementById('newUsernameInput').value.trim();
+            if (input) {
+                switchUser(input);
+                document.getElementById('newUsernameInput').value = '';
+            }
+        }
+
+        // 主推新增/編輯
+        function openAddOshiModal() {
+            document.getElementById('oshiModalTitle').innerText = '新增 VTuber 主推';
+            document.getElementById('oshiForm').reset();
+            document.getElementById('oshiFormId').value = '';
+            document.getElementById('deleteOshiBtn').classList.add('hidden');
+            openModal('oshiModal');
+        }
+
+        function openEditOshiModal() {
+            const oshi = getCurrentOshi();
+            if (!oshi) return;
+
+            document.getElementById('oshiModalTitle').innerText = '編輯 VTuber 主推檔案';
+            document.getElementById('oshiFormId').value = oshi.id;
+            document.getElementById('oshiFormName').value = oshi.name || '';
+            document.getElementById('oshiFormBirthday').value = oshi.birthday || '';
+            document.getElementById('oshiFormDebut').value = oshi.debut || '';
+            document.getElementById('oshiFormTags').value = (oshi.tags || []).join(', ');
+            document.getElementById('oshiSocialYoutube').value = oshi.socials?.youtube || '';
+            document.getElementById('oshiSocialTwitter').value = oshi.socials?.twitter || '';
+            document.getElementById('oshiSocialTwitch').value = oshi.socials?.twitch || '';
+            document.getElementById('oshiSocialInstagram').value = oshi.socials?.instagram || '';
+            document.getElementById('oshiFormBio').value = oshi.bio || '';
+
+            document.getElementById('deleteOshiBtn').classList.remove('hidden');
+            openModal('oshiModal');
+        }
+
+        async function handleSaveOshi(e) {
+            e.preventDefault();
+            const id = document.getElementById('oshiFormId').value;
+            const data = getStorageData();
+
+            const avatarFile = document.getElementById('oshiFormAvatarFile').files[0];
+            const coverFile = document.getElementById('oshiFormCoverFile').files[0];
+
+            let avatarBase64 = '';
+            let coverBase64 = '';
+
+            if (avatarFile) avatarBase64 = await convertBase64(avatarFile, 300);
+            if (coverFile) coverBase64 = await convertBase64(coverFile, 800);
+
+            const tagsRaw = document.getElementById('oshiFormTags').value;
+            const tags = tagsRaw.split(/[,，\s]+/).filter(Boolean);
+
+            if (id) {
+                // 編輯舊資料
+                const oshi = data.oshis.find(o => o.id === id);
+                oshi.name = document.getElementById('oshiFormName').value;
+                oshi.birthday = document.getElementById('oshiFormBirthday').value;
+                oshi.debut = document.getElementById('oshiFormDebut').value;
+                oshi.tags = tags;
+                oshi.socials = {
+                    youtube: document.getElementById('oshiSocialYoutube').value,
+                    twitter: document.getElementById('oshiSocialTwitter').value,
+                    twitch: document.getElementById('oshiSocialTwitch').value,
+                    instagram: document.getElementById('oshiSocialInstagram').value,
+                };
+                oshi.bio = document.getElementById('oshiFormBio').value;
+                if (avatarBase64) oshi.avatar = avatarBase64;
+                if (coverBase64) oshi.cover = coverBase64;
+            } else {
+                // 新增
+                const newOshi = createDefaultOshi(document.getElementById('oshiFormName').value);
+                newOshi.birthday = document.getElementById('oshiFormBirthday').value;
+                newOshi.debut = document.getElementById('oshiFormDebut').value;
+                newOshi.tags = tags;
+                newOshi.socials = {
+                    youtube: document.getElementById('oshiSocialYoutube').value,
+                    twitter: document.getElementById('oshiSocialTwitter').value,
+                    twitch: document.getElementById('oshiSocialTwitch').value,
+                    instagram: document.getElementById('oshiSocialInstagram').value,
+                };
+                newOshi.bio = document.getElementById('oshiFormBio').value;
+                if (avatarBase64) newOshi.avatar = avatarBase64;
+                if (coverBase64) newOshi.cover = coverBase64;
+
+                data.oshis.push(newOshi);
+                currentOshiId = newOshi.id;
+            }
+
+            saveStorageData(data);
+            closeModal('oshiModal');
+            renderAll();
+        }
+
+        function handleDeleteOshi() {
+            if (!confirm('確定要刪除這一位主推的所有資料與紀錄嗎？此動作無法復原。')) return;
+
+            const data = getStorageData();
+            data.oshis = data.oshis.filter(o => o.id !== currentOshiId);
+            
+            if (data.oshis.length === 0) {
+                const defaultOshi = createDefaultOshi('櫻巫女');
+                data.oshis = [defaultOshi];
+            }
+            currentOshiId = data.oshis[0].id;
+            saveStorageData(data);
+            closeModal('oshiModal');
+            renderAll();
+        }
+
+        // 行程管理 Event Actions
+        function openAddEventModal(dateStr = '') {
+            document.getElementById('eventDateInput').value = dateStr || new Date().toISOString().split('T')[0];
+            document.getElementById('eventTitleInput').value = '';
+            document.getElementById('eventNoteInput').value = '';
+            openModal('eventModal');
+        }
+
+        function handleSaveEvent(e) {
+            e.preventDefault();
+            const oshi = getCurrentOshi();
+            if (!oshi.events) oshi.events = [];
+
+            const newEvent = {
+                id: 'evt_' + Date.now(),
+                date: document.getElementById('eventDateInput').value,
+                title: document.getElementById('eventTitleInput').value,
+                type: document.getElementById('eventTypeInput').value,
+                note: document.getElementById('eventNoteInput').value
+            };
+
+            oshi.events.push(newEvent);
+            updateCurrentOshi(oshi);
+            closeModal('eventModal');
+            renderCalendarView();
+        }
+
+        function deleteEvent(eventId) {
+            const oshi = getCurrentOshi();
+            oshi.events = oshi.events.filter(e => e.id !== eventId);
+            updateCurrentOshi(oshi);
+            renderCalendarView();
+        }
+
+        // 周邊管理 Merch Actions
+        function openAddMerchModal() {
+            document.getElementById('merchGroupInput').value = '';
+            document.getElementById('merchNameInput').value = '';
+            document.getElementById('merchPriceInput').value = '';
+            document.getElementById('merchQtyInput').value = '1';
+            document.getElementById('merchChannelInput').value = '';
+            document.getElementById('merchNoteInput').value = '';
+            document.getElementById('merchPhotoInput').value = '';
+            openModal('merchModal');
+        }
+
+        async function handleSaveMerch(e) {
+            e.preventDefault();
+            const oshi = getCurrentOshi();
+            if (!oshi.merch) oshi.merch = [];
+
+            const photoFile = document.getElementById('merchPhotoInput').files[0];
+            let photoBase64 = '';
+            if (photoFile) photoBase64 = await convertBase64(photoFile, 300);
+
+            const newMerch = {
+                id: 'merch_' + Date.now(),
+                group: document.getElementById('merchGroupInput').value.trim() || '一般周邊',
+                name: document.getElementById('merchNameInput').value.trim(),
+                price: document.getElementById('merchPriceInput').value,
+                qty: document.getElementById('merchQtyInput').value,
+                channel: document.getElementById('merchChannelInput').value,
+                note: document.getElementById('merchNoteInput').value,
+                photo: photoBase64
+            };
+
+            oshi.merch.push(newMerch);
+            updateCurrentOshi(oshi);
+            closeModal('merchModal');
+            renderMerchView();
+        }
+
+        function deleteMerchItem(merchId) {
+            const oshi = getCurrentOshi();
+            oshi.merch = oshi.merch.filter(m => m.id !== merchId);
+            updateCurrentOshi(oshi);
+            renderMerchView();
+        }
+
+        // 工具函式：圖片壓縮 Base64
+        function convertBase64(file, maxWidth = 500) {
+            return new Promise((resolve) => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = (e) => {
+                    const img = new Image();
+                    img.src = e.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let scale = maxWidth / img.width;
+                        if (scale > 1) scale = 1;
+                        canvas.width = img.width * scale;
+                        canvas.height = img.height * scale;
+
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        resolve(canvas.toDataURL('image/jpeg', 0.7));
+                    };
+                };
+            });
+        }
+    </script>
+</body>
+</html>
