@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OSHI Hub - 我的推活記帳與日誌</title>
+  <title>主推介紹 - OSHI Hub</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Font Awesome 6 Icons -->
@@ -14,7 +14,6 @@
       theme: {
         extend: {
           colors: {
-            themeRed: '#b91c1c',
             themeDark: '#121212',
             themeCard: '#1e1e1e'
           }
@@ -23,307 +22,251 @@
     }
   </script>
   <style>
-    /* 自訂滾動條與毛玻璃樣式 */
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    /* 自訂毛玻璃與滾動條樣式 */
+    ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: #121212; }
-    ::-webkit-scrollbar-thumb { background: #333; rounded: 3px; }
-    .glass-nav {
-      background: rgba(18, 18, 18, 0.85);
+    ::-webkit-scrollbar-thumb { background: #333; border-radius: 3px; }
+    .glass-card {
+      background: rgba(30, 30, 30, 0.75);
       backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
     }
   </style>
 </head>
-<body class="bg-themeDark text-gray-100 font-sans pb-24 md:pb-6 min-h-screen">
+<body class="bg-themeDark text-gray-100 font-sans min-h-screen pb-12">
 
-  <!-- 頂部導覽列：主推切換與備份選單 -->
-  <header class="sticky top-0 z-40 glass-nav border-b border-gray-800 px-4 py-3 flex items-center justify-between">
-    <div class="flex items-center gap-3">
-      <!-- 多主推切換下拉選單 -->
-      <div class="relative">
-        <select id="oshiSelect" onchange="switchOshi(this.value)" class="bg-gray-800 text-white font-bold text-lg rounded-xl px-3 py-1.5 border border-gray-700 focus:outline-none focus:border-red-500">
-          <!-- 動態生成選項 -->
-        </select>
-      </div>
-      <button onclick="openOshiModal()" class="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-2.5 py-1.5 rounded-lg border border-gray-700 transition">
-        <i class="fa-solid fa-plus mr-1"></i>新增主推
-      </button>
-    </div>
-
-    <!-- 本機備份與資料管理 -->
+  <!-- 頂部導覽與控制區 -->
+  <header class="sticky top-0 z-40 bg-themeDark/80 backdrop-blur-md border-b border-gray-800 px-4 py-3 flex items-center justify-between">
     <div class="flex items-center gap-2">
-      <button onclick="exportData()" class="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-2.5 py-1.5 rounded-lg border border-gray-700 transition" title="匯出 JSON 備份">
-        <i class="fa-solid fa-download md:mr-1"></i><span class="hidden md:inline">匯出</span>
-      </button>
-      <label class="text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 px-2.5 py-1.5 rounded-lg border border-gray-700 transition cursor-pointer" title="匯入 JSON 備份">
-        <i class="fa-solid fa-upload md:mr-1"></i><span class="hidden md:inline">匯入</span>
-        <input type="file" id="importFile" accept=".json" onchange="importData(event)" class="hidden">
-      </label>
+      <i class="fa-solid fa-heart text-red-500 text-xl"></i>
+      <span class="font-bold text-lg tracking-wide text-white">OSHI Profile</span>
     </div>
+    <button onclick="openEditModal()" class="text-xs bg-red-600 hover:bg-red-500 text-white font-semibold px-3 py-1.5 rounded-xl transition shadow-lg shadow-red-900/40 flex items-center gap-1.5">
+      <i class="fa-solid fa-pen-to-square"></i>編輯主推資訊
+    </button>
   </header>
 
-  <main class="max-w-4xl mx-auto px-4 py-6 space-y-6">
+  <main class="max-w-4xl mx-auto px-4 pt-4 space-y-6">
 
-    <!-- 1. 主推個人檔案與 Banner 卡片區 -->
+    <!-- 1. 頂部 Banner 與 主推形象卡片區 -->
     <section class="relative rounded-3xl overflow-hidden bg-gray-900 border border-gray-800 shadow-2xl">
-      <!-- 背景 Banner -->
-      <div class="h-48 md:h-64 w-full bg-cover bg-center relative" id="oshiBanner">
-        <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/40 to-transparent"></div>
+      <!-- 頂部 Banner 照片 -->
+      <div id="oshiBanner" class="h-48 sm:h-64 md:h-80 w-full bg-cover bg-center relative transition-all duration-300">
+        <div class="absolute inset-0 bg-gradient-to-t from-gray-900 via-gray-900/30 to-transparent"></div>
       </div>
       
-      <!-- 主推卡片核心內容 -->
-      <div class="relative px-6 pb-6 pt-2 -mt-16 flex flex-col md:flex-row items-center md:items-end gap-5 text-center md:text-left">
+      <!-- 主推個人形象資訊區 -->
+      <div class="relative px-6 pb-6 pt-2 -mt-16 sm:-mt-20 flex flex-col sm:flex-row items-center sm:items-end gap-5 text-center sm:text-left">
         <!-- 大頭貼 -->
-        <img id="oshiAvatar" src="" class="w-28 h-28 md:w-32 md:w-32 rounded-full border-4 border-gray-900 object-cover shadow-xl">
+        <img id="oshiAvatar" src="" alt="Avatar" class="w-28 h-28 sm:w-36 sm:h-36 rounded-full border-4 border-gray-900 object-cover shadow-2xl bg-gray-800">
         
         <div class="flex-1 space-y-2">
-          <div class="flex flex-col md:flex-row md:items-center gap-2">
-            <h1 id="oshiName" class="text-2xl md:text-3xl font-extrabold text-white">---</h1>
-            <span id="oshiDays" class="inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-semibold bg-red-950 text-red-400 border border-red-800/50 self-center md:self-auto">
-              <i class="fa-solid fa-heart mr-1.5 text-red-500"></i>追推 0 天
+          <div class="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+            <h1 id="oshiName" class="text-2xl sm:text-3xl font-extrabold text-white tracking-wide">請點擊右上角設定主推</h1>
+            <!-- 追推天數標籤 -->
+            <span id="oshiDaysBadge" class="inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-semibold bg-red-950/80 text-red-400 border border-red-800/50 self-center sm:self-auto">
+              <i class="fa-solid fa-heart mr-1.5 text-red-500"></i><span id="oshiDaysText">追推 0 天</span>
             </span>
           </div>
-          <p id="oshiNote" class="text-xs md:text-sm text-gray-400 max-w-xl">尚無備註或介紹...</p>
-        </div>
+          
+          <!-- 生日與出道日資訊 -->
+          <div class="flex flex-wrap items-center justify-center sm:justify-start gap-4 text-xs sm:text-sm text-gray-400">
+            <span><i class="fa-solid fa-cake-candles text-red-400 mr-1.5"></i>生日：<span id="oshiBirthday" class="text-gray-200">未設定</span></span>
+            <span><i class="fa-solid fa-star text-amber-400 mr-1.5"></i>出道日：<span id="oshiDebute" class="text-gray-200">未設定</span></span>
+          </div>
 
-        <!-- 本命存款與活動總花費概覽 -->
-        <div class="grid grid-cols-2 gap-3 w-full md:w-auto pt-2 md:pt-0">
-          <div class="bg-gray-800/80 backdrop-blur-md p-3 rounded-2xl border border-gray-700/60 text-center">
-            <div class="text-xs text-gray-400 mb-0.5">本命存款</div>
-            <div id="savingsTotal" class="text-lg font-bold text-emerald-400">NT$0</div>
-          </div>
-          <div class="bg-gray-800/80 backdrop-blur-md p-3 rounded-2xl border border-gray-700/60 text-center">
-            <div class="text-xs text-gray-400 mb-0.5">追星總花費</div>
-            <div id="expenseTotal" class="text-lg font-bold text-red-400">NT$0</div>
-          </div>
+          <p id="oshiBio" class="text-xs sm:text-sm text-gray-400 max-w-xl line-clamp-2 pt-1">目前尚未設定主推的詳細簡介，請點擊上方按鈕進行設定。</p>
         </div>
       </div>
     </section>
 
-    <!-- 頁籤導覽 (Tab Switcher) -->
-    <div class="flex border-b border-gray-800 text-sm font-medium">
-      <button id="tabBtn-items" onclick="switchTab('items')" class="flex-1 py-3 text-center border-b-2 border-red-600 text-red-500 font-bold">
-        <i class="fa-solid fa-box-open mr-2"></i>周邊記帳明細
-      </button>
-      <button id="tabBtn-calendar" onclick="switchTab('calendar')" class="flex-1 py-3 text-center border-b-2 border-transparent text-gray-400 hover:text-gray-200">
-        <i class="fa-solid fa-calendar-days mr-2"></i>行程與日曆
-      </button>
-    </div>
-
-    <!-- 2. 周邊記帳明細區塊 -->
-    <section id="tab-items" class="space-y-4">
-      <div class="flex items-center justify-between">
-        <h2 class="text-lg font-bold text-white flex items-center gap-2">
-          <i class="fa-solid fa-receipt text-red-500"></i>周邊與活動消費記錄
-        </h2>
-        <button onclick="openItemModal()" class="bg-red-700 hover:bg-red-600 text-white text-xs font-semibold px-3.5 py-2 rounded-xl transition shadow-lg shadow-red-900/30">
-          <i class="fa-solid fa-plus mr-1.5"></i>新增記帳
-        </button>
-      </div>
-
-      <!-- 響應式表格 / 卡片 -->
-      <div class="bg-gray-900 border border-gray-800 rounded-2xl overflow-hidden shadow-xl">
-        <div class="overflow-x-auto">
-          <table class="w-full text-sm text-left text-gray-300">
-            <thead class="text-xs text-gray-400 uppercase bg-gray-800/60 border-b border-gray-800">
-              <tr>
-                <th class="px-4 py-3">活動/項目名稱</th>
-                <th class="px-4 py-3">商品名稱</th>
-                <th class="px-4 py-3">狀態</th>
-                <th class="px-4 py-3">單價</th>
-                <th class="px-4 py-3">數量</th>
-                <th class="px-4 py-3">總花費</th>
-                <th class="px-4 py-3 text-right">操作</th>
-              </tr>
-            </thead>
-            <tbody id="itemsTableBody" class="divide-y divide-gray-800/60">
-              <!-- 動態生成周邊資料列 -->
-            </tbody>
-          </table>
+    <!-- 2. 社群連結按鈕區 -->
+    <section class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+      <!-- YouTube 連結 -->
+      <a id="linkYT" href="#" target="_blank" class="glass-card hover:bg-red-600/20 border border-gray-800 hover:border-red-500/50 rounded-2xl p-4 flex items-center gap-3 transition group">
+        <div class="w-10 h-10 rounded-xl bg-red-600/20 text-red-500 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+          <i class="fa-brands fa-youtube"></i>
         </div>
-      </div>
+        <div class="overflow-hidden">
+          <div class="text-xs text-gray-400">YouTube 頻道</div>
+          <div class="text-sm font-bold text-gray-200 truncate group-hover:text-red-400">前往頻道</div>
+        </div>
+      </a>
+
+      <!-- Twitch 連結 -->
+      <a id="linkTwitch" href="#" target="_blank" class="glass-card hover:bg-purple-600/20 border border-gray-800 hover:border-purple-500/50 rounded-2xl p-4 flex items-center gap-3 transition group">
+        <div class="w-10 h-10 rounded-xl bg-purple-600/20 text-purple-400 flex items-center justify-center text-xl group-hover:scale-110 transition-transform">
+          <i class="fa-brands fa-twitch"></i>
+        </div>
+        <div class="overflow-hidden">
+          <div class="text-xs text-gray-400">Twitch 實況</div>
+          <div class="text-sm font-bold text-gray-200 truncate group-hover:text-purple-400">前往實況台</div>
+        </div>
+      </a>
+
+      <!-- X (Twitter) 連結 -->
+      <a id="linkX" href="#" target="_blank" class="glass-card hover:bg-gray-700/30 border border-gray-800 hover:border-gray-500/50 rounded-2xl p-4 flex items-center gap-3 transition group">
+        <div class="w-10 h-10 rounded-xl bg-gray-800 text-gray-200 flex items-center justify-center text-lg group-hover:scale-110 transition-transform">
+          <i class="fa-brands fa-x-twitter"></i>
+        </div>
+        <div class="overflow-hidden">
+          <div class="text-xs text-gray-400">X (Twitter)</div>
+          <div class="text-sm font-bold text-gray-200 truncate group-hover:text-white">追蹤社群</div>
+        </div>
+      </a>
     </section>
 
-    <!-- 3. 行程與日曆區塊 -->
-    <section id="tab-calendar" class="space-y-4 hidden">
-      <div class="flex items-center justify-between">
-        <h2 class="text-lg font-bold text-white flex items-center gap-2">
-          <i class="fa-solid fa-calendar-check text-red-500"></i>本月行程紀錄
-        </h2>
-        <button onclick="openScheduleModal()" class="bg-red-700 hover:bg-red-600 text-white text-xs font-semibold px-3.5 py-2 rounded-xl transition">
-          <i class="fa-solid fa-plus mr-1.5"></i>新增行程
-        </button>
+    <!-- 3. 直播預告與周表區 -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- 近期直播預告卡片 -->
+      <div class="bg-gray-900 border border-gray-800 rounded-3xl p-5 space-y-4 shadow-xl">
+        <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+          <h2 class="text-base font-bold text-white flex items-center gap-2">
+            <i class="fa-solid fa-satellite-dish text-red-500"></i>最新直播預告
+          </h2>
+          <span class="text-xs px-2.5 py-0.5 rounded-full bg-red-950 text-red-400 border border-red-800/50 font-medium">UPCOMING</span>
+        </div>
+
+        <div class="space-y-3">
+          <div class="aspect-video bg-gray-800 rounded-2xl overflow-hidden relative group">
+            <img id="streamCover" src="" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+              <a id="streamLink" href="#" target="_blank" class="bg-red-600 hover:bg-red-500 text-white font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-2 shadow-lg">
+                <i class="fa-solid fa-play"></i>前往觀看
+              </a>
+            </div>
+          </div>
+          <div>
+            <h3 id="streamTitle" class="font-bold text-sm text-gray-100 line-clamp-1">未設定直播標題</h3>
+            <p id="streamTime" class="text-xs text-gray-400 mt-1"><i class="fa-regular fa-clock mr-1"></i>開播時間：尚未預定</p>
+          </div>
+        </div>
       </div>
 
-      <!-- 簡易月曆檢視卡片 -->
-      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-4 shadow-xl">
-        <div id="calendarHeader" class="text-center font-bold text-base text-gray-200 mb-4">2026 年 10 月</div>
-        <div class="grid grid-cols-7 gap-1 text-center text-xs font-semibold text-gray-500 mb-2">
-          <div>日</div><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div>
+      <!-- 本周行程周表卡片 -->
+      <div class="bg-gray-900 border border-gray-800 rounded-3xl p-5 space-y-4 shadow-xl">
+        <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+          <h2 class="text-base font-bold text-white flex items-center gap-2">
+            <i class="fa-regular fa-calendar-days text-red-500"></i>本周行程 (周表)
+          </h2>
+          <span class="text-xs text-gray-400">WEEKLY SCHEDULE</span>
         </div>
-        <div id="calendarGrid" class="grid grid-cols-7 gap-1.5 text-sm">
-          <!-- 動態渲染日曆格子 -->
-        </div>
-      </div>
 
-      <!-- 行程列表 -->
-      <div class="bg-gray-900 border border-gray-800 rounded-2xl p-4 space-y-3">
-        <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider">即將到來的行程</h3>
-        <div id="scheduleList" class="space-y-2">
-          <!-- 動態生成行程列表 -->
+        <div class="aspect-video bg-gray-800 rounded-2xl overflow-hidden relative border border-gray-800">
+          <img id="scheduleImg" src="" class="w-full h-full object-cover">
         </div>
       </div>
     </section>
 
   </main>
 
-  <!-- 彈出視窗 1：新增/編輯主推 Modal -->
-  <div id="oshiModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-gray-900 border border-gray-800 w-full max-w-md rounded-2xl p-6 space-y-4 shadow-2xl">
-      <h3 class="text-lg font-bold text-white">新增 / 編輯主推資訊</h3>
-      <div class="space-y-3 text-sm">
-        <div>
-          <label class="block text-gray-400 mb-1">主推名稱</label>
-          <input type="text" id="inputOshiName" class="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500">
-        </div>
-        <div>
-          <label class="block text-gray-400 mb-1">開始追推日期</label>
-          <input type="date" id="inputOshiDate" class="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500">
-        </div>
-        <div>
-          <label class="block text-gray-400 mb-1">頭像圖片網址 (URL)</label>
-          <input type="text" id="inputOshiAvatar" placeholder="https://..." class="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500">
-        </div>
-        <div>
-          <label class="block text-gray-400 mb-1">Banner 封面網址 (URL)</label>
-          <input type="text" id="inputOshiBanner" placeholder="https://..." class="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500">
-        </div>
-        <div>
-          <label class="block text-gray-400 mb-1">個人簡介 / 備註</label>
-          <textarea id="inputOshiNote" rows="2" class="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500"></textarea>
-        </div>
+  <!-- 4. 編輯主推資訊 Modal 視窗 -->
+  <div id="editModal" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-gray-900 border border-gray-800 w-full max-w-lg rounded-3xl p-6 space-y-4 shadow-2xl max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-gray-800 pb-3">
+        <h3 class="text-lg font-bold text-white">編輯主推 VTuber 資訊</h3>
+        <button onclick="closeModal()" class="text-gray-400 hover:text-white"><i class="fa-solid fa-xmark text-xl"></i></button>
       </div>
-      <div class="flex justify-end gap-2 pt-2">
-        <button onclick="closeModal('oshiModal')" class="px-4 py-2 bg-gray-800 text-gray-300 rounded-xl text-xs font-semibold">取消</button>
-        <button onclick="saveOshi()" class="px-4 py-2 bg-red-700 hover:bg-red-600 text-white rounded-xl text-xs font-semibold">儲存</button>
-      </div>
-    </div>
-  </div>
 
-  <!-- 彈出視窗 2：新增周邊消費 Modal -->
-  <div id="itemModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-gray-900 border border-gray-800 w-full max-w-md rounded-2xl p-6 space-y-4 shadow-2xl">
-      <h3 class="text-lg font-bold text-white">新增消費/周邊記帳</h3>
-      <div class="space-y-3 text-sm">
+      <div class="space-y-3 text-xs sm:text-sm">
         <div>
-          <label class="block text-gray-400 mb-1">活動/管道名稱</label>
-          <input type="text" id="inputEventName" placeholder="例如：安利美特 / FF46" class="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500">
+          <label class="block text-gray-400 mb-1">VTuber 名稱</label>
+          <input type="text" id="inputName" placeholder="例如：幸Sachi" class="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500">
         </div>
-        <div>
-          <label class="block text-gray-400 mb-1">商品名稱</label>
-          <input type="text" id="inputItemName" placeholder="例如：壓克力立牌" class="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500">
-        </div>
+
         <div class="grid grid-cols-2 gap-3">
           <div>
-            <label class="block text-gray-400 mb-1">單價 (NT$)</label>
-            <input type="number" id="inputPrice" value="0" class="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500">
+            <label class="block text-gray-400 mb-1">生日 (MM/DD)</label>
+            <input type="text" id="inputBirthday" placeholder="例如：05/10" class="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500">
           </div>
           <div>
-            <label class="block text-gray-400 mb-1">數量</label>
-            <input type="number" id="inputQty" value="1" class="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500">
+            <label class="block text-gray-400 mb-1">出道/推推日期</label>
+            <input type="date" id="inputDebute" class="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500">
           </div>
         </div>
+
         <div>
-          <label class="block text-gray-400 mb-1">進度狀態</label>
-          <select id="inputStatus" class="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none">
-            <option value="已入手">已入手</option>
-            <option value="預購中">預購中</option>
-            <option value="已發貨">已發貨</option>
-            <option value="願望清單">願望清單</option>
-          </select>
+          <label class="block text-gray-400 mb-1">頭像圖片網址 (URL)</label>
+          <input type="text" id="inputAvatar" placeholder="https://..." class="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500">
+        </div>
+
+        <div>
+          <label class="block text-gray-400 mb-1">Banner 封面網址 (URL)</label>
+          <input type="text" id="inputBanner" placeholder="https://..." class="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500">
+        </div>
+
+        <div>
+          <label class="block text-gray-400 mb-1">簡介說明</label>
+          <textarea id="inputBio" rows="2" placeholder="輸入主推的文字介紹..." class="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500"></textarea>
+        </div>
+
+        <hr class="border-gray-800 my-2">
+
+        <!-- 社群網址編輯 -->
+        <div class="space-y-2">
+          <label class="block text-gray-400">社群平台連結</label>
+          <input type="text" id="inputYT" placeholder="YouTube 頻道連結" class="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500">
+          <input type="text" id="inputTwitch" placeholder="Twitch 頻道連結" class="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500">
+          <input type="text" id="inputX" placeholder="X (Twitter) 連結" class="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500">
+        </div>
+
+        <hr class="border-gray-800 my-2">
+
+        <!-- 直播與周表編輯 -->
+        <div class="space-y-2">
+          <label class="block text-gray-400">直播與周表資訊</label>
+          <input type="text" id="inputStreamTitle" placeholder="直播標題" class="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500">
+          <input type="text" id="inputStreamTime" placeholder="預定時間 (如：10/05 20:00)" class="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500">
+          <input type="text" id="inputStreamCover" placeholder="直播封面圖 URL" class="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500">
+          <input type="text" id="inputStreamLink" placeholder="直播觀看連結 URL" class="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500">
+          <input type="text" id="inputScheduleImg" placeholder="周表圖片 URL" class="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500">
         </div>
       </div>
-      <div class="flex justify-end gap-2 pt-2">
-        <button onclick="closeModal('itemModal')" class="px-4 py-2 bg-gray-800 text-gray-300 rounded-xl text-xs font-semibold">取消</button>
-        <button onclick="saveItem()" class="px-4 py-2 bg-red-700 hover:bg-red-600 text-white rounded-xl text-xs font-semibold">新增紀錄</button>
+
+      <div class="flex justify-end gap-2 pt-3">
+        <button onclick="closeModal()" class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-xl text-xs font-semibold">取消</button>
+        <button onclick="saveOshiProfile()" class="px-4 py-2 bg-red-600 hover:bg-red-500 text-white rounded-xl text-xs font-semibold shadow-lg shadow-red-900/40">儲存更新</button>
       </div>
     </div>
   </div>
 
-  <!-- 彈出視窗 3：新增行程 Modal -->
-  <div id="scheduleModal" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-gray-900 border border-gray-800 w-full max-w-md rounded-2xl p-6 space-y-4 shadow-2xl">
-      <h3 class="text-lg font-bold text-white">新增推活行程</h3>
-      <div class="space-y-3 text-sm">
-        <div>
-          <label class="block text-gray-400 mb-1">行程名稱</label>
-          <input type="text" id="inputScheduleTitle" placeholder="例如：新歌歌回直播 / 週年演唱會" class="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500">
-        </div>
-        <div>
-          <label class="block text-gray-400 mb-1">日期</label>
-          <input type="date" id="inputScheduleDate" class="w-full bg-gray-800 border border-gray-700 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-red-500">
-        </div>
-      </div>
-      <div class="flex justify-end gap-2 pt-2">
-        <button onclick="closeModal('scheduleModal')" class="px-4 py-2 bg-gray-800 text-gray-300 rounded-xl text-xs font-semibold">取消</button>
-        <button onclick="saveSchedule()" class="px-4 py-2 bg-red-700 hover:bg-red-600 text-white rounded-xl text-xs font-semibold">儲存行程</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- JavaScript 核心狀態與 LocalStorage 管理程式碼 -->
+  <!-- JavaScript 狀態管理邏輯 -->
   <script>
-    // 預設核心資料結構
-    const defaultData = {
-      currentOshiId: 'oshi_1',
-      oshis: [
-        {
-          id: 'oshi_1',
-          name: '幸Sachi',
-          startDate: '2025-10-03',
-          avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=300&auto=format&fit=crop',
-          banner: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1000&auto=format&fit=crop',
-          note: '子午計畫三期生 / 歌唱與遊戲實況',
-          savings: 0,
-          items: [
-            { id: '1', event: '安利美特', name: '壓克力立牌', price: 550, qty: 1, status: '已入手' },
-            { id: '2', event: 'FF46', name: '活頁夾卡冊', price: 350, qty: 1, status: '已入手' }
-          ],
-          schedules: [
-            { id: 's1', title: '下班小確幸直播', date: '2026-10-05' },
-            { id: 's2', title: '生日周邊發售', date: '2026-10-15' }
-          ]
-        }
-      ]
+    // 預設主推檔案資料結構
+    const defaultOshi = {
+      name: '幸Sachi',
+      birthday: '05/10',
+      debuteDate: '2025-10-03',
+      avatar: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=400&auto=format&fit=crop',
+      banner: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1200&auto=format&fit=crop',
+      bio: '子午計畫三期生 / 歌唱與遊戲實況主',
+      yt: 'https://youtube.com',
+      twitch: 'https://twitch.tv',
+      x: 'https://x.com',
+      streamTitle: '【下班小確幸】聊聊連續兩周被炸紅色炸彈這件事',
+      streamTime: '2026/10/05 20:00',
+      streamCover: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=600&auto=format&fit=crop',
+      streamLink: 'https://youtube.com',
+      scheduleImg: 'https://images.unsplash.com/photo-1506784983877-45594efa4cbe?q=80&w=600&auto=format&fit=crop'
     };
 
-    let appData = defaultData;
+    let oshiData = defaultOshi;
 
-    // 載入 LocalStorage 儲存資料
+    // 載入 LocalStorage
     function loadData() {
-      const saved = localStorage.getItem('oshi_hub_data');
+      const saved = localStorage.getItem('oshi_single_profile');
       if (saved) {
         try {
-          appData = JSON.parse(saved);
+          oshiData = JSON.parse(saved);
         } catch (e) {
-          console.error("Parse failed, using default data", e);
+          console.error("Parse failed", e);
         }
       }
       render();
     }
 
-    // 儲存資料至 LocalStorage
-    function saveData() {
-      localStorage.setItem('oshi_hub_data', JSON.stringify(appData));
-      render();
-    }
-
-    // 取得當前選取的主推
-    function getCurrentOshi() {
-      return appData.oshis.find(o => o.id === appData.currentOshiId) || appData.oshis[0];
-    }
-
     // 計算追推天數
-    function getDaysDiff(startDateStr) {
+    function getDaysCount(startDateStr) {
       if (!startDateStr) return 0;
       const start = new Date(startDateStr);
       const today = new Date();
@@ -331,205 +274,85 @@
       return Math.max(0, Math.floor(diff / (1000 * 60 * 60 * 24)));
     }
 
-    // 渲染全頁面
+    // 渲染 UI 畫面
     function render() {
-      const oshi = getCurrentOshi();
+      document.getElementById('oshiName').innerText = oshiData.name || '請設定名稱';
+      document.getElementById('oshiBirthday').innerText = oshiData.birthday || '未設定';
+      document.getElementById('oshiDebute').innerText = oshiData.debuteDate || '未設定';
+      document.getElementById('oshiBio').innerText = oshiData.bio || '無簡介';
 
-      // 渲染切換選單
-      const select = document.getElementById('oshiSelect');
-      select.innerHTML = appData.oshis.map(o => 
-        `<option value="${o.id}" ${o.id === oshi.id ? 'selected' : ''}>${o.name}</option>`
-      ).join('');
+      // 頭像與 Banner
+      document.getElementById('oshiAvatar').src = oshiData.avatar || '';
+      document.getElementById('oshiBanner').style.backgroundImage = `url('${oshiData.banner || ''}')`;
 
-      // 渲染個人資料卡
-      document.getElementById('oshiName').innerText = oshi.name;
-      document.getElementById('oshiAvatar').src = oshi.avatar;
-      document.getElementById('oshiBanner').style.backgroundImage = `url('${oshi.banner}')`;
-      document.getElementById('oshiNote').innerText = oshi.note || '尚無簡介';
-      document.getElementById('oshiDays').innerHTML = `<i class="fa-solid fa-heart mr-1.5 text-red-500"></i>追推 ${getDaysDiff(oshi.startDate)} 天`;
+      // 天數計算
+      const days = getDaysCount(oshiData.debuteDate);
+      document.getElementById('oshiDaysText').innerText = `追推 ${days} 天`;
 
-      // 算帳統計
-      const totalExpense = oshi.items.reduce((sum, item) => sum + (item.price * item.qty), 0);
-      document.getElementById('expenseTotal').innerText = `NT$${totalExpense.toLocaleString()}`;
-      document.getElementById('savingsTotal').innerText = `NT$${(oshi.savings || 0).toLocaleString()}`;
+      // 社群連結
+      document.getElementById('linkYT').href = oshiData.yt || '#';
+      document.getElementById('linkTwitch').href = oshiData.twitch || '#';
+      document.getElementById('linkX').href = oshiData.x || '#';
 
-      // 渲染周邊表格
-      const tbody = document.getElementById('itemsTableBody');
-      if (oshi.items.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" class="text-center py-6 text-gray-500">尚無記帳紀錄，點擊右上角新增！</td></tr>`;
-      } else {
-        tbody.innerHTML = oshi.items.map(item => `
-          <tr class="hover:bg-gray-800/40 transition">
-            <td class="px-4 py-3 font-medium text-gray-200">${item.event}</td>
-            <td class="px-4 py-3 text-white font-semibold">${item.name}</td>
-            <td class="px-4 py-3">
-              <span class="px-2 py-0.5 rounded text-xs font-semibold bg-gray-800 border border-gray-700 text-gray-300">
-                ${item.status}
-              </span>
-            </td>
-            <td class="px-4 py-3">NT$${item.price}</td>
-            <td class="px-4 py-3">${item.qty}</td>
-            <td class="px-4 py-3 text-red-400 font-bold">NT$${(item.price * item.qty).toLocaleString()}</td>
-            <td class="px-4 py-3 text-right">
-              <button onclick="deleteItem('${item.id}')" class="text-gray-500 hover:text-red-400 transition"><i class="fa-solid fa-trash-can"></i></button>
-            </td>
-          </tr>
-        `).join('');
-      }
-
-      // 渲染行程與日曆
-      renderCalendar();
-    }
-
-    // 切換主推
-    function switchOshi(id) {
-      appData.currentOshiId = id;
-      saveData();
-    }
-
-    // 切換頁籤
-    function switchTab(tab) {
-      document.getElementById('tab-items').classList.toggle('hidden', tab !== 'items');
-      document.getElementById('tab-calendar').classList.toggle('hidden', tab !== 'calendar');
-      
-      document.getElementById('tabBtn-items').className = tab === 'items' 
-        ? "flex-1 py-3 text-center border-b-2 border-red-600 text-red-500 font-bold"
-        : "flex-1 py-3 text-center border-b-2 border-transparent text-gray-400 hover:text-gray-200";
-      document.getElementById('tabBtn-calendar').className = tab === 'calendar' 
-        ? "flex-1 py-3 text-center border-b-2 border-red-600 text-red-500 font-bold"
-        : "flex-1 py-3 text-center border-b-2 border-transparent text-gray-400 hover:text-gray-200";
+      // 直播與周表
+      document.getElementById('streamTitle').innerText = oshiData.streamTitle || '未預定直播';
+      document.getElementById('streamTime').innerHTML = `<i class="fa-regular fa-clock mr-1"></i>開播時間：${oshiData.streamTime || '未定'}`;
+      document.getElementById('streamCover').src = oshiData.streamCover || '';
+      document.getElementById('streamLink').href = oshiData.streamLink || '#';
+      document.getElementById('scheduleImg').src = oshiData.scheduleImg || '';
     }
 
     // Modal 控制器
-    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
-    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
+    function openEditModal() {
+      document.getElementById('inputName').value = oshiData.name || '';
+      document.getElementById('inputBirthday').value = oshiData.birthday || '';
+      document.getElementById('inputDebute').value = oshiData.debuteDate || '';
+      document.getElementById('inputAvatar').value = oshiData.avatar || '';
+      document.getElementById('inputBanner').value = oshiData.banner || '';
+      document.getElementById('inputBio').value = oshiData.bio || '';
 
-    function openOshiModal() {
-      const oshi = getCurrentOshi();
-      document.getElementById('inputOshiName').value = oshi.name;
-      document.getElementById('inputOshiDate').value = oshi.startDate;
-      document.getElementById('inputOshiAvatar').value = oshi.avatar;
-      document.getElementById('inputOshiBanner').value = oshi.banner;
-      document.getElementById('inputOshiNote').value = oshi.note;
-      openModal('oshiModal');
+      document.getElementById('inputYT').value = oshiData.yt || '';
+      document.getElementById('inputTwitch').value = oshiData.twitch || '';
+      document.getElementById('inputX').value = oshiData.x || '';
+
+      document.getElementById('inputStreamTitle').value = oshiData.streamTitle || '';
+      document.getElementById('inputStreamTime').value = oshiData.streamTime || '';
+      document.getElementById('inputStreamCover').value = oshiData.streamCover || '';
+      document.getElementById('inputStreamLink').value = oshiData.streamLink || '';
+      document.getElementById('inputScheduleImg').value = oshiData.scheduleImg || '';
+
+      document.getElementById('editModal').classList.remove('hidden');
     }
 
-    function saveOshi() {
-      const name = document.getElementById('inputOshiName').value.trim();
-      if (!name) return alert('請輸入主推名稱');
-
-      const oshi = getCurrentOshi();
-      oshi.name = name;
-      oshi.startDate = document.getElementById('inputOshiDate').value;
-      oshi.avatar = document.getElementById('inputOshiAvatar').value || oshi.avatar;
-      oshi.banner = document.getElementById('inputOshiBanner').value || oshi.banner;
-      oshi.note = document.getElementById('inputOshiNote').value;
-
-      closeModal('oshiModal');
-      saveData();
+    function closeModal() {
+      document.getElementById('editModal').classList.add('hidden');
     }
 
-    function openItemModal() { openModal('itemModal'); }
-    function saveItem() {
-      const eventName = document.getElementById('inputEventName').value.trim();
-      const itemName = document.getElementById('inputItemName').value.trim();
-      const price = parseFloat(document.getElementById('inputPrice').value) || 0;
-      const qty = parseInt(document.getElementById('inputQty').value) || 1;
-      const status = document.getElementById('inputStatus').value;
-
-      if (!itemName) return alert('請填寫商品名稱');
-
-      const oshi = getCurrentOshi();
-      oshi.items.push({ id: Date.now().toString(), event: eventName || '日常周邊', name: itemName, price, qty, status });
-
-      closeModal('itemModal');
-      saveData();
-    }
-
-    function deleteItem(itemId) {
-      const oshi = getCurrentOshi();
-      oshi.items = oshi.items.filter(i => i.id !== itemId);
-      saveData();
-    }
-
-    function openScheduleModal() { openModal('scheduleModal'); }
-    function saveSchedule() {
-      const title = document.getElementById('inputScheduleTitle').value.trim();
-      const date = document.getElementById('inputScheduleDate').value;
-      if (!title || !date) return alert('請填寫完整行程與日期');
-
-      const oshi = getCurrentOshi();
-      if (!oshi.schedules) oshi.schedules = [];
-      oshi.schedules.push({ id: Date.now().toString(), title, date });
-
-      closeModal('scheduleModal');
-      saveData();
-    }
-
-    // 日曆渲染 logic
-    function renderCalendar() {
-      const oshi = getCurrentOshi();
-      const grid = document.getElementById('calendarGrid');
-      const list = document.getElementById('scheduleList');
-      grid.innerHTML = '';
-      
-      // 簡單產生 31 天格子 (2026/10 範例)
-      for (let i = 1; i <= 31; i++) {
-        const dateStr = `2026-10-${i.toString().padStart(2, '0')}`;
-        const hasSchedule = (oshi.schedules || []).some(s => s.date === dateStr);
-        grid.innerHTML += `
-          <div class="h-10 flex flex-col items-center justify-center rounded-lg ${hasSchedule ? 'bg-red-900/60 border border-red-500 font-bold text-white' : 'bg-gray-800/40 text-gray-400'}">
-            <span>${i}</span>
-            ${hasSchedule ? '<span class="w-1.5 h-1.5 bg-red-400 rounded-full mt-0.5"></span>' : ''}
-          </div>
-        `;
-      }
-
-      // 渲染列表
-      if (!oshi.schedules || oshi.schedules.length === 0) {
-        list.innerHTML = `<div class="text-xs text-gray-500">目前尚無排定行程</div>`;
-      } else {
-        list.innerHTML = oshi.schedules.map(s => `
-          <div class="flex items-center justify-between p-2.5 rounded-xl bg-gray-800/50 border border-gray-700/60 text-xs">
-            <span class="font-semibold text-gray-200">${s.title}</span>
-            <span class="text-red-400 font-mono">${s.date}</span>
-          </div>
-        `).join('');
-      }
-    }
-
-    // 匯出 JSON 檔案
-    function exportData() {
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(appData, null, 2));
-      const anchor = document.createElement('a');
-      anchor.setAttribute("href", dataStr);
-      anchor.setAttribute("download", `oshi_hub_backup_${new Date().toISOString().slice(0,10)}.json`);
-      document.body.appendChild(anchor);
-      anchor.click();
-      anchor.remove();
-    }
-
-    // 匯入 JSON 檔案
-    function importData(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        try {
-          const imported = JSON.parse(e.target.result);
-          if (imported.oshis) {
-            appData = imported;
-            saveData();
-            alert('成功匯入資料！');
-          }
-        } catch (err) {
-          alert('匯入失敗：JSON 格式無效');
-        }
+    // 儲存資料
+    function saveOshiProfile() {
+      oshiData = {
+        name: document.getElementById('inputName').value.trim(),
+        birthday: document.getElementById('inputBirthday').value.trim(),
+        debuteDate: document.getElementById('inputDebute').value,
+        avatar: document.getElementById('inputAvatar').value.trim(),
+        banner: document.getElementById('inputBanner').value.trim(),
+        bio: document.getElementById('inputBio').value.trim(),
+        yt: document.getElementById('inputYT').value.trim(),
+        twitch: document.getElementById('inputTwitch').value.trim(),
+        x: document.getElementById('inputX').value.trim(),
+        streamTitle: document.getElementById('inputStreamTitle').value.trim(),
+        streamTime: document.getElementById('inputStreamTime').value.trim(),
+        streamCover: document.getElementById('inputStreamCover').value.trim(),
+        streamLink: document.getElementById('inputStreamLink').value.trim(),
+        scheduleImg: document.getElementById('inputScheduleImg').value.trim()
       };
-      reader.readAsText(file);
+
+      localStorage.setItem('oshi_single_profile', JSON.stringify(oshiData));
+      closeModal();
+      render();
     }
 
-    // 頁面初始化
+    // 初始化載入
     window.onload = loadData;
   </script>
 </body>
