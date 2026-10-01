@@ -12,19 +12,6 @@
             theme: {
                 extend: {
                     colors: {
-                        primary: {
-                            50: '#fdf4ff',
-                            100: '#fae8ff',
-                            200: '#f5d0fe',
-                            300: '#f0abfc',
-                            400: '#e879f9',
-                            500: '#d946ef',
-                            600: '#c026d3',
-                            700: '#a21caf',
-                            800: '#86198f',
-                            900: '#701a75',
-                            950: '#4a044e',
-                        },
                         darkbg: '#0f172a',
                         cardbg: '#1e293b',
                     }
@@ -32,21 +19,19 @@
             }
         }
     </script>
-    <!-- Lucide Icons -->
+    <!-- FontAwesome & Lucide Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://unpkg.com/lucide@latest"></script>
-    <!-- Google Fonts Inter & Noto Sans TC -->
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-        
         body {
             font-family: 'Inter', system-ui, -apple-system, sans-serif;
             background-color: #0b0f19;
             color: #f3f4f6;
         }
-
         .custom-scrollbar::-webkit-scrollbar {
             width: 6px;
             height: 6px;
@@ -58,244 +43,396 @@
             background: rgba(99, 102, 241, 0.4);
             border-radius: 4px;
         }
-        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: rgba(99, 102, 241, 0.7);
-        }
-
-        /* Input styling adjustments for mobile tight layout */
         .tight-input {
-            padding-top: 0.5rem;
-            padding-bottom: 0.5rem;
-            padding-left: 0.75rem;
-            padding-right: 0.75rem;
+            padding: 0.5rem 0.75rem;
             font-size: 0.875rem;
-            line-height: 1.25rem;
-        }
-        @media (max-width: 640px) {
-            .tight-input {
-                padding-top: 0.375rem;
-                padding-bottom: 0.375rem;
-                font-size: 0.75rem;
-                line-height: 1rem;
-            }
         }
     </style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
+<body class="bg-slate-950 text-slate-100 min-h-screen flex flex-col antialiased">
 
     <!-- Top Navigation Header -->
-    <header class="sticky top-0 z-40 bg-slate-900/80 backdrop-blur-md border-b border-slate-800/80 px-3 sm:px-6 py-2.5 sm:py-3 transition-all duration-200">
+    <header class="sticky top-0 z-40 bg-slate-900/80 backdrop-blur-md border-b border-slate-800/80 px-3 sm:px-6 py-2.5 sm:py-3">
         <div class="max-w-7xl mx-auto flex items-center justify-between gap-2 sm:gap-4">
             
-            <!-- Brand Logo -->
-            <div class="flex items-center gap-2 shrink-0">
-                <div class="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-indigo-500/20">
-                    <i class="fa-solid font-bold text-white text-sm sm:text-base">推</i>
+            <!-- Brand & Current Oshi Display -->
+            <div class="flex items-center gap-3">
+                <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 flex items-center justify-center shadow-lg shadow-indigo-500/20 shrink-0">
+                    <i class="fa-solid fa-heart text-white text-sm"></i>
                 </div>
-                <div class="hidden xs:block">
-                    <h1 class="font-bold text-base sm:text-lg bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent leading-tight">OshiCenter</h1>
+                <div>
+                    <h1 id="headerOshiTitle" class="font-bold text-base sm:text-lg bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent leading-tight">OshiCenter</h1>
                     <p class="text-[10px] text-indigo-400 font-medium leading-none">VTuber 收藏與推活中心</p>
                 </div>
             </div>
 
             <!-- Header Right Controls -->
-            <div class="flex items-center gap-1.5 sm:gap-3 shrink-0">
-                <!-- Add Oshi Button -->
-                <button onclick="openOshiModal()" class="flex items-center gap-1.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-medium text-xs sm:text-sm px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-lg sm:rounded-xl shadow-md hover:shadow-indigo-500/25 transition-all">
+            <div class="flex items-center gap-2">
+                <button onclick="openOshiModal()" class="flex items-center gap-1.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-medium text-xs sm:text-sm px-3 py-2 rounded-xl shadow-md transition-all">
                     <i class="fa-solid fa-plus text-xs"></i>
                     <span class="hidden sm:inline">新增推活</span>
-                    <span class="sm:hidden">新增</span>
                 </button>
 
-                <!-- User Switcher Button -->
-                <button onclick="openUserModal()" class="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700/80 text-slate-200 text-xs sm:text-sm px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg sm:rounded-xl border border-slate-700/60 transition-all">
+                <button onclick="openUserModal()" class="flex items-center gap-1.5 bg-slate-800 hover:bg-slate-700/80 text-slate-200 text-xs sm:text-sm px-3 py-2 rounded-xl border border-slate-700/60 transition-all">
                     <i class="fa-solid fa-user text-indigo-400 text-xs"></i>
-                    <span id="headerUserName" class="font-medium max-w-[70px] sm:max-w-[120px] truncate">預設使用者</span>
+                    <span id="currentUsernameDisplay" class="font-medium max-w-[90px] truncate">預設使用者</span>
                     <i class="fa-solid fa-chevron-down text-[10px] text-slate-400"></i>
                 </button>
             </div>
         </div>
     </header>
 
-    <!-- Main Content Container -->
-    <!-- Main Oshi Section View -->
-    <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-4 sm:py-6 space-y-4 sm:space-y-6">
-        
-        <!-- Main Card Section Container -->
-        <div id="oshiDetailContainer" class="bg-slate-900/70 border border-slate-800/80 rounded-2xl overflow-hidden shadow-xl backdrop-blur-sm transition-all">
-            <!-- Dynamic Content Injected Here -->
+    <!-- Sub Header: Oshi Switcher Tabs -->
+    <div class="bg-slate-900/50 border-b border-slate-800/60 px-3 sm:px-6 py-2">
+        <div class="max-w-7xl mx-auto flex items-center justify-between gap-4">
+            <div id="oshiTabsContainer" class="flex items-center space-x-2 overflow-x-auto custom-scrollbar pb-1">
+                <!-- Dynamic Oshi Tabs -->
+            </div>
+            <button onclick="editCurrentOshi()" class="text-xs text-slate-400 hover:text-white flex items-center gap-1 shrink-0 bg-slate-800/40 px-2.5 py-1.5 rounded-lg border border-slate-700/50">
+                <i class="fa-solid fa-gear"></i>
+                <span>編輯主推</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Main View Switcher Sub-tabs -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-3 sm:px-6 py-4 space-y-4">
+        <div class="flex items-center border-b border-slate-800 text-sm font-medium space-x-6">
+            <button id="tabBtn-home" onclick="switchTab('home')" class="subtab-btn pb-2 border-b-2 border-pink-500 text-pink-400 flex items-center gap-2">
+                <i class="fa-solid fa-house text-xs"></i> 推活主頁
+            </button>
+            <button id="tabBtn-calendar" onclick="switchTab('calendar')" class="subtab-btn pb-2 border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2">
+                <i class="fa-solid fa-calendar-days text-xs"></i> 活動行事曆
+            </button>
+            <button id="tabBtn-merch" onclick="switchTab('merch')" class="subtab-btn pb-2 border-b-2 border-transparent text-slate-400 hover:text-slate-200 flex items-center gap-2">
+                <i class="fa-solid fa-bag-shopping text-xs"></i> 周邊戰利品
+            </button>
         </div>
 
-    </main>
+        <!-- 1. HOME VIEW -->
+        <section id="view-home" class="space-y-4">
+            <div class="bg-slate-900/80 border border-slate-800 rounded-2xl overflow-hidden shadow-xl">
+                <!-- Cover Banner -->
+                <div class="h-40 sm:h-56 bg-slate-800 relative">
+                    <img id="homeCoverImg" class="w-full h-full object-cover hidden" alt="Cover">
+                    <div id="homeCoverPlaceholder" class="w-full h-full flex items-center justify-center text-slate-600 bg-gradient-to-r from-slate-900 via-indigo-950 to-slate-900">
+                        <i class="fa-solid fa-image text-3xl opacity-40"></i>
+                    </div>
+                </div>
 
-    <!-- Add/Edit Oshi Modal -->
-    <div id="oshiModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-2.5 sm:p-4 hidden overflow-y-auto">
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden my-auto">
-            
-            <!-- Modal Header -->
-            <div class="px-4 sm:px-6 py-3 sm:py-4 border-b border-slate-800 flex items-center justify-between shrink-0 bg-slate-900/90">
-                <h3 id="oshiModalTitle" class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
-                    <i class="fa-solid fa-heart text-pink-500"></i>
-                    <span>新增推 VTuber</span>
-                </h3>
-                <button onclick="closeOshiModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
+                <!-- Info Header Section -->
+                <div class="p-4 sm:p-6 relative pt-0">
+                    <div class="flex flex-col sm:flex-row sm:items-end justify-between -mt-12 sm:-mt-16 mb-4 gap-4">
+                        <div class="flex items-end gap-4">
+                            <div class="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl border-4 border-slate-900 bg-slate-800 overflow-hidden shadow-2xl shrink-0">
+                                <img id="homeAvatarImg" class="w-full h-full object-cover hidden" alt="Avatar">
+                                <div id="homeAvatarPlaceholder" class="w-full h-full flex items-center justify-center text-slate-500 font-bold text-xl">VT</div>
+                            </div>
+                            <div class="mb-1">
+                                <h2 id="homeName" class="text-xl sm:text-2xl font-bold text-white">未設定主推</h2>
+                                <div class="flex flex-wrap items-center gap-2 mt-1">
+                                    <span id="homeBirthdayBadge" class="hidden text-xs bg-pink-500/20 text-pink-300 border border-pink-500/30 px-2 py-0.5 rounded-md">
+                                        <i class="fa-solid fa-cake-candles text-[10px] mr-1"></i><span id="homeBirthdayText"></span>
+                                    </span>
+                                    <span id="homeDebutBadge" class="hidden text-xs bg-purple-500/20 text-purple-300 border border-purple-500/30 px-2 py-0.5 rounded-md">
+                                        <i class="fa-solid fa-star text-[10px] mr-1"></i><span id="homeDebutText"></span>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tags & Bio -->
+                    <div id="homeTagsContainer" class="flex flex-wrap gap-1.5 mb-4"></div>
+                    <div id="homeBioCard" class="hidden bg-slate-950/60 border border-slate-800/80 rounded-xl p-3.5 text-xs sm:text-sm text-slate-300 mb-6">
+                        <p id="homeBioText"></p>
+                    </div>
+
+                    <!-- Dynamic Grids: Social Links & Stream Frame -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2 flex items-center gap-1.5">
+                                <i class="fa-solid fa-link text-indigo-400"></i> 社群與頻道
+                            </h3>
+                            <div id="socialLinksContainer" class="space-y-2"></div>
+                        </div>
+                        <div>
+                            <div class="flex items-center justify-between mb-2">
+                                <h3 class="text-xs font-semibold text-slate-400 uppercase tracking-wider flex items-center gap-1.5">
+                                    <i class="fa-solid fa-tv text-pink-400"></i> 直播預告與實況
+                                </h3>
+                                <span id="streamStatusBadge" class="text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-400">未設定</span>
+                            </div>
+                            <div id="streamEmbedCard"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </section>
 
-            <!-- Modal Form Body -->
-            <form id="oshiForm" onsubmit="handleOshiSubmit(event)" class="p-3 sm:p-6 overflow-y-auto space-y-3 sm:space-y-4 custom-scrollbar text-xs sm:text-sm">
-                <input type="hidden" id="oshiId" value="">
-
-                <!-- Basic Info Grid -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-4">
-                    <div>
-                        <label class="block text-slate-300 font-medium mb-1">VTuber 名字 <span class="text-pink-500">*</span></label>
-                        <input type="text" id="oshiName" required placeholder="例如：星街彗星 / Hoshimachi Suisei" class="w-full bg-slate-950 border border-slate-800 rounded-lg tight-input text-slate-100 focus:outline-none focus:border-indigo-500 transition-colors">
+        <!-- 2. CALENDAR VIEW -->
+        <section id="view-calendar" class="space-y-4 hidden">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-xl space-y-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <h2 id="calendarMonthYear" class="text-base sm:text-lg font-bold text-white">2026 年 10 月</h2>
+                        <button onclick="resetToToday()" class="text-xs bg-slate-800 hover:bg-slate-700 text-slate-300 px-2.5 py-1 rounded-lg transition">今天</button>
                     </div>
-                    <div>
-                        <label class="block text-slate-300 font-medium mb-1">所屬社團 / 箱</label>
-                        <input type="text" id="oshiGroup" placeholder="例如：hololive 0期生" class="w-full bg-slate-950 border border-slate-800 rounded-lg tight-input text-slate-100 focus:outline-none focus:border-indigo-500 transition-colors">
-                    </div>
-                </div>
-
-                <!-- Images & Media URLs -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-4">
-                    <div>
-                        <label class="block text-slate-300 font-medium mb-1">頭像圖片網址</label>
-                        <input type="url" id="oshiAvatar" placeholder="https://..." class="w-full bg-slate-950 border border-slate-800 rounded-lg tight-input text-slate-100 focus:outline-none focus:border-indigo-500 transition-colors">
-                    </div>
-                    <div>
-                        <label class="block text-slate-300 font-medium mb-1">背景封面網址</label>
-                        <input type="url" id="oshiCover" placeholder="https://..." class="w-full bg-slate-950 border border-slate-800 rounded-lg tight-input text-slate-100 focus:outline-none focus:border-indigo-500 transition-colors">
-                    </div>
-                </div>
-
-                <!-- YouTube & Social Links -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 sm:gap-4">
-                    <div>
-                        <label class="block text-slate-300 font-medium mb-1">YouTube 頻道連結 / ID</label>
-                        <input type="text" id="oshiYoutube" placeholder="頻道網址或 @handle" class="w-full bg-slate-950 border border-slate-800 rounded-lg tight-input text-slate-100 focus:outline-none focus:border-indigo-500 transition-colors">
-                    </div>
-                    <div>
-                        <label class="block text-slate-300 font-medium mb-1">Twitter / X 帳號</label>
-                        <input type="text" id="oshiTwitter" placeholder="@username" class="w-full bg-slate-950 border border-slate-800 rounded-lg tight-input text-slate-100 focus:outline-none focus:border-indigo-500 transition-colors">
-                    </div>
-                </div>
-
-                <!-- Tag Input Component (Mobile Flow Adjusted) -->
-                <div>
-                    <label class="block text-slate-300 font-medium mb-1">推標籤 / 特色標籤</label>
-                    <div class="flex items-center gap-2">
-                        <input type="text" id="oshiTagInput" placeholder="輸入後點擊新增" class="flex-1 bg-slate-950 border border-slate-800 rounded-lg tight-input text-slate-100 focus:outline-none focus:border-indigo-500 transition-colors">
-                        <button type="button" onclick="addOshiTag()" class="shrink-0 bg-slate-800 hover:bg-slate-700 text-indigo-300 border border-slate-700 font-medium px-3 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm whitespace-nowrap transition-colors flex items-center gap-1">
-                            <i class="fa-solid fa-plus text-[10px]"></i>
-                            <span>新增標籤</span>
+                    <div class="flex items-center space-x-2">
+                        <button onclick="changeMonth(-1)" class="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg"><i class="fa-solid fa-chevron-left"></i></button>
+                        <button onclick="changeMonth(1)" class="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg"><i class="fa-solid fa-chevron-right"></i></button>
+                        <button onclick="openEventModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white text-xs px-3 py-1.5 rounded-lg flex items-center gap-1 font-medium ml-2">
+                            <i class="fa-solid fa-plus"></i> 新增行程
                         </button>
                     </div>
-                    <!-- Tags Container -->
-                    <div id="oshiTagsList" class="flex flex-wrap gap-1.5 mt-2 min-h-[28px]">
-                        <!-- Dynamic Tags -->
+                </div>
+
+                <!-- Calendar Grid Header -->
+                <div class="grid grid-cols-7 gap-1 text-center text-xs font-bold text-slate-400 py-1 border-b border-slate-800">
+                    <div>日</div><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div>六</div>
+                </div>
+                <!-- Calendar Days Grid -->
+                <div id="calendarGrid" class="grid grid-cols-7 gap-1 sm:gap-2"></div>
+
+                <!-- Monthly Events List -->
+                <div class="pt-4 border-t border-slate-800 space-y-2">
+                    <h3 class="text-xs font-semibold text-slate-400 uppercase">本月排程清單</h3>
+                    <div id="monthlyEventsList" class="space-y-2"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. MERCH VIEW -->
+        <section id="view-merch" class="space-y-4 hidden">
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-xl space-y-4">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                    <div>
+                        <span class="text-xs text-slate-400 block">累積戰利品總支出</span>
+                        <h2 id="totalSpendAmount" class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400">NT$ 0</h2>
+                    </div>
+                    <button onclick="openMerchModal()" class="bg-gradient-to-r from-pink-600 to-purple-600 hover:from-pink-500 hover:to-purple-500 text-white text-xs sm:text-sm px-4 py-2 rounded-xl font-medium shadow-md flex items-center justify-center gap-1.5">
+                        <i class="fa-solid fa-cart-plus"></i> 新增戰利品
+                    </button>
+                </div>
+
+                <div id="merchGroupContainer" class="space-y-4"></div>
+            </div>
+        </section>
+    </main>
+
+    <!-- MODAL 1: User Switcher -->
+    <div id="userModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-5 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <h3 class="font-bold text-white flex items-center gap-2"><i class="fa-solid fa-users text-indigo-400"></i> 切換 / 建立使用者</h3>
+                <button id="closeUserModalBtn" onclick="closeUserModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form onsubmit="switchUserAccountEvent(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs text-slate-300 font-medium mb-1">請輸入您的名稱/暱稱</label>
+                    <input type="text" id="usernameInput" required placeholder="例如：墨爻" class="w-full bg-slate-950 border border-slate-800 rounded-lg tight-input text-slate-100 focus:outline-none focus:border-indigo-500">
+                </div>
+                <button type="submit" class="w-full py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-medium rounded-lg text-sm transition">確認載入帳號</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 2: Add/Edit Oshi -->
+    <div id="oshiModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-2.5 sm:p-4 hidden overflow-y-auto">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-2xl max-h-[92vh] flex flex-col shadow-2xl overflow-hidden my-auto">
+            <div class="px-4 sm:px-6 py-3 border-b border-slate-800 flex items-center justify-between shrink-0">
+                <h3 id="oshiModalTitle" class="text-base sm:text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-heart text-pink-500"></i><span>新增推 VTuber</span>
+                </h3>
+                <button id="closeOshiModalBtn" onclick="closeOshiModal()" class="text-slate-400 hover:text-white p-1"><i class="fa-solid fa-xmark text-lg"></i></button>
+            </div>
+
+            <form id="oshiForm" onsubmit="saveOshiData(event)" class="p-4 sm:p-6 overflow-y-auto space-y-4 custom-scrollbar text-xs sm:text-sm">
+                <input type="hidden" id="oshiIdInput" value="">
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-slate-300 font-medium mb-1">VTuber 名字 <span class="text-pink-500">*</span></label>
+                        <input type="text" id="oshiNameInput" required placeholder="例如：幸Sachi" class="w-full bg-slate-950 border border-slate-800 rounded-lg tight-input text-slate-100 focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-slate-300 font-medium mb-1">生日 (MM-DD)</label>
+                        <input type="text" id="oshiBirthdayInput" placeholder="例如：11-25" class="w-full bg-slate-950 border border-slate-800 rounded-lg tight-input text-slate-100 focus:outline-none focus:border-indigo-500">
                     </div>
                 </div>
 
-                <!-- Description & Notes -->
-                <div>
-                    <label class="block text-slate-300 font-medium mb-1">個人簡介 / 應援心得</label>
-                    <textarea id="oshiBio" rows="2" placeholder="寫下對這位 VTuber 的介紹或心得..." class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs sm:text-sm text-slate-100 focus:outline-none focus:border-indigo-500 transition-colors resize-none"></textarea>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-slate-300 font-medium mb-1">出道日期 (YYYY-MM-DD)</label>
+                        <input type="date" id="oshiDebutInput" class="w-full bg-slate-950 border border-slate-800 rounded-lg tight-input text-slate-100 focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-slate-300 font-medium mb-1">YouTube 預告 / 實況網址</label>
+                        <input type="text" id="oshiStreamInput" placeholder="https://www.youtube.com/watch?v=..." class="w-full bg-slate-950 border border-slate-800 rounded-lg tight-input text-slate-100 focus:outline-none focus:border-indigo-500">
+                    </div>
                 </div>
 
-                <!-- Submit Buttons -->
-                <div class="pt-2 border-t border-slate-800/80 flex items-center justify-end gap-2.5 shrink-0">
-                    <button type="button" onclick="closeOshiModal()" class="px-3.5 py-1.5 sm:py-2 rounded-lg text-slate-400 hover:text-white bg-slate-800/50 hover:bg-slate-800 font-medium transition-colors">取消</button>
-                    <button type="submit" class="px-4 py-1.5 sm:py-2 rounded-lg bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-medium shadow-md shadow-indigo-500/20 transition-all flex items-center gap-1.5">
-                        <i class="fa-solid fa-check text-xs"></i>
-                        <span>儲存資料</span>
-                    </button>
+                <!-- Custom Base64 Image Uploads -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-slate-300 font-medium mb-1">上傳頭像圖片</label>
+                        <input type="file" id="oshiAvatarFile" accept="image/*" onchange="previewFile(this, 'avatarPreviewImg', 'avatarPreviewFallback')" class="w-full text-xs text-slate-400 file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:bg-slate-800 file:text-slate-200">
+                        <div class="mt-2 flex items-center space-x-2">
+                            <img id="avatarPreviewImg" class="w-10 h-10 rounded-full object-cover hidden border border-slate-700" alt="Preview">
+                            <span id="avatarPreviewFallback" class="text-[10px] text-slate-500">尚未選擇圖片</span>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-slate-300 font-medium mb-1">上傳背景封面</label>
+                        <input type="file" id="oshiCoverFile" accept="image/*" onchange="previewFile(this, 'coverPreviewImg', 'coverPreviewFallback')" class="w-full text-xs text-slate-400 file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:bg-slate-800 file:text-slate-200">
+                        <div class="mt-2 flex items-center space-x-2">
+                            <img id="coverPreviewImg" class="w-16 h-8 rounded object-cover hidden border border-slate-700" alt="Preview">
+                            <span id="coverPreviewFallback" class="text-[10px] text-slate-500">尚未選擇圖片</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Interactive Tags -->
+                <div>
+                    <label class="block text-slate-300 font-medium mb-1">特色標籤</label>
+                    <div class="flex gap-2">
+                        <input type="text" id="tagInputField" onkeypress="handleTagInputKey(event)" placeholder="輸入標籤按下 Enter 或點擊新增" class="flex-1 bg-slate-950 border border-slate-800 rounded-lg tight-input text-slate-100">
+                        <button type="button" onclick="addTagFromInput()" class="bg-slate-800 hover:bg-slate-700 text-indigo-300 px-3 py-1 rounded-lg text-xs font-medium">新增標籤</button>
+                    </div>
+                    <div id="tagsChipContainer" class="flex flex-wrap gap-1.5 mt-2 min-h-[24px]"></div>
+                </div>
+
+                <!-- Interactive Social Links -->
+                <div>
+                    <label class="block text-slate-300 font-medium mb-1">社群與連結設定</label>
+                    <div class="flex gap-2 mb-2">
+                        <select id="socialPlatformSelect" class="bg-slate-950 border border-slate-800 rounded-lg text-xs text-slate-200 px-2 py-1">
+                            <option value="youtube">YouTube</option>
+                            <option value="twitter">X (Twitter)</option>
+                            <option value="twitch">Twitch</option>
+                            <option value="instagram">Instagram</option>
+                            <option value="discord">Discord</option>
+                        </select>
+                        <input type="url" id="socialUrlInput" placeholder="https://..." class="flex-1 bg-slate-950 border border-slate-800 rounded-lg tight-input text-slate-100">
+                        <button type="button" onclick="addSocialLinkFromForm()" class="bg-slate-800 hover:bg-slate-700 text-slate-200 px-3 py-1 rounded-lg text-xs">加入</button>
+                    </div>
+                    <div id="socialDynamicList" class="space-y-1"></div>
+                </div>
+
+                <div>
+                    <label class="block text-slate-300 font-medium mb-1">個人簡介 / 應援心得</label>
+                    <textarea id="oshiBioInput" rows="2" placeholder="寫下對這位 VTuber 的介紹..." class="w-full bg-slate-950 border border-slate-800 rounded-lg p-2.5 text-xs text-slate-100 focus:outline-none focus:border-indigo-500 resize-none"></textarea>
+                </div>
+
+                <div class="pt-3 border-t border-slate-800 flex items-center justify-between shrink-0">
+                    <button type="button" id="deleteOshiBtn" onclick="deleteOshi()" class="px-3 py-1.5 rounded-lg text-red-400 hover:bg-red-500/10 text-xs font-medium hidden">刪除此主推</button>
+                    <div class="flex gap-2 ml-auto">
+                        <button type="button" onclick="closeOshiModal()" class="px-3 py-1.5 rounded-lg text-slate-400 hover:text-white bg-slate-800 text-xs font-medium">取消</button>
+                        <button type="submit" class="px-4 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs shadow-md">儲存資料</button>
+                    </div>
                 </div>
             </form>
         </div>
     </div>
 
+    <!-- MODAL 3: Calendar Event -->
+    <div id="eventModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-5 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <h3 class="font-bold text-white text-sm sm:text-base flex items-center gap-2"><i class="fa-solid fa-calendar-plus text-indigo-400"></i> 新增/編輯行程事件</h3>
+                <button onclick="closeEventModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="eventForm" onsubmit="saveEventData(event)" class="space-y-3 text-xs sm:text-sm">
+                <input type="hidden" id="eventIdInput" value="">
+                <div>
+                    <label class="block text-slate-300 font-medium mb-1">日期</label>
+                    <input type="date" id="eventDateInput" required class="w-full bg-slate-950 border border-slate-800 rounded-lg tight-input text-slate-100">
+                </div>
+                <div>
+                    <label class="block text-slate-300 font-medium mb-1">行程標題</label>
+                    <input type="text" id="eventTitleInput" required placeholder="例如：新衣裝配信 / 周年歌回" class="w-full bg-slate-950 border border-slate-800 rounded-lg tight-input text-slate-100">
+                </div>
+                <div>
+                    <label class="block text-slate-300 font-medium mb-1">事件類型</label>
+                    <select id="eventTypeInput" class="w-full bg-slate-950 border border-slate-800 rounded-lg tight-input text-slate-100">
+                        <option value="stream">直播預告</option>
+                        <option value="member">會員限定</option>
+                        <option value="wallpaper">桌布發布</option>
+                        <option value="anniversary">紀念日</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-slate-300 font-medium mb-1">備註說明</label>
+                    <input type="text" id="eventNoteInput" placeholder="例如：記得準備歌單" class="w-full bg-slate-950 border border-slate-800 rounded-lg tight-input text-slate-100">
+                </div>
+                <div class="pt-2 flex justify-end gap-2">
+                    <button type="button" onclick="closeEventModal()" class="px-3 py-1.5 rounded-lg text-slate-400 bg-slate-800">取消</button>
+                    <button type="submit" class="px-4 py-1.5 rounded-lg bg-indigo-600 text-white font-medium">儲存行程</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL 4: Merch Item -->
+    <div id="merchModal" class="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 hidden">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-md p-5 shadow-2xl space-y-4">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                <h3 class="font-bold text-white text-sm sm:text-base flex items-center gap-2"><i class="fa-solid fa-cart-flatbed text-pink-400"></i> 新增戰利品紀錄</h3>
+                <button onclick="closeMerchModal()" class="text-slate-400 hover:text-white"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="merchForm" onsubmit="saveMerchData(event)" class="space-y-3 text-xs sm:text-sm">
+                <input type="hidden" id="merchIdInput" value="">
+                <div>
+                    <label class="block text-slate-300 font-medium mb-1">活動/主題名稱</label>
+                    <input type="text" id="merchEventInput" required placeholder="例如：2026 生日紀念周邊" class="w-full bg-slate-950 border border-slate-800 rounded-lg tight-input text-slate-100">
+                </div>
+                <div>
+                    <label class="block text-slate-300 font-medium mb-1">周邊商品名稱</label>
+                    <input type="text" id="merchNameInput" required placeholder="例如：壓克力立牌 / 紀念徽章" class="w-full bg-slate-950 border border-slate-800 rounded-lg tight-input text-slate-100">
+                </div>
+                <div class="grid grid-cols-2 gap-2">
+                    <div>
+                        <label class="block text-slate-300 font-medium mb-1">單價 (NT$)</label>
+                        <input type="number" id="merchPriceInput" required min="0" value="0" class="w-full bg-slate-950 border border-slate-800 rounded-lg tight-input text-slate-100">
+                    </div>
+                    <div>
+                        <label class="block text-slate-300 font-medium mb-1">數量</label>
+                        <input type="number" id="merchQtyInput" required min="1" value="1" class="w-full bg-slate-950 border border-slate-800 rounded-lg tight-input text-slate-100">
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-slate-300 font-medium mb-1">購買管道 / 備註</label>
+                    <input type="text" id="merchChannelInput" placeholder="例如：官方商城 / 展覽現場" class="w-full bg-slate-950 border border-slate-800 rounded-lg tight-input text-slate-100">
+                </div>
+                <div>
+                    <label class="block text-slate-300 font-medium mb-1">照片上傳</label>
+                    <input type="file" id="merchImgFile" accept="image/*" class="w-full text-xs text-slate-400 file:mr-2 file:py-1 file:px-2 file:rounded-md file:border-0 file:bg-slate-800 file:text-slate-200">
+                </div>
+                <div class="pt-2 flex justify-end gap-2">
+                    <button type="button" onclick="closeMerchModal()" class="px-3 py-1.5 rounded-lg text-slate-400 bg-slate-800">取消</button>
+                    <button type="submit" class="px-4 py-1.5 rounded-lg bg-pink-600 text-white font-medium">儲存紀錄</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Application Engine JavaScript -->
     <script>
-        // Multi-user Account State (Requirement 2)
-        /* 
-         * STREAMING_CHUNK: Fixing User Switch & Onboarding Loop Logic
-         */
-        function switchUserAccount(username) {
-            if (!username || !username.trim()) return;
-            const cleanUser = username.trim();
-            
-            // Save current username
-            currentUser = cleanUser;
-            localStorage.setItem('oshicenter_current_user', currentUser);
-            
-            // Update UI Header
-            const headerNameEl = document.getElementById('headerUserName');
-            if (headerNameEl) headerNameEl.textContent = currentUser;
+        // State Initialization
+        let currentUser = '預設使用者';
+        let appData = { currentOshiId: null, oshis: [] };
+        let tempTagsList = [];
+        let tempSocialList = [];
+        let calendarDate = new Date();
 
-            // Load user oshis
-            const savedData = localStorage.getItem(`oshicenter_oshis_${currentUser}`);
-            oshis = savedData ? JSON.parse(savedData) : [];
-
-            // Close User Modal
-            closeUserModal();
-
-            // Render current data
-            renderOshiCenterView();
-
-            // ONBOARDING BUG FIX: Check if current user has 0 oshis, trigger Add Oshi modal without looping
-            if (oshis.length === 0) {
-                openOshiModal();
-            }
+        function getStorageKey(username) {
+            return `oshicenter_data_${username}`;
         }
 
-        /* 
-         * STREAMING_CHUNK: Saving Oshi Data Safely
-         */
-        function saveOshiData(oshiDataObject) {
-            if (!oshiDataObject) return;
-
-            const existingIndex = oshis.findIndex(o => o.id === oshiDataObject.id);
-            if (existingIndex >= 0) {
-                oshis[existingIndex] = oshiDataObject;
-            } else {
-                oshis.push(oshiDataObject);
-            }
-
-            // Save to localStorage under current user
-            localStorage.setItem(`oshicenter_oshis_${currentUser}`, JSON.stringify(oshis));
-
-            // Select newly created/updated oshi as active
-            activeOshiId = oshiDataObject.id;
-
-            // CLOSE MODAL PROPERLY to prevent looping
-            closeOshiModal();
-
-            // Re-render UI
-            renderOshiCenterView();
-        }
-
-        function handleOshiSubmit(e) {
-            e.preventDefault();
-            const id = document.getElementById('oshiId').value || 'oshi_' + Date.now();
-            const name = document.getElementById('oshiName').value.trim();
-            if (!name) return;
-
-            const newOshi = {
-                id: id,
-                name: name,
-                group: document.getElementById('oshiGroup').value.trim(),
-                avatar: document.getElementById('oshiAvatar').value.trim() || 'https://placehold.co/150x150/334155/f8fafc?text=VTuber',
-                cover: document.getElementById('oshiCover').value.trim() || 'https://placehold.co/800x300/1e293b/64748b?text=Cover',
-                youtube: document.getElementById('oshiYoutube').value.trim(),
-                twitter: document.getElementById('oshiTwitter').value.trim(),
-                bio: document.getElementById('oshiBio').value.trim(),
-                tags: [...tempTagsList]
-            };
-
-            saveOshiData(newOshi);
-        }
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedUser = localStorage.getItem('OSHI_CENTER_CURRENT_USER') || '預設使用者';
+            loadUserData(savedUser);
+        });
 
         function loadUserData(username) {
             currentUser = username.trim();
@@ -316,7 +453,6 @@
                 appData = { currentOshiId: null, oshis: [] };
             }
 
-            // Check onboarding for new account
             if (!appData.oshis || appData.oshis.length === 0) {
                 openOshiModal(null, true);
             } else {
@@ -334,37 +470,22 @@
                 localStorage.setItem(key, JSON.stringify(appData));
             } catch (e) {
                 console.error('LocalStorage error:', e);
-                alert('無法儲存資料，可能上傳的圖片容量過大，請更換較小檔案。');
+                alert('無法儲存資料，上傳的圖片容量可能過大。');
             }
         }
 
-        // Account Switcher Handlers (Requirement 2)
-        function openUserModal(isForced = false) {
+        // Account Switcher Handlers
+        function openUserModal() {
             const modal = document.getElementById('userModal');
-            const closeBtn = document.getElementById('closeUserModalBtn');
-            const input = document.getElementById('usernameInput');
-
-            input.value = currentUser || '';
-
-            if (isForced) {
-                closeBtn.classList.add('hidden');
-            } else {
-                closeBtn.classList.remove('hidden');
-            }
-
+            document.getElementById('usernameInput').value = currentUser || '';
             modal.classList.remove('hidden');
-            lucide.createIcons();
         }
 
         function closeUserModal() {
-            if (!currentUser) {
-                alert('請輸入您的暱稱以建立或載入專屬帳號！');
-                return;
-            }
             document.getElementById('userModal').classList.add('hidden');
         }
 
-        function switchUserAccount(e) {
+        function switchUserAccountEvent(e) {
             e.preventDefault();
             const inputName = document.getElementById('usernameInput').value.trim();
             if (!inputName) return;
@@ -373,47 +494,10 @@
             loadUserData(inputName);
         }
 
-        // --- Helper Functions ---
-        function fileToBase64(file, maxWidth = 800) {
-            return new Promise((resolve, reject) => {
-                if (!file) {
-                    resolve(null);
-                    return;
-                }
-                const reader = new FileReader();
-                reader.readAsDataURL(file);
-                reader.onload = (event) => {
-                    const img = new Image();
-                    img.src = event.target.result;
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        let width = img.width;
-                        let height = img.height;
-
-                        if (width > maxWidth) {
-                            height = Math.round((height * maxWidth) / width);
-                            width = maxWidth;
-                        }
-
-                        canvas.width = width;
-                        canvas.height = height;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, width, height);
-
-                        const compressedBase64 = canvas.toDataURL('image/jpeg', 0.75);
-                        resolve(compressedBase64);
-                    };
-                    img.onerror = (err) => reject(err);
-                };
-                reader.onerror = (error) => reject(error);
-            });
-        }
-
         function getCurrentOshi() {
             return appData.oshis.find(o => o.id === appData.currentOshiId) || null;
         }
 
-        // Requirement 1: Edit Current Active Oshi Helper
         function editCurrentOshi() {
             if (appData.currentOshiId) {
                 openOshiModal(appData.currentOshiId);
@@ -422,28 +506,25 @@
             }
         }
 
-        // --- Render Engine ---
+        // Render Engine
         function renderAll() {
             renderHeaderTitle();
             renderOshiTabs();
             renderHomeView();
             renderCalendarView();
             renderMerchView();
-            lucide.createIcons();
         }
 
-        // Requirement 1: Dynamic Top Title Swapped
         function renderHeaderTitle() {
             const oshi = getCurrentOshi();
             const headerTitle = document.getElementById('headerOshiTitle');
             if (oshi && oshi.name) {
                 headerTitle.textContent = oshi.name;
             } else {
-                headerTitle.textContent = 'VTuber 應援與收藏管理';
+                headerTitle.textContent = 'OshiCenter';
             }
         }
 
-        // Render Top Oshi Selector Tabs
         function renderOshiTabs() {
             const container = document.getElementById('oshiTabsContainer');
             container.innerHTML = '';
@@ -452,7 +533,7 @@
                 const isActive = oshi.id === appData.currentOshiId;
                 const btn = document.createElement('button');
                 btn.onclick = () => switchOshi(oshi.id);
-                btn.className = `flex items-center space-x-2 px-3 py-1.5 min-h-[44px] rounded-xl text-xs sm:text-sm font-medium transition whitespace-nowrap border shrink-0 ${
+                btn.className = `flex items-center space-x-2 px-3 py-1.5 rounded-xl text-xs sm:text-sm font-medium transition whitespace-nowrap border shrink-0 ${
                     isActive 
                     ? 'bg-pink-500/20 text-pink-300 border-pink-500/50 shadow-md' 
                     : 'bg-slate-800/60 text-slate-400 hover:text-slate-200 border-slate-700/50 hover:bg-slate-800'
@@ -490,14 +571,13 @@
             }
         }
 
-        // ==================== HOME VIEW RENDERER ====================
+        // Home View Renderer
         function renderHomeView() {
             const oshi = getCurrentOshi();
             if (!oshi) return;
 
             document.getElementById('homeName').textContent = oshi.name || '未命名主推';
 
-            // Cover Banner
             const coverImg = document.getElementById('homeCoverImg');
             const coverPlaceholder = document.getElementById('homeCoverPlaceholder');
             if (oshi.coverBase64) {
@@ -509,7 +589,6 @@
                 coverPlaceholder.classList.remove('hidden');
             }
 
-            // Avatar
             const avatarImg = document.getElementById('homeAvatarImg');
             const avatarPlaceholder = document.getElementById('homeAvatarPlaceholder');
             if (oshi.avatarBase64) {
@@ -521,27 +600,24 @@
                 avatarPlaceholder.classList.remove('hidden');
             }
 
-            // Birthday
             const bdayBadge = document.getElementById('homeBirthdayBadge');
             if (oshi.birthday) {
                 document.getElementById('homeBirthdayText').textContent = `生日：${oshi.birthday}`;
                 bdayBadge.classList.remove('hidden');
-                bdayBadge.classList.add('flex');
+                bdayBadge.classList.add('inline-flex');
             } else {
                 bdayBadge.classList.add('hidden');
             }
 
-            // Debut Date
             const debutBadge = document.getElementById('homeDebutBadge');
             if (oshi.debut) {
-                document.getElementById('homeDebutText').textContent = `出道日：${oshi.debut}`;
+                document.getElementById('homeDebutText').textContent = `出道：${oshi.debut}`;
                 debutBadge.classList.remove('hidden');
-                debutBadge.classList.add('flex');
+                debutBadge.classList.add('inline-flex');
             } else {
                 debutBadge.classList.add('hidden');
             }
 
-            // Tags
             const tagsContainer = document.getElementById('homeTagsContainer');
             tagsContainer.innerHTML = '';
             if (oshi.tags && Array.isArray(oshi.tags)) {
@@ -553,7 +629,6 @@
                 });
             }
 
-            // Bio
             const bioCard = document.getElementById('homeBioCard');
             if (oshi.bio) {
                 document.getElementById('homeBioText').textContent = oshi.bio;
@@ -562,44 +637,31 @@
                 bioCard.classList.add('hidden');
             }
 
-            // Requirement 3: Dynamic Social Links Render
+            // Social Links
             const socialContainer = document.getElementById('socialLinksContainer');
             socialContainer.innerHTML = '';
-            
-            const platformMeta = {
-                youtube: { label: 'YouTube 頻道', icon: 'youtube', color: 'hover:bg-red-500/20 hover:border-red-500/50 hover:text-red-300' },
-                twitter: { label: 'X (Twitter)', icon: 'twitter', color: 'hover:bg-sky-500/20 hover:border-sky-500/50 hover:text-sky-300' },
-                twitch: { label: 'Twitch 實況', icon: 'tv', color: 'hover:bg-purple-500/20 hover:border-purple-500/50 hover:text-purple-300' },
-                instagram: { label: 'Instagram', icon: 'instagram', color: 'hover:bg-pink-500/20 hover:border-pink-500/50 hover:text-pink-300' },
-                tiktok: { label: 'TikTok', icon: 'video', color: 'hover:bg-teal-500/20 hover:border-teal-500/50 hover:text-teal-300' },
-                discord: { label: 'Discord 群組', icon: 'message-square', color: 'hover:bg-indigo-500/20 hover:border-indigo-500/50 hover:text-indigo-300' },
-                marshmallow: { label: '棉花糖 (Marshmallow)', icon: 'mail', color: 'hover:bg-amber-500/20 hover:border-amber-500/50 hover:text-amber-300' }
-            };
-
             const links = oshi.socialLinks || [];
 
             if (links.length > 0) {
                 links.forEach(item => {
-                    const meta = platformMeta[item.platform] || { label: item.platform, icon: 'link', color: 'hover:bg-slate-800' };
                     const a = document.createElement('a');
                     a.href = item.url;
                     a.target = '_blank';
-                    a.rel = 'noopener noreferrer';
-                    a.className = `flex items-center justify-between p-3 rounded-xl bg-slate-950 border border-slate-800 text-xs sm:text-sm text-slate-200 transition min-h-[44px] ${meta.color}`;
+                    a.className = `flex items-center justify-between p-3 rounded-xl bg-slate-950 border border-slate-800 text-xs sm:text-sm text-slate-200 hover:bg-slate-800 transition`;
                     a.innerHTML = `
-                        <div class="flex items-center space-x-3">
-                            <i data-lucide="${meta.icon}" class="w-4.5 h-4.5"></i>
-                            <span class="font-medium">${meta.label}</span>
+                        <div class="flex items-center space-x-2">
+                            <i class="fa-solid fa-link text-indigo-400"></i>
+                            <span class="font-medium uppercase">${item.platform}</span>
                         </div>
-                        <i data-lucide="external-link" class="w-4 h-4 text-slate-500"></i>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-slate-500 text-xs"></i>
                     `;
                     socialContainer.appendChild(a);
                 });
             } else {
-                socialContainer.innerHTML = `<p class="text-xs text-slate-500 text-center py-4">尚未設定社群連結</p>`;
+                socialContainer.innerHTML = `<p class="text-xs text-slate-500 text-center py-3">尚未設定社群連結</p>`;
             }
 
-            // Stream Zone Embed
+            // Stream Frame Embed
             const streamCard = document.getElementById('streamEmbedCard');
             const streamStatus = document.getElementById('streamStatusBadge');
 
@@ -613,9 +675,9 @@
 
                 if (videoId && videoId.length > 5) {
                     streamCard.className = "rounded-xl overflow-hidden bg-slate-950 border border-slate-800 aspect-video relative";
-                    streamCard.innerHTML = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+                    streamCard.innerHTML = `<iframe class="w-full h-full" src="https://www.youtube.com/embed/${videoId}" frameborder="0" allowfullscreen></iframe>`;
                     streamStatus.textContent = "已載入預告";
-                    streamStatus.className = "text-xs px-2.5 py-1 rounded-full bg-red-500/20 text-red-400 border border-red-500/30";
+                    streamStatus.className = "text-[10px] px-2 py-0.5 rounded-full bg-red-500/20 text-red-400 border border-red-500/30";
                 } else {
                     renderEmptyStream();
                 }
@@ -627,17 +689,16 @@
         function renderEmptyStream() {
             const streamCard = document.getElementById('streamEmbedCard');
             const streamStatus = document.getElementById('streamStatusBadge');
-            streamCard.className = "rounded-xl overflow-hidden bg-slate-950 border border-slate-800 aspect-video flex flex-col items-center justify-center p-6 text-center";
+            streamCard.className = "rounded-xl bg-slate-950 border border-slate-800 aspect-video flex flex-col items-center justify-center p-6 text-center";
             streamCard.innerHTML = `
-                <i data-lucide="video-off" class="w-12 h-12 text-slate-600 mb-3"></i>
+                <i class="fa-solid fa-video-slash text-slate-600 text-3xl mb-2"></i>
                 <p class="text-slate-400 text-xs sm:text-sm">目前暫無設定直播預告資訊</p>
-                <p class="text-xs text-slate-600 mt-1">點擊右上角⚙️編輯主推設定</p>
             `;
             streamStatus.textContent = "未設定";
-            streamStatus.className = "text-xs px-2.5 py-1 rounded-full bg-slate-800 text-slate-400 border border-slate-700";
+            streamStatus.className = "text-[10px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-400";
         }
 
-        // ==================== CALENDAR ENGINE ====================
+        // Calendar Engine
         function changeMonth(delta) {
             calendarDate.setMonth(calendarDate.getMonth() + delta);
             renderCalendarView();
@@ -665,7 +726,7 @@
 
             for (let i = 0; i < firstDay; i++) {
                 const emptyCell = document.createElement('div');
-                emptyCell.className = "min-h-[50px] sm:min-h-[75px] bg-slate-950/30 rounded-xl border border-slate-800/40 opacity-30";
+                emptyCell.className = "min-h-[55px] bg-slate-950/30 rounded-xl border border-slate-800/40 opacity-30";
                 grid.appendChild(emptyCell);
             }
 
@@ -676,37 +737,18 @@
                 const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
                 const isToday = today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
 
-                let isDebutDay = false;
-                if (oshi.debut) {
-                    const debutParts = oshi.debut.split('-');
-                    if (parseInt(debutParts[1]) === (month + 1) && parseInt(debutParts[2]) === day) {
-                        isDebutDay = true;
-                    }
-                }
-
                 const dayEvents = events.filter(e => e.date === dateStr);
 
                 const cell = document.createElement('div');
-                cell.className = `min-h-[50px] sm:min-h-[75px] p-1 sm:p-1.5 rounded-xl border flex flex-col justify-between transition cursor-pointer hover:border-pink-500/50 ${
-                    isToday 
-                    ? 'bg-pink-950/20 border-pink-500/60 shadow-inner' 
-                    : 'bg-slate-950/80 border-slate-800/80'
+                cell.className = `min-h-[55px] sm:min-h-[70px] p-1 rounded-xl border flex flex-col justify-between transition cursor-pointer hover:border-pink-500/50 ${
+                    isToday ? 'bg-pink-950/20 border-pink-500/60' : 'bg-slate-950/80 border-slate-800/80'
                 }`;
                 cell.onclick = () => openEventModal(null, dateStr);
 
                 let badgesHtml = '';
-                if (isDebutDay) {
-                    badgesHtml += `<div class="text-[9px] sm:text-[10px] bg-purple-500/30 text-purple-300 border border-purple-500/40 rounded px-1 py-0.5 truncate">🎉 出道</div>`;
-                }
-
                 dayEvents.forEach(evt => {
-                    let typeBg = 'bg-pink-500/20 text-pink-300 border-pink-500/30';
-                    if (evt.type === 'member') typeBg = 'bg-blue-500/20 text-blue-300 border-blue-500/30';
-                    if (evt.type === 'wallpaper') typeBg = 'bg-amber-500/20 text-amber-300 border-amber-500/30';
-                    if (evt.type === 'anniversary') typeBg = 'bg-purple-500/20 text-purple-300 border-purple-500/30';
-
                     badgesHtml += `
-                        <div onclick="event.stopPropagation(); openEventModal('${evt.id}')" class="text-[9px] sm:text-[10px] ${typeBg} border rounded px-1 py-0.5 truncate hover:scale-105 transition" title="${evt.title}">
+                        <div onclick="event.stopPropagation(); openEventModal('${evt.id}')" class="text-[9px] bg-pink-500/20 text-pink-300 border border-pink-500/30 rounded px-1 py-0.5 truncate mt-0.5">
                             ${evt.title}
                         </div>
                     `;
@@ -715,11 +757,8 @@
                 cell.innerHTML = `
                     <div class="flex items-center justify-between">
                         <span class="text-xs font-bold ${isToday ? 'text-pink-400' : 'text-slate-300'}">${day}</span>
-                        ${isToday ? '<span class="w-1.5 h-1.5 rounded-full bg-pink-500"></span>' : ''}
                     </div>
-                    <div class="space-y-0.5 sm:space-y-1 overflow-hidden mt-0.5">
-                        ${badgesHtml}
-                    </div>
+                    <div class="space-y-0.5 overflow-hidden">${badgesHtml}</div>
                 `;
 
                 grid.appendChild(cell);
@@ -737,7 +776,7 @@
             const monthEvents = (oshi.events || []).filter(e => e.date.startsWith(currentMonthPrefix));
 
             if (monthEvents.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-500 py-3 text-center">本月份尚無自訂事件紀錄</p>`;
+                container.innerHTML = `<p class="text-xs text-slate-500 py-3 text-center">本月份尚無行程紀錄</p>`;
                 return;
             }
 
@@ -745,37 +784,24 @@
 
             monthEvents.forEach(evt => {
                 const item = document.createElement('div');
-                item.className = "flex items-center justify-between p-3 rounded-xl bg-slate-950 border border-slate-800 text-xs sm:text-sm";
-                
+                item.className = "flex items-center justify-between p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-xs";
                 item.innerHTML = `
                     <div class="flex items-center space-x-3">
-                        <span class="font-mono text-xs px-2 py-1 rounded bg-slate-800 text-slate-300 font-bold">${evt.date}</span>
-                        <div>
-                            <span class="font-semibold text-slate-200 block">${evt.title}</span>
-                            ${evt.note ? `<span class="text-xs text-slate-400 block">${evt.note}</span>` : ''}
-                        </div>
+                        <span class="font-mono text-xs px-2 py-0.5 rounded bg-slate-800 text-slate-300 font-bold">${evt.date}</span>
+                        <span class="font-semibold text-slate-200">${evt.title}</span>
                     </div>
-                    <div class="flex items-center space-x-1">
-                        <button onclick="openEventModal('${evt.id}')" class="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition min-h-[44px] min-w-[44px] flex items-center justify-center">
-                            <i data-lucide="edit-2" class="w-4 h-4"></i>
-                        </button>
-                        <button onclick="deleteEvent('${evt.id}')" class="p-2 text-red-400 hover:text-red-300 rounded-lg hover:bg-red-500/10 transition min-h-[44px] min-w-[44px] flex items-center justify-center">
-                            <i data-lucide="trash-2" class="w-4 h-4"></i>
-                        </button>
-                    </div>
+                    <button onclick="deleteEvent('${evt.id}')" class="text-red-400 hover:text-red-300 p-1"><i class="fa-solid fa-trash"></i></button>
                 `;
                 container.appendChild(item);
             });
-            lucide.createIcons();
         }
 
-        // ==================== MERCH TRACKER ENGINE ====================
+        // Merch Tracker Engine
         function renderMerchView() {
             const oshi = getCurrentOshi();
             if (!oshi) return;
 
             const merches = oshi.merches || [];
-
             const totalSpend = merches.reduce((sum, item) => sum + (Number(item.price) * Number(item.qty)), 0);
             document.getElementById('totalSpendAmount').textContent = `NT$ ${totalSpend.toLocaleString()}`;
 
@@ -784,13 +810,11 @@
 
             if (merches.length === 0) {
                 groupContainer.innerHTML = `
-                    <div class="bg-slate-900 rounded-2xl border border-slate-800 p-8 text-center">
-                        <i data-lucide="shopping-bag" class="w-12 h-12 text-slate-600 mx-auto mb-3"></i>
-                        <p class="text-slate-400 text-sm">尚無任何周邊購買紀錄</p>
-                        <p class="text-xs text-slate-600 mt-1">點擊上方按鈕開始新增第一次戰利品！</p>
+                    <div class="bg-slate-950/60 rounded-xl border border-slate-800 p-8 text-center text-slate-500 text-xs">
+                        <i class="fa-solid fa-bag-shopping text-2xl mb-2"></i>
+                        <p>尚無任何周邊購買紀錄</p>
                     </div>
                 `;
-                lucide.createIcons();
                 return;
             }
 
@@ -803,77 +827,76 @@
 
             Object.keys(grouped).forEach(eventName => {
                 const groupItems = grouped[eventName];
-                const groupSubtotal = groupItems.reduce((sum, item) => sum + (Number(item.price) * Number(item.qty)), 0);
-
                 const groupCard = document.createElement('div');
-                groupCard.className = "bg-slate-900 rounded-2xl border border-slate-800 p-4 sm:p-5 shadow-lg space-y-4";
+                groupCard.className = "bg-slate-950/80 rounded-xl border border-slate-800 p-4 space-y-3";
 
                 let rowsHtml = '';
                 groupItems.forEach(item => {
                     const itemTotal = Number(item.price) * Number(item.qty);
                     const imgHtml = item.imgBase64 
-                        ? `<img src="${item.imgBase64}" class="w-12 h-12 rounded-lg object-cover border border-slate-700 shrink-0">`
-                        : `<div class="w-12 h-12 rounded-lg bg-slate-800 flex items-center justify-center text-slate-500 shrink-0 border border-slate-700/50"><i data-lucide="package" class="w-6 h-6"></i></div>`;
+                        ? `<img src="${item.imgBase64}" class="w-10 h-10 rounded-lg object-cover border border-slate-700 shrink-0">`
+                        : `<div class="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center text-slate-500 text-xs shrink-0"><i class="fa-solid fa-box"></i></div>`;
 
                     rowsHtml += `
-                        <div class="flex flex-col sm:flex-row sm:items-center justify-between p-3 rounded-xl bg-slate-950 border border-slate-800/80 gap-3">
+                        <div class="flex items-center justify-between p-2.5 rounded-lg bg-slate-900 border border-slate-800/80">
                             <div class="flex items-center space-x-3">
                                 ${imgHtml}
                                 <div>
-                                    <span class="font-bold text-slate-200 text-sm block">${item.name}</span>
-                                    <div class="text-xs text-slate-400 flex flex-wrap gap-x-3 gap-y-1 mt-0.5">
-                                        <span>單價: NT$ ${Number(item.price).toLocaleString()}</span>
-                                        <span>數量: ${item.qty}</span>
-                                        ${item.channel ? `<span class="text-purple-400">管道: ${item.channel}</span>` : ''}
-                                    </div>
-                                    ${item.note ? `<p class="text-xs text-slate-500 mt-1">${item.note}</p>` : ''}
+                                    <span class="font-bold text-slate-200 text-xs block">${item.name}</span>
+                                    <span class="text-[10px] text-slate-400">NT$ ${Number(item.price).toLocaleString()} × ${item.qty}</span>
                                 </div>
                             </div>
-
-                            <div class="flex items-center justify-between sm:justify-end space-x-4 border-t sm:border-t-0 border-slate-800 pt-2 sm:pt-0">
-                                <div class="text-right">
-                                    <span class="text-xs text-slate-400 block">小計</span>
-                                    <span class="text-sm font-extrabold text-pink-400">NT$ ${itemTotal.toLocaleString()}</span>
-                                </div>
-                                <button onclick="deleteMerch('${item.id}')" class="p-2 text-red-400 hover:text-red-300 rounded-lg hover:bg-red-500/10 transition min-h-[44px] min-w-[44px] flex items-center justify-center" title="刪除紀錄">
-                                    <i data-lucide="trash-2" class="w-4 h-4"></i>
-                                </button>
+                            <div class="flex items-center space-x-3">
+                                <span class="text-xs font-bold text-pink-400">NT$ ${itemTotal.toLocaleString()}</span>
+                                <button onclick="deleteMerch('${item.id}')" class="text-red-400 hover:text-red-300 p-1"><i class="fa-solid fa-trash text-xs"></i></button>
                             </div>
                         </div>
                     `;
                 });
 
                 groupCard.innerHTML = `
-                    <div class="flex items-center justify-between border-b border-slate-800 pb-3">
-                        <div class="flex items-center space-x-2">
-                            <i data-lucide="tag" class="w-4 h-4 text-pink-400"></i>
-                            <h3 class="font-bold text-white text-sm sm:text-base">${eventName}</h3>
-                            <span class="text-xs px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700">${groupItems.length} 項</span>
-                        </div>
-                        <div class="text-right">
-                            <span class="text-xs text-slate-400 mr-1.5">活動總計:</span>
-                            <span class="text-sm sm:text-base font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 to-purple-400">NT$ ${groupSubtotal.toLocaleString()}</span>
-                        </div>
+                    <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+                        <h3 class="font-bold text-white text-xs sm:text-sm"><i class="fa-solid fa-tag text-pink-400 mr-1.5"></i>${eventName}</h3>
                     </div>
-                    <div class="space-y-2">
-                        ${rowsHtml}
-                    </div>
+                    <div class="space-y-1.5">${rowsHtml}</div>
                 `;
 
                 groupContainer.appendChild(groupCard);
             });
-
-            lucide.createIcons();
         }
 
-        // ==================== MODAL & FORM UI/UX HANDLERS ====================
+        // Form Helpers
+        function fileToBase64(file, maxWidth = 800) {
+            return new Promise((resolve, reject) => {
+                if (!file) resolve(null);
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = (event) => {
+                    const img = new Image();
+                    img.src = event.target.result;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let width = img.width;
+                        let height = img.height;
+                        if (width > maxWidth) {
+                            height = Math.round((height * maxWidth) / width);
+                            width = maxWidth;
+                        }
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, width, height);
+                        resolve(canvas.toDataURL('image/jpeg', 0.75));
+                    };
+                };
+                reader.onerror = (error) => reject(error);
+            });
+        }
 
-        // Requirement 3: File Preview Realtime Helper
         function previewFile(input, imgId, fallbackId) {
             const file = input.files[0];
             const imgEl = document.getElementById(imgId);
             const fallbackEl = document.getElementById(fallbackId);
-
             if (file) {
                 const reader = new FileReader();
                 reader.onload = (e) => {
@@ -885,16 +908,6 @@
             }
         }
 
-        function clearImagePreview(inputId, imgId, fallbackId) {
-            document.getElementById(inputId).value = '';
-            const imgEl = document.getElementById(imgId);
-            const fallbackEl = document.getElementById(fallbackId);
-            imgEl.src = '';
-            imgEl.classList.add('hidden');
-            if (fallbackEl) fallbackEl.classList.remove('hidden');
-        }
-
-        // Requirement 3: Interactive Tag Input System
         function handleTagInputKey(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
@@ -920,43 +933,23 @@
         function renderTagsChips() {
             const container = document.getElementById('tagsChipContainer');
             container.innerHTML = '';
-
-            if (tempTagsList.length === 0) {
-                container.innerHTML = `<span class="text-xs text-slate-500 italic self-center px-1">尚未建立標籤</span>`;
-                return;
-            }
-
             tempTagsList.forEach(tag => {
                 const chip = document.createElement('span');
-                chip.className = 'inline-flex items-center px-2.5 py-1 rounded-lg bg-pink-500/20 text-pink-300 border border-pink-500/40 text-xs font-medium space-x-1';
-                chip.innerHTML = `
-                    <span># ${tag}</span>
-                    <button type="button" onclick="removeTag('${tag}')" class="hover:text-white text-pink-400 p-0.5 rounded focus:outline-none">
-                        <i data-lucide="x" class="w-3 h-3"></i>
-                    </button>
-                `;
+                chip.className = 'inline-flex items-center px-2 py-0.5 rounded bg-pink-500/20 text-pink-300 border border-pink-500/40 text-xs font-medium space-x-1';
+                chip.innerHTML = `<span># ${tag}</span><button type="button" onclick="removeTag('${tag}')" class="ml-1 text-pink-400 hover:text-white">×</button>`;
                 container.appendChild(chip);
             });
-            lucide.createIcons();
         }
 
-        // Requirement 3: Dynamic Social Links System
         function addSocialLinkFromForm() {
             const platformSelect = document.getElementById('socialPlatformSelect');
             const urlInput = document.getElementById('socialUrlInput');
-            
             const platform = platformSelect.value;
             const url = urlInput.value.trim();
 
-            if (!url) {
-                alert('請輸入有效的社群網址！');
-                return;
-            }
-
-            // Remove existing platform duplicate if added
+            if (!url) return;
             tempSocialList = tempSocialList.filter(item => item.platform !== platform);
             tempSocialList.push({ platform, url });
-
             urlInput.value = '';
             renderSocialListInForm();
         }
@@ -969,34 +962,21 @@
         function renderSocialListInForm() {
             const container = document.getElementById('socialDynamicList');
             container.innerHTML = '';
-
-            if (tempSocialList.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-500 italic py-1">尚未建立任何社群連結</p>`;
-                return;
-            }
-
             tempSocialList.forEach(item => {
                 const el = document.createElement('div');
-                el.className = 'flex items-center justify-between p-2 rounded-xl bg-slate-950 border border-slate-800 text-xs';
+                el.className = 'flex items-center justify-between p-1.5 rounded bg-slate-950 border border-slate-800 text-xs';
                 el.innerHTML = `
-                    <div class="flex items-center space-x-2 truncate mr-2">
-                        <span class="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 font-bold uppercase text-[10px]">${item.platform}</span>
-                        <span class="text-slate-300 truncate">${item.url}</span>
-                    </div>
-                    <button type="button" onclick="removeSocialLink('${item.platform}')" class="text-red-400 hover:text-red-300 p-1.5 min-h-[36px] min-w-[36px] flex items-center justify-center rounded-lg hover:bg-red-500/10">
-                        <i data-lucide="trash-2" class="w-3.5 h-3.5"></i>
-                    </button>
+                    <span class="text-slate-300 uppercase">${item.platform}: ${item.url}</span>
+                    <button type="button" onclick="removeSocialLink('${item.platform}')" class="text-red-400 p-0.5"><i class="fa-solid fa-trash"></i></button>
                 `;
                 container.appendChild(el);
             });
-            lucide.createIcons();
         }
 
-        // 1. OSHI MODAL HANDLERS
+        // Modal Controls
         function openOshiModal(oshiId = null, isOnboarding = false) {
             const modal = document.getElementById('oshiModal');
             const form = document.getElementById('oshiForm');
-            const title = document.getElementById('oshiModalTitle');
             const closeBtn = document.getElementById('closeOshiModalBtn');
             const deleteBtn = document.getElementById('deleteOshiBtn');
 
@@ -1004,19 +984,12 @@
             tempTagsList = [];
             tempSocialList = [];
 
-            clearImagePreview('oshiAvatarFile', 'avatarPreviewImg', 'avatarPreviewFallback');
-            clearImagePreview('oshiCoverFile', 'coverPreviewImg', 'coverPreviewFallback');
-
             if (isOnboarding) {
                 closeBtn.classList.add('hidden');
                 deleteBtn.classList.add('hidden');
-                title.innerHTML = `<i data-lucide="sparkles" class="w-5 h-5 text-pink-400"></i><span>歡迎！請建立您的第一個主推 VTuber</span>`;
-                document.getElementById('oshiIdInput').value = '';
             } else if (oshiId) {
                 closeBtn.classList.remove('hidden');
                 deleteBtn.classList.remove('hidden');
-                title.innerHTML = `<i data-lucide="settings" class="w-5 h-5 text-pink-400"></i><span>編輯主推資料</span>`;
-
                 const oshi = appData.oshis.find(o => o.id === oshiId);
                 if (oshi) {
                     document.getElementById('oshiIdInput').value = oshi.id;
@@ -1025,50 +998,22 @@
                     document.getElementById('oshiDebutInput').value = oshi.debut || '';
                     document.getElementById('oshiBioInput').value = oshi.bio || '';
                     document.getElementById('oshiStreamInput').value = oshi.streamUrl || '';
-
-                    // Load Tags
-                    if (Array.isArray(oshi.tags)) {
-                        tempTagsList = [...oshi.tags];
-                    } else if (typeof oshi.tags === 'string' && oshi.tags.trim()) {
-                        tempTagsList = oshi.tags.split(',').map(t => t.trim()).filter(Boolean);
-                    }
-
-                    // Load Social Links
-                    if (Array.isArray(oshi.socialLinks)) {
-                        tempSocialList = [...oshi.socialLinks];
-                    }
-
-                    // Load Image Previews
-                    if (oshi.avatarBase64) {
-                        const avatarImg = document.getElementById('avatarPreviewImg');
-                        avatarImg.src = oshi.avatarBase64;
-                        avatarImg.classList.remove('hidden');
-                        document.getElementById('avatarPreviewFallback').classList.add('hidden');
-                    }
-                    if (oshi.coverBase64) {
-                        const coverImg = document.getElementById('coverPreviewImg');
-                        coverImg.src = oshi.coverBase64;
-                        coverImg.classList.remove('hidden');
-                        document.getElementById('coverPreviewFallback').classList.add('hidden');
-                    }
+                    tempTagsList = Array.isArray(oshi.tags) ? [...oshi.tags] : [];
+                    tempSocialList = Array.isArray(oshi.socialLinks) ? [...oshi.socialLinks] : [];
                 }
             } else {
                 closeBtn.classList.remove('hidden');
                 deleteBtn.classList.add('hidden');
-                title.innerHTML = `<i data-lucide="user-plus" class="w-5 h-5 text-pink-400"></i><span>新增主推 VTuber</span>`;
-                document.getElementById('oshiIdInput').value = '';
             }
 
             renderTagsChips();
             renderSocialListInForm();
-
             modal.classList.remove('hidden');
-            lucide.createIcons();
         }
 
         function closeOshiModal() {
             if (!appData.oshis || appData.oshis.length === 0) {
-                alert('請至少新增一位主推資料以開始使用！');
+                alert('請至少新增一位主推資料！');
                 return;
             }
             document.getElementById('oshiModal').classList.add('hidden');
@@ -1076,10 +1021,9 @@
 
         async function saveOshiData(e) {
             e.preventDefault();
-
             const id = document.getElementById('oshiIdInput').value;
             const name = document.getElementById('oshiNameInput').value.trim();
-            const birthday = document.getElementById('oshiBirthdayInput').value;
+            const birthday = document.getElementById('oshiBirthdayInput').value.trim();
             const debut = document.getElementById('oshiDebutInput').value;
             const bio = document.getElementById('oshiBioInput').value.trim();
             const streamUrl = document.getElementById('oshiStreamInput').value.trim();
@@ -1087,36 +1031,31 @@
             const avatarFile = document.getElementById('oshiAvatarFile').files[0];
             const coverFile = document.getElementById('oshiCoverFile').files[0];
 
-            let avatarBase64 = null;
-            let coverBase64 = null;
-
-            if (avatarFile) avatarBase64 = await fileToBase64(avatarFile, 400);
-            if (coverFile) coverBase64 = await fileToBase64(coverFile, 1000);
+            let avatarBase64 = avatarFile ? await fileToBase64(avatarFile, 300) : null;
+            let coverBase64 = coverFile ? await fileToBase64(coverFile, 800) : null;
 
             if (id) {
-                // Edit Existing
                 const oshi = appData.oshis.find(o => o.id === id);
                 if (oshi) {
                     oshi.name = name;
                     oshi.birthday = birthday;
                     oshi.debut = debut;
-                    oshi.tags = [...tempTagsList];
                     oshi.bio = bio;
                     oshi.streamUrl = streamUrl;
+                    oshi.tags = [...tempTagsList];
                     oshi.socialLinks = [...tempSocialList];
                     if (avatarBase64) oshi.avatarBase64 = avatarBase64;
                     if (coverBase64) oshi.coverBase64 = coverBase64;
                 }
             } else {
-                // Create New
                 const newOshi = {
                     id: 'oshi_' + Date.now(),
                     name,
                     birthday,
                     debut,
-                    tags: [...tempTagsList],
                     bio,
                     streamUrl,
+                    tags: [...tempTagsList],
                     socialLinks: [...tempSocialList],
                     avatarBase64,
                     coverBase64,
@@ -1135,18 +1074,11 @@
         function deleteOshi() {
             const id = document.getElementById('oshiIdInput').value;
             if (!id) return;
-
-            if (confirm('確定要刪除這位主推及所有相關的行事曆與周邊紀錄嗎？此動作無法復原。')) {
+            if (confirm('確定要刪除這位主推及所有資料嗎？')) {
                 appData.oshis = appData.oshis.filter(o => o.id !== id);
-                if (appData.oshis.length > 0) {
-                    appData.currentOshiId = appData.oshis[0].id;
-                } else {
-                    appData.currentOshiId = null;
-                }
-
+                appData.currentOshiId = appData.oshis.length > 0 ? appData.oshis[0].id : null;
                 saveToLocalStorage();
                 document.getElementById('oshiModal').classList.add('hidden');
-
                 if (appData.oshis.length === 0) {
                     openOshiModal(null, true);
                 } else {
@@ -1155,11 +1087,10 @@
             }
         }
 
-        // 2. CALENDAR EVENT MODAL HANDLERS
+        // Event Modal Controls
         function openEventModal(eventId = null, defaultDate = null) {
             const modal = document.getElementById('eventModal');
-            const form = document.getElementById('eventForm');
-            form.reset();
+            document.getElementById('eventForm').reset();
 
             if (eventId) {
                 const oshi = getCurrentOshi();
@@ -1188,7 +1119,6 @@
             e.preventDefault();
             const oshi = getCurrentOshi();
             if (!oshi) return;
-
             if (!oshi.events) oshi.events = [];
 
             const id = document.getElementById('eventIdInput').value;
@@ -1206,13 +1136,7 @@
                     evt.note = note;
                 }
             } else {
-                oshi.events.push({
-                    id: 'evt_' + Date.now(),
-                    date,
-                    title,
-                    type,
-                    note
-                });
+                oshi.events.push({ id: 'evt_' + Date.now(), date, title, type, note });
             }
 
             saveToLocalStorage();
@@ -1223,20 +1147,18 @@
         function deleteEvent(eventId) {
             const oshi = getCurrentOshi();
             if (!oshi) return;
-
-            if (confirm('確定要刪除此行程事件嗎？')) {
+            if (confirm('確定要刪除此行程嗎？')) {
                 oshi.events = (oshi.events || []).filter(e => e.id !== eventId);
                 saveToLocalStorage();
                 renderCalendarView();
             }
         }
 
-        // 3. MERCH MODAL HANDLERS
+        // Merch Modal Controls
         function openMerchModal() {
-            const modal = document.getElementById('merchModal');
             document.getElementById('merchForm').reset();
             document.getElementById('merchIdInput').value = '';
-            modal.classList.remove('hidden');
+            document.getElementById('merchModal').classList.remove('hidden');
         }
 
         function closeMerchModal() {
@@ -1247,7 +1169,6 @@
             e.preventDefault();
             const oshi = getCurrentOshi();
             if (!oshi) return;
-
             if (!oshi.merches) oshi.merches = [];
 
             const eventName = document.getElementById('merchEventInput').value.trim();
@@ -1255,22 +1176,11 @@
             const price = Number(document.getElementById('merchPriceInput').value);
             const qty = Number(document.getElementById('merchQtyInput').value);
             const channel = document.getElementById('merchChannelInput').value.trim();
-            const note = document.getElementById('merchNoteInput').value.trim();
 
             const imgFile = document.getElementById('merchImgFile').files[0];
-            let imgBase64 = null;
-            if (imgFile) imgBase64 = await fileToBase64(imgFile, 500);
+            let imgBase64 = imgFile ? await fileToBase64(imgFile, 400) : null;
 
-            oshi.merches.push({
-                id: 'merch_' + Date.now(),
-                eventName,
-                name,
-                price,
-                qty,
-                channel,
-                note,
-                imgBase64
-            });
+            oshi.merches.push({ id: 'merch_' + Date.now(), eventName, name, price, qty, channel, imgBase64 });
 
             saveToLocalStorage();
             closeMerchModal();
@@ -1280,8 +1190,7 @@
         function deleteMerch(merchId) {
             const oshi = getCurrentOshi();
             if (!oshi) return;
-
-            if (confirm('確定要刪除此筆周邊紀錄嗎？')) {
+            if (confirm('確定要刪除此周邊紀錄嗎？')) {
                 oshi.merches = (oshi.merches || []).filter(m => m.id !== merchId);
                 saveToLocalStorage();
                 renderMerchView();
