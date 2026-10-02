@@ -82,7 +82,7 @@
           <i class="fa-solid fa-user-plus"></i>
         </div>
         <h3 class="text-lg font-bold text-gray-300">目前尚無主推 VTuber 資料</h3>
-        <p class="text-xs text-gray-500 max-w-sm mx-auto">點擊上方「新增主推」按鈕，建立頭像、出道日與社群連結，開始記錄你的追推日常！</p>
+        <p class="text-xs text-gray-500 max-w-sm mx-auto">點擊上方「新增主推」按鈕，上傳頭像、封面，設定出道日與社群連結，開始記錄你的追推日常！</p>
         <button onclick="openOshiModal()" class="bg-themeAccent text-white text-xs font-bold px-4 py-2 rounded-xl">立即新增</button>
       </div>
 
@@ -142,7 +142,7 @@
               </h3>
               <button onclick="openWeeklyModal()" class="text-xs text-red-400 hover:underline">更新周表</button>
             </div>
-            <div id="weeklyScheduleBox" class="rounded-xl overflow-hidden bg-zinc-900 border border-themeBorder min-h-[160px] flex items-center justify-center text-xs text-gray-500">
+            <div id="weeklyScheduleBox" class="rounded-xl overflow-hidden bg-zinc-900 border border-themeBorder min-h-[160px] flex items-center justify-center text-xs text-gray-500 p-2">
               尚無周表圖片，點擊右上方更新
             </div>
           </div>
@@ -289,14 +289,25 @@
             <input type="date" id="inOshiDebut" class="w-full bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
           </div>
         </div>
+
+        <!-- 頭像選擇 -->
         <div>
-          <label class="block text-gray-400 mb-1">頭像圖片 URL</label>
-          <input type="text" id="inOshiAvatar" placeholder="https://..." class="w-full bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
+          <label class="block text-gray-400 mb-1">頭像圖片</label>
+          <div class="flex items-center gap-2">
+            <input type="file" id="fileOshiAvatar" accept="image/*" class="w-full text-gray-400 bg-zinc-900 border border-themeBorder rounded-xl file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-zinc-800 file:text-gray-200">
+            <input type="text" id="inOshiAvatar" placeholder="或輸入圖片 URL" class="w-1/2 bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
+          </div>
         </div>
+
+        <!-- Banner 封面選擇 -->
         <div>
-          <label class="block text-gray-400 mb-1">Banner 封面網址 URL</label>
-          <input type="text" id="inOshiBanner" placeholder="https://..." class="w-full bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
+          <label class="block text-gray-400 mb-1">Banner 封面圖片</label>
+          <div class="flex items-center gap-2">
+            <input type="file" id="fileOshiBanner" accept="image/*" class="w-full text-gray-400 bg-zinc-900 border border-themeBorder rounded-xl file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-zinc-800 file:text-gray-200">
+            <input type="text" id="inOshiBanner" placeholder="或輸入圖片 URL" class="w-1/2 bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
+          </div>
         </div>
+
         <hr class="border-themeBorder">
         <h4 class="font-bold text-gray-300">社群平台連結 (留空自動隱藏)</h4>
         <div class="grid grid-cols-2 gap-2">
@@ -317,9 +328,11 @@
   <div id="weeklyModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-themeCard border border-themeBorder w-full max-w-md rounded-3xl p-6 space-y-4">
       <h3 class="text-lg font-bold text-white">更新本週行程周表</h3>
-      <div class="text-xs space-y-2">
-        <label class="block text-gray-400">周表圖片網址 (URL)</label>
-        <input type="text" id="inWeeklyImg" placeholder="https://..." class="w-full bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
+      <div class="text-xs space-y-3">
+        <label class="block text-gray-400">選擇周表圖片檔案</label>
+        <input type="file" id="fileWeeklyImg" accept="image/*" class="w-full text-gray-400 bg-zinc-900 border border-themeBorder rounded-xl file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-zinc-800 file:text-gray-200">
+        <div class="text-center text-gray-500 font-bold my-1">- 或 -</div>
+        <input type="text" id="inWeeklyImg" placeholder="輸入圖片網址 URL" class="w-full bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
       </div>
       <div class="flex justify-end gap-2 pt-2">
         <button onclick="closeModal('weeklyModal')" class="px-4 py-2 bg-zinc-800 text-gray-300 rounded-xl text-xs">取消</button>
@@ -351,18 +364,19 @@
             <input type="number" id="inGoodsQty" value="1" class="w-full bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
           </div>
         </div>
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-gray-400 mb-1">進度狀態</label>
-            <select id="inGoodsStatus" class="w-full bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
-              <option value="預購中">預購中</option>
-              <option value="已發貨">已發貨</option>
-              <option value="已入手">已入手</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-gray-400 mb-1">商品宣傳照 URL</label>
-            <input type="text" id="inGoodsImg" placeholder="https://..." class="w-full bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
+        <div>
+          <label class="block text-gray-400 mb-1">進度狀態</label>
+          <select id="inGoodsStatus" class="w-full bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
+            <option value="預購中">預購中</option>
+            <option value="已發貨">已發貨</option>
+            <option value="已入手">已入手</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-gray-400 mb-1">商品宣傳照/實品圖</label>
+          <div class="flex items-center gap-2">
+            <input type="file" id="fileGoodsImg" accept="image/*" class="w-full text-gray-400 bg-zinc-900 border border-themeBorder rounded-xl file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-zinc-800 file:text-gray-200">
+            <input type="text" id="inGoodsImg" placeholder="或 URL" class="w-1/2 bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
           </div>
         </div>
       </div>
@@ -387,8 +401,11 @@
           <input type="date" id="inEventDate" class="w-full bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
         </div>
         <div>
-          <label class="block text-gray-400 mb-1">宣傳圖/現場相片 URL</label>
-          <input type="text" id="inEventImg" placeholder="https://..." class="w-full bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
+          <label class="block text-gray-400 mb-1">宣傳圖/現場相片</label>
+          <div class="flex items-center gap-2">
+            <input type="file" id="fileEventImg" accept="image/*" class="w-full text-gray-400 bg-zinc-900 border border-themeBorder rounded-xl file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-zinc-800 file:text-gray-200">
+            <input type="text" id="inEventImg" placeholder="或 URL" class="w-1/2 bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
+          </div>
         </div>
       </div>
       <div class="flex justify-end gap-2 pt-2">
@@ -410,6 +427,17 @@
     let currentFilterStatus = '全部';
     let currentCalendarDate = new Date();
 
+    // 通用：轉成 Base64 檔案讀取工具
+    function readFileAsBase64(file) {
+      return new Promise((resolve, reject) => {
+        if (!file) resolve(null);
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.onerror = (e) => reject(e);
+        reader.readAsDataURL(file);
+      });
+    }
+
     // 載入 LocalStorage 本機存檔
     function loadStore() {
       const saved = localStorage.getItem('oshiverse_app_data');
@@ -421,7 +449,12 @@
 
     // 儲存至 LocalStorage
     function saveStore() {
-      localStorage.setItem('oshiverse_app_data', JSON.stringify(store));
+      try {
+        localStorage.setItem('oshiverse_app_data', JSON.stringify(store));
+      } catch (e) {
+        alert("儲存失敗：圖片檔案過大導致瀏覽器儲存空間超出上限，建議壓縮圖片後重新試試！");
+        console.error("Storage limit exceeded", e);
+      }
       render();
     }
 
@@ -549,7 +582,9 @@
       document.getElementById('inOshiBirthday').value = oshi.birthday || '';
       document.getElementById('inOshiDebut').value = oshi.debutDate || '';
       document.getElementById('inOshiAvatar').value = oshi.avatar || '';
+      document.getElementById('fileOshiAvatar').value = '';
       document.getElementById('inOshiBanner').value = oshi.banner || '';
+      document.getElementById('fileOshiBanner').value = '';
       document.getElementById('inSocialYT').value = oshi.socials?.yt || '';
       document.getElementById('inSocialTwitch').value = oshi.socials?.twitch || '';
       document.getElementById('inSocialX').value = oshi.socials?.x || '';
@@ -557,7 +592,7 @@
       openModal('oshiModal');
     }
 
-    function saveOshiData() {
+    async function saveOshiData() {
       const name = document.getElementById('inOshiName').value.trim();
       if (!name) return alert('請輸入主推名稱');
 
@@ -568,11 +603,25 @@
         store.currentOshiId = oshi.id;
       }
 
+      // 處理頭像 (優先使用上傳檔案)
+      const fileAvatar = document.getElementById('fileOshiAvatar').files[0];
+      if (fileAvatar) {
+        oshi.avatar = await readFileAsBase64(fileAvatar);
+      } else {
+        oshi.avatar = document.getElementById('inOshiAvatar').value || oshi.avatar;
+      }
+
+      // 處理 Banner 封面 (優先使用上傳檔案)
+      const fileBanner = document.getElementById('fileOshiBanner').files[0];
+      if (fileBanner) {
+        oshi.banner = await readFileAsBase64(fileBanner);
+      } else {
+        oshi.banner = document.getElementById('inOshiBanner').value || oshi.banner;
+      }
+
       oshi.name = name;
       oshi.birthday = document.getElementById('inOshiBirthday').value;
       oshi.debutDate = document.getElementById('inOshiDebut').value;
-      oshi.avatar = document.getElementById('inOshiAvatar').value;
-      oshi.banner = document.getElementById('inOshiBanner').value;
       oshi.socials = {
         yt: document.getElementById('inSocialYT').value,
         twitch: document.getElementById('inSocialTwitch').value,
@@ -584,18 +633,33 @@
       saveStore();
     }
 
-    function openWeeklyModal() { openModal('weeklyModal'); }
-    function saveWeeklyImg() {
+    function openWeeklyModal() { 
+      document.getElementById('inWeeklyImg').value = '';
+      document.getElementById('fileWeeklyImg').value = '';
+      openModal('weeklyModal'); 
+    }
+    
+    async function saveWeeklyImg() {
       const oshi = getCurrentOshi();
       if (!oshi) return;
-      oshi.weeklyImg = document.getElementById('inWeeklyImg').value;
+      const file = document.getElementById('fileWeeklyImg').files[0];
+      if (file) {
+        oshi.weeklyImg = await readFileAsBase64(file);
+      } else {
+        oshi.weeklyImg = document.getElementById('inWeeklyImg').value;
+      }
       closeModal('weeklyModal');
       saveStore();
     }
 
-    // 周邊記帳邏輯 (分類加總 + 分組明細)
-    function openGoodsModal() { openModal('goodsModal'); }
-    function saveGoodsItem() {
+    // 周邊記帳邏輯
+    function openGoodsModal() { 
+      document.getElementById('fileGoodsImg').value = '';
+      document.getElementById('inGoodsImg').value = '';
+      openModal('goodsModal'); 
+    }
+
+    async function saveGoodsItem() {
       const oshi = getCurrentOshi();
       if (!oshi) return alert('請先建立主推資料');
 
@@ -604,7 +668,10 @@
       const price = parseFloat(document.getElementById('inGoodsPrice').value) || 0;
       const qty = parseInt(document.getElementById('inGoodsQty').value) || 1;
       const status = document.getElementById('inGoodsStatus').value;
-      const img = document.getElementById('inGoodsImg').value;
+      
+      let img = document.getElementById('inGoodsImg').value;
+      const file = document.getElementById('fileGoodsImg').files[0];
+      if (file) img = await readFileAsBase64(file);
 
       if (!name) return alert('請輸入商品名稱');
 
@@ -682,14 +749,23 @@
       }).join('');
     }
 
-    // 行事曆邏輯 (縮圖網格 + 時間限制)
-    function openCalendarEventModal() { openModal('calendarEventModal'); }
-    function saveCalendarEvent() {
+    // 行事曆邏輯
+    function openCalendarEventModal() { 
+      document.getElementById('fileEventImg').value = '';
+      document.getElementById('inEventImg').value = '';
+      openModal('calendarEventModal'); 
+    }
+
+    async function saveCalendarEvent() {
       const oshi = getCurrentOshi();
       if (!oshi) return;
       const title = document.getElementById('inEventTitle').value.trim();
       const date = document.getElementById('inEventDate').value;
-      const img = document.getElementById('inEventImg').value;
+      
+      let img = document.getElementById('inEventImg').value;
+      const file = document.getElementById('fileEventImg').files[0];
+      if (file) img = await readFileAsBase64(file);
+
       if (!title || !date) return alert('請填寫事件名稱與日期');
 
       if (!oshi.events) oshi.events = [];
