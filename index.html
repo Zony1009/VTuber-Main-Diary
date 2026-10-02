@@ -38,7 +38,7 @@
       <select id="oshiSelector" onchange="switchOshi(this.value)" class="bg-themeCard text-white font-bold text-sm md:text-base rounded-xl px-3 py-1.5 border border-themeBorder focus:outline-none focus:border-themeAccent">
         <!-- 動態選單 -->
       </select>
-      <button onclick="openOshiModal('add')" class="text-xs bg-themeAccent hover:bg-red-700 text-white font-medium px-3 py-1.5 rounded-xl transition flex items-center gap-1 shadow-lg shadow-red-900/20">
+      <button onclick="openOshiModal('add')" class="text-xs bg-themeAccent hover:bg-red-700 text-white font-medium px-3 py-1.5 rounded-xl transition flex items-center gap-1 shadow-lg shadow-red-900/20" title="新增主推">
         <i class="fa-solid fa-plus"></i><span class="hidden sm:inline">新增主推</span>
       </button>
     </div>
@@ -83,7 +83,7 @@
         </div>
         <h3 class="text-lg font-bold text-gray-300">目前尚無主推 VTuber 資料</h3>
         <p class="text-xs text-gray-500 max-w-sm mx-auto">點擊上方「新增主推」按鈕，上傳頭像、封面，設定出道日與社群連結，開始記錄你的追推日常！</p>
-        <button onclick="openOshiModal('add')" class="bg-themeAccent text-white text-xs font-bold px-4 py-2 rounded-xl">商業推建立/新增主推</button>
+        <button onclick="openOshiModal('add')" class="bg-themeAccent text-white text-xs font-bold px-4 py-2 rounded-xl">新增主推</button>
       </div>
 
       <!-- 主推基本形象卡片區 -->
@@ -474,7 +474,8 @@
         return;
       }
 
-      emptyNotice.classList.remove('hidden');
+      // 有主推資料時，隱藏空白引導卡片，顯示個人資料卡片
+      emptyNotice.classList.add('hidden');
       profileCard.classList.remove('hidden');
 
       // 1. 渲染主頁資料
