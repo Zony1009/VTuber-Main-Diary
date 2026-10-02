@@ -38,13 +38,13 @@
       <select id="oshiSelector" onchange="switchOshi(this.value)" class="bg-themeCard text-white font-bold text-sm md:text-base rounded-xl px-3 py-1.5 border border-themeBorder focus:outline-none focus:border-themeAccent">
         <!-- 動態選單 -->
       </select>
-      <button onclick="openOshiModal()" class="text-xs bg-themeAccent hover:bg-red-700 text-white font-medium px-3 py-1.5 rounded-xl transition flex items-center gap-1 shadow-lg shadow-red-900/20">
+      <button onclick="openOshiModal('add')" class="text-xs bg-themeAccent hover:bg-red-700 text-white font-medium px-3 py-1.5 rounded-xl transition flex items-center gap-1 shadow-lg shadow-red-900/20">
         <i class="fa-solid fa-plus"></i><span class="hidden sm:inline">新增主推</span>
       </button>
     </div>
 
     <div class="flex items-center gap-2">
-      <!-- 虛擬 Google 登入狀態按鈕 (可接 Firebase/Supabase Auth) -->
+      <!-- 虛擬 Google 登入狀態按鈕 -->
       <button id="loginBtn" onclick="toggleAuth()" class="text-xs bg-themeCard hover:bg-zinc-800 text-gray-300 px-3 py-1.5 rounded-xl border border-themeBorder transition flex items-center gap-1.5">
         <i class="fa-brands fa-google text-red-500"></i><span id="authStatusText">Google 登入</span>
       </button>
@@ -83,14 +83,14 @@
         </div>
         <h3 class="text-lg font-bold text-gray-300">目前尚無主推 VTuber 資料</h3>
         <p class="text-xs text-gray-500 max-w-sm mx-auto">點擊上方「新增主推」按鈕，上傳頭像、封面，設定出道日與社群連結，開始記錄你的追推日常！</p>
-        <button onclick="openOshiModal()" class="bg-themeAccent text-white text-xs font-bold px-4 py-2 rounded-xl">立即新增</button>
+        <button onclick="openOshiModal('add')" class="bg-themeAccent text-white text-xs font-bold px-4 py-2 rounded-xl">商業推建立/新增主推</button>
       </div>
 
       <!-- 主推基本形象卡片區 -->
       <div id="oshiProfileCard" class="relative rounded-3xl overflow-hidden bg-themeCard border border-themeBorder shadow-2xl">
         <div id="oshiBanner" class="h-44 md:h-60 w-full bg-cover bg-center relative bg-zinc-800">
           <div class="absolute inset-0 bg-gradient-to-t from-themeCard via-themeCard/30 to-transparent"></div>
-          <button onclick="openOshiModal()" class="absolute top-4 right-4 bg-black/60 backdrop-blur-md text-xs text-gray-300 px-3 py-1.5 rounded-xl border border-white/10 hover:bg-black/80 transition">
+          <button onclick="openOshiModal('edit')" class="absolute top-4 right-4 bg-black/60 backdrop-blur-md text-xs text-gray-300 px-3 py-1.5 rounded-xl border border-white/10 hover:bg-black/80 transition">
             <i class="fa-solid fa-pen mr-1"></i>編輯資料
           </button>
         </div>
@@ -113,18 +113,17 @@
           </div>
         </div>
 
-        <!-- 彈性社群連結列 (未填寫的自動隱藏) -->
+        <!-- 彈性社群連結列 -->
         <div id="socialLinksContainer" class="px-6 py-4 bg-zinc-900/60 border-t border-themeBorder/60 flex flex-wrap gap-2.5 justify-center md:justify-start">
           <!-- 動態生成按鈕 -->
         </div>
       </div>
 
-      <!-- 下方雙欄 Layout (電腦端 Dashboard，手機端上下疊放) -->
+      <!-- 下方雙欄 Layout -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         
         <!-- 左側/上方：重要事件倒數與周表卡片 -->
         <div class="space-y-6">
-          <!-- 重要事件倒數小工具 -->
           <div class="bg-themeCard border border-themeBorder rounded-2xl p-4 space-y-3">
             <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
               <i class="fa-solid fa-hourglass-half text-themeAccent"></i>重大事件倒數
@@ -134,7 +133,6 @@
             </div>
           </div>
 
-          <!-- 每週行程周表展演區 -->
           <div class="bg-themeCard border border-themeBorder rounded-2xl p-4 space-y-3">
             <div class="flex items-center justify-between">
               <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
@@ -148,7 +146,7 @@
           </div>
         </div>
 
-        <!-- 右側/下方：今日直播與頻道動態 (佔 2 欄) -->
+        <!-- 右側/下方：當前直播區 -->
         <div class="md:col-span-2 space-y-6">
           <div class="bg-themeCard border border-themeBorder rounded-2xl p-5 space-y-4">
             <div class="flex items-center justify-between">
@@ -158,7 +156,6 @@
               <span id="liveBadge" class="px-2.5 py-0.5 rounded-full text-xs font-bold bg-zinc-800 text-gray-400">偵測中</span>
             </div>
 
-            <!-- 直播卡片展演區 -->
             <div id="liveDisplayCard" class="bg-zinc-900 border border-themeBorder rounded-2xl overflow-hidden p-4 flex flex-col md:flex-row gap-4 items-center">
               <div class="w-full md:w-56 h-32 bg-zinc-800 rounded-xl overflow-hidden relative flex-shrink-0">
                 <img id="liveThumbnail" src="" class="w-full h-full object-cover hidden">
@@ -196,7 +193,6 @@
         </button>
       </div>
 
-      <!-- 日曆本體卡片 -->
       <div class="bg-themeCard border border-themeBorder rounded-2xl p-4 md:p-6 shadow-xl space-y-4">
         <div class="flex items-center justify-between border-b border-themeBorder pb-4">
           <button onclick="changeMonth(-1)" class="p-2 bg-zinc-800 hover:bg-zinc-700 rounded-xl text-gray-300 text-xs"><i class="fa-solid fa-chevron-left"></i> 上個月</button>
@@ -209,11 +205,10 @@
         </div>
 
         <div id="calendarGrid" class="grid grid-cols-7 gap-1.5 md:gap-2">
-          <!-- 動態生成日曆格子 (含微型圖片縮圖) -->
+          <!-- 動態生成日曆格子 -->
         </div>
       </div>
 
-      <!-- 行事曆歷史列表 -->
       <div class="bg-themeCard border border-themeBorder rounded-2xl p-5 space-y-3">
         <h3 class="text-xs font-bold text-gray-400 uppercase">本月紀錄事件列表</h3>
         <div id="calendarEventsList" class="space-y-2">
@@ -226,7 +221,6 @@
     <!-- 分頁 3：周邊與消費紀錄 -->
     <!-- ========================================== -->
     <section id="tab-3" class="space-y-6 hidden">
-      <!-- 頂部統計儀表板 -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div class="bg-themeCard border border-themeBorder p-4 rounded-2xl">
           <div class="text-xs text-gray-400 mb-1">追星總支出</div>
@@ -242,7 +236,6 @@
         </div>
       </div>
 
-      <!-- 操作與狀態篩選列 -->
       <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
         <div class="flex border border-themeBorder bg-themeCard rounded-xl p-1 text-xs font-semibold overflow-x-auto">
           <button onclick="filterGoods('全部')" class="goods-filter-btn px-3 py-1.5 rounded-lg bg-zinc-800 text-white">全部</button>
@@ -256,7 +249,6 @@
         </button>
       </div>
 
-      <!-- 周邊消費紀錄列表卡片 (分類加總 + 單項明細) -->
       <div class="bg-themeCard border border-themeBorder rounded-2xl overflow-hidden shadow-xl">
         <div id="goodsListContainer" class="divide-y divide-themeBorder">
           <!-- 動態生成分類加總與明細 -->
@@ -273,7 +265,7 @@
   <!-- Modal 1: 編輯/新增主推 -->
   <div id="oshiModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-themeCard border border-themeBorder w-full max-w-lg rounded-3xl p-6 space-y-4 max-h-[90vh] overflow-y-auto">
-      <h3 class="text-lg font-bold text-white">主推 VTuber 個人檔案設定</h3>
+      <h3 id="oshiModalTitle" class="text-lg font-bold text-white">新增主推 VTuber</h3>
       <div class="space-y-3 text-xs">
         <div>
           <label class="block text-gray-400 mb-1">主推名稱</label>
@@ -317,9 +309,15 @@
           <input type="text" id="inSocialIG" placeholder="Instagram URL" class="bg-zinc-900 border border-themeBorder rounded-xl px-3 py-1.5 text-white">
         </div>
       </div>
-      <div class="flex justify-end gap-2 pt-2">
-        <button onclick="closeModal('oshiModal')" class="px-4 py-2 bg-zinc-800 text-gray-300 rounded-xl text-xs">取消</button>
-        <button onclick="saveOshiData()" class="px-4 py-2 bg-themeAccent hover:bg-red-700 text-white rounded-xl text-xs font-bold">儲存設定</button>
+
+      <div class="flex justify-between items-center pt-2">
+        <button id="deleteOshiBtn" onclick="deleteCurrentOshi()" class="px-3 py-2 bg-red-950/60 hover:bg-red-900 text-red-400 rounded-xl text-xs font-semibold border border-red-800/50 hidden">
+          <i class="fa-solid fa-trash mr-1"></i>刪除此主推
+        </button>
+        <div class="flex gap-2 ml-auto">
+          <button onclick="closeModal('oshiModal')" class="px-4 py-2 bg-zinc-800 text-gray-300 rounded-xl text-xs">取消</button>
+          <button onclick="saveOshiData()" class="px-4 py-2 bg-themeAccent hover:bg-red-700 text-white rounded-xl text-xs font-bold">儲存設定</button>
+        </div>
       </div>
     </div>
   </div>
@@ -415,9 +413,8 @@
     </div>
   </div>
 
-  <!-- JavaScript 核心程式邏輯與 LocalStorage 即時存檔 -->
+  <!-- JavaScript 核心程式邏輯 -->
   <script>
-    // 預設核心資料（初次開啟全空白）
     const initialStore = {
       currentOshiId: null,
       oshis: []
@@ -426,8 +423,8 @@
     let store = initialStore;
     let currentFilterStatus = '全部';
     let currentCalendarDate = new Date();
+    let currentModalMode = 'add'; // 'add' 或 'edit'
 
-    // 通用：轉成 Base64 檔案讀取工具
     function readFileAsBase64(file) {
       return new Promise((resolve, reject) => {
         if (!file) resolve(null);
@@ -438,7 +435,6 @@
       });
     }
 
-    // 載入 LocalStorage 本機存檔
     function loadStore() {
       const saved = localStorage.getItem('oshiverse_app_data');
       if (saved) {
@@ -447,7 +443,6 @@
       render();
     }
 
-    // 儲存至 LocalStorage
     function saveStore() {
       try {
         localStorage.setItem('oshiverse_app_data', JSON.stringify(store));
@@ -458,13 +453,11 @@
       render();
     }
 
-    // 取得當前選取的主推物件
     function getCurrentOshi() {
       if (!store.currentOshiId || store.oshis.length === 0) return null;
       return store.oshis.find(o => o.id === store.currentOshiId) || null;
     }
 
-    // 核心渲染全頁面
     function render() {
       renderOshiSelector();
       const oshi = getCurrentOshi();
@@ -481,7 +474,7 @@
         return;
       }
 
-      emptyNotice.classList.add('hidden');
+      emptyNotice.classList.remove('hidden');
       profileCard.classList.remove('hidden');
 
       // 1. 渲染主頁資料
@@ -491,7 +484,6 @@
       document.getElementById('oshiAvatar').src = oshi.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=300';
       document.getElementById('oshiBanner').style.backgroundImage = `url('${oshi.banner || 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1000'}')`;
 
-      // 計算追推天數與出道月數
       if (oshi.debutDate) {
         const start = new Date(oshi.debutDate);
         const today = new Date();
@@ -501,10 +493,10 @@
         document.getElementById('oshiDebutMonths').innerText = `${diffMonths} 個月`;
       }
 
-      // 2. 渲染彈性社群按鈕 (未填寫自動隱藏)
+      // 2. 社群按鈕渲染
       renderSocialLinks(oshi.socials || {});
 
-      // 3. 渲染周表圖片
+      // 3. 周表圖片
       const weeklyBox = document.getElementById('weeklyScheduleBox');
       if (oshi.weeklyImg) {
         weeklyBox.innerHTML = `<img src="${oshi.weeklyImg}" class="w-full h-auto object-cover rounded-xl cursor-pointer" onclick="window.open('${oshi.weeklyImg}')">`;
@@ -512,12 +504,11 @@
         weeklyBox.innerHTML = `尚無周表圖片，點擊右上方更新`;
       }
 
-      // 4. 渲染分頁 2 (行事曆) 與 分頁 3 (周邊消費)
+      // 4. 行事曆與周邊
       renderCalendar();
       renderGoods();
     }
 
-    // 動態社群按鈕渲染
     function renderSocialLinks(socials) {
       const container = document.getElementById('socialLinksContainer');
       container.innerHTML = '';
@@ -543,7 +534,6 @@
       }
     }
 
-    // 渲染主推切換選單
     function renderOshiSelector() {
       const select = document.getElementById('oshiSelector');
       if (store.oshis.length === 0) {
@@ -555,13 +545,11 @@
       ).join('');
     }
 
-    // 切換主推
     function switchOshi(id) {
       store.currentOshiId = id;
       saveStore();
     }
 
-    // 切換 Tab 頁籤
     function switchTab(tabIndex) {
       for (let i = 1; i <= 3; i++) {
         document.getElementById(`tab-${i}`).classList.toggle('hidden', i !== tabIndex);
@@ -572,51 +560,81 @@
       }
     }
 
-    // Modal 控制邏輯
     function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
     function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
-    function openOshiModal() {
-      const oshi = getCurrentOshi() || {};
-      document.getElementById('inOshiName').value = oshi.name || '';
-      document.getElementById('inOshiBirthday').value = oshi.birthday || '';
-      document.getElementById('inOshiDebut').value = oshi.debutDate || '';
-      document.getElementById('inOshiAvatar').value = oshi.avatar || '';
-      document.getElementById('fileOshiAvatar').value = '';
-      document.getElementById('inOshiBanner').value = oshi.banner || '';
-      document.getElementById('fileOshiBanner').value = '';
-      document.getElementById('inSocialYT').value = oshi.socials?.yt || '';
-      document.getElementById('inSocialTwitch').value = oshi.socials?.twitch || '';
-      document.getElementById('inSocialX').value = oshi.socials?.x || '';
-      document.getElementById('inSocialIG').value = oshi.socials?.ig || '';
+    // 開啟主推彈窗 (區分 add / edit)
+    function openOshiModal(mode = 'add') {
+      currentModalMode = mode;
+      const deleteBtn = document.getElementById('deleteOshiBtn');
+      const title = document.getElementById('oshiModalTitle');
+
+      if (mode === 'edit') {
+        title.innerText = '編輯主推 VTuber 個人檔案';
+        deleteBtn.classList.remove('hidden');
+        const oshi = getCurrentOshi() || {};
+        document.getElementById('inOshiName').value = oshi.name || '';
+        document.getElementById('inOshiBirthday').value = oshi.birthday || '';
+        document.getElementById('inOshiDebut').value = oshi.debutDate || '';
+        document.getElementById('inOshiAvatar').value = oshi.avatar || '';
+        document.getElementById('fileOshiAvatar').value = '';
+        document.getElementById('inOshiBanner').value = oshi.banner || '';
+        document.getElementById('fileOshiBanner').value = '';
+        document.getElementById('inSocialYT').value = oshi.socials?.yt || '';
+        document.getElementById('inSocialTwitch').value = oshi.socials?.twitch || '';
+        document.getElementById('inSocialX').value = oshi.socials?.x || '';
+        document.getElementById('inSocialIG').value = oshi.socials?.ig || '';
+      } else {
+        title.innerText = '新增主推 VTuber';
+        deleteBtn.classList.add('hidden');
+        document.getElementById('inOshiName').value = '';
+        document.getElementById('inOshiBirthday').value = '';
+        document.getElementById('inOshiDebut').value = '';
+        document.getElementById('inOshiAvatar').value = '';
+        document.getElementById('fileOshiAvatar').value = '';
+        document.getElementById('inOshiBanner').value = '';
+        document.getElementById('fileOshiBanner').value = '';
+        document.getElementById('inSocialYT').value = '';
+        document.getElementById('inSocialTwitch').value = '';
+        document.getElementById('inSocialX').value = '';
+        document.getElementById('inSocialIG').value = '';
+      }
       openModal('oshiModal');
     }
 
+    // 儲存主推資料
     async function saveOshiData() {
       const name = document.getElementById('inOshiName').value.trim();
       if (!name) return alert('請輸入主推名稱');
 
-      let oshi = getCurrentOshi();
-      if (!oshi) {
+      let oshi;
+      if (currentModalMode === 'add') {
         oshi = { id: 'oshi_' + Date.now(), goods: [], events: [] };
         store.oshis.push(oshi);
         store.currentOshiId = oshi.id;
+      } else {
+        oshi = getCurrentOshi();
+        if (!oshi) {
+          oshi = { id: 'oshi_' + Date.now(), goods: [], events: [] };
+          store.oshis.push(oshi);
+          store.currentOshiId = oshi.id;
+        }
       }
 
-      // 處理頭像 (優先使用上傳檔案)
+      // 頭像處理
       const fileAvatar = document.getElementById('fileOshiAvatar').files[0];
       if (fileAvatar) {
         oshi.avatar = await readFileAsBase64(fileAvatar);
       } else {
-        oshi.avatar = document.getElementById('inOshiAvatar').value || oshi.avatar;
+        oshi.avatar = document.getElementById('inOshiAvatar').value || oshi.avatar || '';
       }
 
-      // 處理 Banner 封面 (優先使用上傳檔案)
+      // Banner 處理
       const fileBanner = document.getElementById('fileOshiBanner').files[0];
       if (fileBanner) {
         oshi.banner = await readFileAsBase64(fileBanner);
       } else {
-        oshi.banner = document.getElementById('inOshiBanner').value || oshi.banner;
+        oshi.banner = document.getElementById('inOshiBanner').value || oshi.banner || '';
       }
 
       oshi.name = name;
@@ -631,6 +649,19 @@
 
       closeModal('oshiModal');
       saveStore();
+    }
+
+    // 刪除目前的主推
+    function deleteCurrentOshi() {
+      const oshi = getCurrentOshi();
+      if (!oshi) return;
+
+      if (confirm(`確定要刪除「${oshi.name}」的所有資料與記錄嗎？此動作無法復原。`)) {
+        store.oshis = store.oshis.filter(o => o.id !== oshi.id);
+        store.currentOshiId = store.oshis.length > 0 ? store.oshis[0].id : null;
+        closeModal('oshiModal');
+        saveStore();
+      }
     }
 
     function openWeeklyModal() { 
@@ -652,7 +683,6 @@
       saveStore();
     }
 
-    // 周邊記帳邏輯
     function openGoodsModal() { 
       document.getElementById('fileGoodsImg').value = '';
       document.getElementById('inGoodsImg').value = '';
@@ -698,14 +728,12 @@
         return;
       }
 
-      // 算帳數據
       const totalSpend = oshi.goods.reduce((s, g) => s + (g.price * g.qty), 0);
       const pendingSpend = oshi.goods.filter(g => g.status === '預購中').reduce((s, g) => s + (g.price * g.qty), 0);
       document.getElementById('statTotalSpend').innerText = `NT$ ${totalSpend.toLocaleString()}`;
       document.getElementById('statPendingSpend').innerText = `NT$ ${pendingSpend.toLocaleString()}`;
       document.getElementById('statTotalItems').innerText = `${oshi.goods.length} 筆`;
 
-      // 依活動/管道進行分類加總
       const filtered = currentFilterStatus === '全部' ? oshi.goods : oshi.goods.filter(g => g.status === currentFilterStatus);
       const grouped = {};
       filtered.forEach(g => {
@@ -749,7 +777,6 @@
       }).join('');
     }
 
-    // 行事曆邏輯
     function openCalendarEventModal() { 
       document.getElementById('fileEventImg').value = '';
       document.getElementById('inEventImg').value = '';
@@ -810,7 +837,6 @@
       }
     }
 
-    // Google Auth 模擬切換
     let isLoggedIn = false;
     function toggleAuth() {
       isLoggedIn = !isLoggedIn;
@@ -818,7 +844,6 @@
       document.getElementById('loginBtn').classList.toggle('border-emerald-500', isLoggedIn);
     }
 
-    // 匯出 JSON 備份
     function exportData() {
       const str = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(store, null, 2));
       const a = document.createElement('a');
@@ -827,7 +852,6 @@
       a.click();
     }
 
-    // 初始化
     window.onload = loadStore;
   </script>
 </body>
