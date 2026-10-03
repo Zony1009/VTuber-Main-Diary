@@ -68,20 +68,20 @@
     </div>
   </header>
 
-  <!-- 頁籤導覽 Tab列 -->
-  <nav class="max-w-6xl mx-auto px-4 pt-4">
-    <div class="flex border-b border-themeBorder text-sm font-semibold overflow-x-auto">
-      <button id="tabBtn-1" onclick="switchTab(1)" class="flex-1 py-3 min-w-[100px] text-center border-b-2 border-accent text-accent">
-        <i class="fa-solid fa-heart mr-2"></i>主頁與動態
+  <!-- 頁籤導覽 Tab列（僅留圖示，增加可擴充性） -->
+  <nav class="max-w-6xl mx-auto px-4 pt-3">
+    <div class="flex border-b border-themeBorder text-base font-semibold overflow-x-auto">
+      <button id="tabBtn-1" onclick="switchTab(1)" title="主頁與動態" aria-label="主頁與動態" class="flex-1 py-3 min-w-[50px] text-center border-b-2 border-accent text-accent">
+        <i class="fa-solid fa-heart"></i>
       </button>
-      <button id="tabBtn-2" onclick="switchTab(2)" class="flex-1 py-3 min-w-[100px] text-center border-b-2 border-transparent text-gray-400 hover:text-gray-200">
-        <i class="fa-solid fa-calendar-days mr-2"></i>行事曆與紀念日
+      <button id="tabBtn-2" onclick="switchTab(2)" title="行事曆與紀念日" aria-label="行事曆與紀念日" class="flex-1 py-3 min-w-[50px] text-center border-b-2 border-transparent text-gray-400 hover:text-gray-200">
+        <i class="fa-solid fa-calendar-days"></i>
       </button>
-      <button id="tabBtn-3" onclick="switchTab(3)" class="flex-1 py-3 min-w-[100px] text-center border-b-2 border-transparent text-gray-400 hover:text-gray-200">
-        <i class="fa-solid fa-bag-shopping mr-2"></i>周邊與消費分析
+      <button id="tabBtn-3" onclick="switchTab(3)" title="周邊與消費分析" aria-label="周邊與消費分析" class="flex-1 py-3 min-w-[50px] text-center border-b-2 border-transparent text-gray-400 hover:text-gray-200">
+        <i class="fa-solid fa-bag-shopping"></i>
       </button>
-      <button id="tabBtn-4" onclick="switchTab(4)" class="flex-1 py-3 min-w-[100px] text-center border-b-2 border-transparent text-gray-400 hover:text-gray-200">
-        <i class="fa-solid fa-images mr-2"></i>數位展示櫃
+      <button id="tabBtn-4" onclick="switchTab(4)" title="數位展示櫃" aria-label="數位展示櫃" class="flex-1 py-3 min-w-[50px] text-center border-b-2 border-transparent text-gray-400 hover:text-gray-200">
+        <i class="fa-solid fa-images"></i>
       </button>
     </div>
   </nav>
@@ -92,6 +92,12 @@
     <!-- 分頁 1：主頁與動態 -->
     <!-- ========================================== -->
     <section id="tab-1" class="space-y-6">
+      <!-- 左上角分頁標題 -->
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-heart text-accent text-lg"></i>
+        <h2 class="text-lg font-bold text-white">主頁與動態</h2>
+      </div>
+
       <div id="emptyOshiNotice" class="hidden bg-themeCard border border-dashed border-zinc-700 rounded-3xl p-12 text-center space-y-4">
         <div class="w-16 h-16 bg-zinc-800 rounded-full flex items-center justify-center mx-auto text-gray-500 text-2xl">
           <i class="fa-solid fa-user-plus"></i>
@@ -197,9 +203,13 @@
     <!-- ========================================== -->
     <section id="tab-2" class="space-y-6 hidden">
       <div class="flex items-center justify-between gap-3">
-        <div>
-          <h2 class="text-lg font-bold text-white">歷史行事曆與預計到貨</h2>
-          <p class="text-xs text-gray-400">登錄大事記、演唱會，或自動連動周邊預計到貨時間</p>
+        <!-- 左上角分頁標題 -->
+        <div class="flex items-center gap-2">
+          <i class="fa-solid fa-calendar-days text-accent text-lg"></i>
+          <div>
+            <h2 class="text-lg font-bold text-white">行事曆與紀念日</h2>
+            <p class="text-xs text-gray-400">登錄大事記、演唱會，或自動連動周邊預計到貨時間</p>
+          </div>
         </div>
         <button onclick="openCalendarEventModal()" class="bg-accent text-white text-xs font-bold px-3.5 py-2 rounded-xl transition whitespace-nowrap shrink-0">
           新增事件
@@ -230,6 +240,12 @@
     <!-- 分頁 3：周邊與消費分析 -->
     <!-- ========================================== -->
     <section id="tab-3" class="space-y-6 hidden">
+      <!-- 左上角分頁標題 -->
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-bag-shopping text-accent text-lg"></i>
+        <h2 class="text-lg font-bold text-white">周邊與消費分析</h2>
+      </div>
+
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div class="bg-themeCard border border-themeBorder p-4 rounded-2xl">
           <div class="text-xs text-gray-400 mb-1">追星總支出</div>
@@ -275,9 +291,11 @@
     <!-- 分頁 4：數位展示櫃 (Gallery) -->
     <!-- ========================================== -->
     <section id="tab-4" class="space-y-6 hidden">
-      <div class="flex items-center justify-between">
+      <!-- 左上角分頁標題 -->
+      <div class="flex items-center gap-2">
+        <i class="fa-solid fa-images text-accent text-lg"></i>
         <div>
-          <h2 class="text-lg font-bold text-white">已入手周邊展示櫃</h2>
+          <h2 class="text-lg font-bold text-white">數位展示櫃</h2>
           <p class="text-xs text-gray-400">視覺化展示所有已入手珍藏與戰利品照片</p>
         </div>
       </div>
@@ -744,8 +762,8 @@
         document.getElementById(`tab-${i}`).classList.toggle('hidden', i !== tabIndex);
         const btn = document.getElementById(`tabBtn-${i}`);
         btn.className = i === tabIndex 
-          ? "flex-1 py-3 min-w-[100px] text-center border-b-2 border-accent text-accent font-bold"
-          : "flex-1 py-3 min-w-[100px] text-center border-b-2 border-transparent text-gray-400 hover:text-gray-200";
+          ? "flex-1 py-3 min-w-[50px] text-center border-b-2 border-accent text-accent font-bold"
+          : "flex-1 py-3 min-w-[50px] text-center border-b-2 border-transparent text-gray-400 hover:text-gray-200";
       }
     }
 
