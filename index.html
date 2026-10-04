@@ -11,8 +11,13 @@
   <!-- Chart.js for Expense Analytics -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <!-- html2canvas for Oshi Card Export -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   
+  <!-- Firebase SDKs (v9/v10 Compat for Single-file HTML integration) -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -43,7 +48,7 @@
 </head>
 <body class="bg-themeDark text-gray-100 font-sans min-h-screen pb-12">
 
-  <!-- 頂部列：主推切換、備份與功能 -->
+  <!-- 頂部列：主推切換、雲端帳號登入與備份 -->
   <header class="sticky top-0 z-40 glass-header border-b border-themeBorder px-4 py-3 flex items-center justify-between">
     <div class="flex items-center gap-3">
       <select id="oshiSelector" onchange="switchOshi(this.value)" class="bg-themeCard text-white font-bold text-sm md:text-base rounded-xl px-3 py-1.5 border border-themeBorder focus:outline-none focus:border-accent">
@@ -55,6 +60,18 @@
     </div>
 
     <div class="flex items-center gap-2">
+      <!-- Firebase 雲端同步/登入狀態 -->
+      <div id="authContainer" class="flex items-center gap-2">
+        <button id="loginBtn" onclick="loginWithGoogle()" class="text-xs bg-zinc-800 hover:bg-zinc-700 text-white font-medium px-3 py-1.5 rounded-xl border border-themeBorder transition flex items-center gap-1.5">
+          <i class="fa-brands fa-google text-red-500"></i><span class="hidden md:inline">Google 登入/同步</span>
+        </button>
+        <div id="userInfo" class="hidden items-center gap-2 bg-zinc-900 border border-themeBorder rounded-xl px-2.5 py-1">
+          <img id="userAvatar" class="w-5 h-5 rounded-full object-cover">
+          <span id="userName" class="text-xs text-gray-300 font-semibold max-w-[80px] truncate"></span>
+          <button onclick="logoutFirebase()" class="text-xs text-gray-400 hover:text-red-400 ml-1" title="登出"><i class="fa-solid fa-right-from-bracket"></i></button>
+        </div>
+      </div>
+
       <button onclick="generateOshiCard()" class="text-xs bg-themeCard hover:bg-zinc-800 text-gray-300 px-3 py-1.5 rounded-xl border border-themeBorder transition flex items-center gap-1.5">
         <i class="fa-solid fa-id-card text-accent"></i><span class="hidden sm:inline">追推名片</span>
       </button>
@@ -68,7 +85,7 @@
     </div>
   </header>
 
-  <!-- 頁籤導覽 Tab列（僅留圖示，增加可擴充性） -->
+  <!-- 頁籤導覽 Tab列 -->
   <nav class="max-w-6xl mx-auto px-4 pt-3">
     <div class="flex border-b border-themeBorder text-base font-semibold overflow-x-auto">
       <button id="tabBtn-1" onclick="switchTab(1)" title="主頁與動態" aria-label="主頁與動態" class="flex-1 py-3 min-w-[50px] text-center border-b-2 border-accent text-accent">
@@ -92,7 +109,6 @@
     <!-- 分頁 1：主頁與動態 -->
     <!-- ========================================== -->
     <section id="tab-1" class="space-y-6">
-      <!-- 左上角分頁標題 -->
       <div class="flex items-center gap-2">
         <i class="fa-solid fa-heart text-accent text-lg"></i>
         <h2 class="text-lg font-bold text-white">主頁與動態</h2>
@@ -203,7 +219,6 @@
     <!-- ========================================== -->
     <section id="tab-2" class="space-y-6 hidden">
       <div class="flex items-center justify-between gap-3">
-        <!-- 左上角分頁標題 -->
         <div class="flex items-center gap-2">
           <i class="fa-solid fa-calendar-days text-accent text-lg"></i>
           <div>
@@ -240,7 +255,6 @@
     <!-- 分頁 3：周邊與消費分析 -->
     <!-- ========================================== -->
     <section id="tab-3" class="space-y-6 hidden">
-      <!-- 左上角分頁標題 -->
       <div class="flex items-center gap-2">
         <i class="fa-solid fa-bag-shopping text-accent text-lg"></i>
         <h2 class="text-lg font-bold text-white">周邊與消費分析</h2>
@@ -261,7 +275,6 @@
         </div>
       </div>
 
-      <!-- 消費分類圖表分析 -->
       <div class="bg-themeCard border border-themeBorder rounded-2xl p-5 space-y-3">
         <h3 class="text-xs font-bold text-gray-400 uppercase">消費類型比例圖表</h3>
         <div class="h-48 flex justify-center">
@@ -291,7 +304,6 @@
     <!-- 分頁 4：數位展示櫃 (Gallery) -->
     <!-- ========================================== -->
     <section id="tab-4" class="space-y-6 hidden">
-      <!-- 左上角分頁標題 -->
       <div class="flex items-center gap-2">
         <i class="fa-solid fa-images text-accent text-lg"></i>
         <div>
@@ -304,9 +316,7 @@
 
   </main>
 
-  <!-- ========================================== -->
-  <!-- 隱藏的名片繪製區域 (用于 html2canvas 導出) -->
-  <!-- ========================================== -->
+  <!-- 隱藏的名片繪製區域 -->
   <div id="oshiCardRenderArea" class="fixed top-[-9999px] left-[-9999px] w-[500px] bg-themeCard p-6 rounded-3xl border-2 border-themeBorder text-white space-y-4">
     <div class="flex items-center gap-4">
       <img id="cardAvatar" class="w-20 h-20 rounded-full object-cover border-2 border-accent">
@@ -333,12 +343,14 @@
     <div class="bg-themeCard border border-themeBorder w-full max-w-lg rounded-3xl p-6 space-y-4 max-h-[90vh] overflow-y-auto">
       <h3 id="oshiModalTitle" class="text-lg font-bold text-white">新增主推 VTuber</h3>
       <div class="space-y-3 text-xs">
-        <!-- 自動抓取連結輸入框 -->
         <div class="bg-zinc-900 p-3 rounded-xl border border-themeBorder space-y-2">
-          <label class="block font-bold text-accent">YouTube 頻道網址 / ID (自動填寫資訊)</label>
+          <label class="block font-bold text-accent">YouTube 頻道網址 / @Handle / ID</label>
           <div class="flex gap-2">
-            <input type="text" id="inYtChannelUrl" placeholder="例如：https://www.youtube.com/@Sachi_Meridian" class="flex-1 bg-themeCard border border-themeBorder rounded-xl px-3 py-1.5 text-white">
-            <button onclick="autoFetchYtChannel()" class="bg-accent text-white px-3 py-1.5 rounded-xl font-bold">自動抓取</button>
+            <input type="text" id="inYtChannelUrl" placeholder="例如：https://www.youtube.com/@SachiTeRaz 或 @SachiTeRaz" class="flex-1 bg-themeCard border border-themeBorder rounded-xl px-3 py-1.5 text-white">
+            <button id="fetchYtBtn" onclick="autoFetchYtChannel()" class="bg-accent text-white px-3 py-1.5 rounded-xl font-bold transition flex items-center gap-1">
+              <span id="fetchSpinner" class="hidden"><i class="fa-solid fa-spinner fa-spin"></i></span>
+              <span>自動抓取</span>
+            </button>
           </div>
         </div>
 
@@ -385,7 +397,8 @@
           <input type="text" id="inSocialYT" placeholder="YouTube URL" class="bg-zinc-900 border border-themeBorder rounded-xl px-3 py-1.5 text-white">
           <input type="text" id="inSocialTwitch" placeholder="Twitch URL" class="bg-zinc-900 border border-themeBorder rounded-xl px-3 py-1.5 text-white">
           <input type="text" id="inSocialX" placeholder="X (Twitter) URL" class="bg-zinc-900 border border-themeBorder rounded-xl px-3 py-1.5 text-white">
-          <input type="text" id="inSocialIG" placeholder="Instagram URL" class="bg-zinc-900 border border-themeBorder rounded-xl px-3 py-1.5 text-white">
+          <!-- 改良 Lit.link / IG 彈性欄位 -->
+          <input type="text" id="inSocialIG" placeholder="Lit.link / Instagram URL" class="bg-zinc-900 border border-themeBorder rounded-xl px-3 py-1.5 text-white">
         </div>
       </div>
 
@@ -521,6 +534,30 @@
 
   <!-- JavaScript 核心邏輯 -->
   <script>
+    // --- Firebase 雲端配置 ---
+    const firebaseConfig = {
+      apiKey: "AIzaSyDemoConfigKeyForOshiVerse001",
+      authDomain: "oshiverse-app.firebaseapp.com",
+      projectId: "oshiverse-app",
+      storageBucket: "oshiverse-app.appspot.com",
+      messagingSenderId: "1234567890",
+      appId: "1:1234567890:web:abcdef123456"
+    };
+
+    let db = null;
+    let auth = null;
+    let currentUser = null;
+
+    try {
+      if (typeof firebase !== 'undefined' && firebase.initializeApp) {
+        firebase.initializeApp(firebaseConfig);
+        auth = firebase.auth();
+        db = firebase.firestore();
+      }
+    } catch(e) {
+      console.warn("Firebase 初始化提示：使用模擬/本地模式", e);
+    }
+
     const initialStore = {
       currentOshiId: null,
       oshis: []
@@ -532,14 +569,83 @@
     let currentModalMode = 'add';
     let chartInstance = null;
 
-    function readFileAsBase64(file) {
-      return new Promise((resolve, reject) => {
-        if (!file) resolve(null);
-        const reader = new FileReader();
-        reader.onload = (e) => resolve(e.target.result);
-        reader.onerror = (e) => reject(e);
-        reader.readAsDataURL(file);
+    // --- Firebase Auth & Cloud Sync ---
+    function initAuthListener() {
+      if (!auth) return;
+      auth.onAuthStateChanged(async (user) => {
+        currentUser = user;
+        const loginBtn = document.getElementById('loginBtn');
+        const userInfo = document.getElementById('userInfo');
+
+        if (user) {
+          loginBtn.classList.add('hidden');
+          userInfo.classList.remove('hidden');
+          userInfo.classList.add('flex');
+          document.getElementById('userName').innerText = user.displayName || '使用者';
+          document.getElementById('userAvatar').src = user.photoURL || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=100';
+
+          // 從雲端載入資料
+          await loadCloudData(user.uid);
+        } else {
+          loginBtn.classList.remove('hidden');
+          userInfo.classList.add('hidden');
+          userInfo.classList.remove('flex');
+          loadStore(); // 切回 LocalStorage
+        }
       });
+    }
+
+    async function loginWithGoogle() {
+      if (!auth) {
+        alert("目前未設定有效的 Firebase API 憑證，系統將繼續以本機 LocalStorage 儲存資料。");
+        return;
+      }
+      const provider = new firebase.auth.GoogleAuthProvider();
+      try {
+        await auth.signInWithPopup(provider);
+      } catch (err) {
+        console.error("Login failed", err);
+        alert("Google 登入失敗: " + err.message);
+      }
+    }
+
+    function logoutFirebase() {
+      if (auth) auth.signOut();
+    }
+
+    async function loadCloudData(uid) {
+      if (!db) return;
+      try {
+        const doc = await db.collection('user_oshis').doc(uid).get();
+        if (doc.exists) {
+          store = doc.data();
+          render();
+        } else {
+          // 若無雲端紀錄，將目前本地資料上傳同步
+          saveStore();
+        }
+      } catch (e) {
+        console.error("Cloud fetch error:", e);
+        loadStore();
+      }
+    }
+
+    function saveStore() {
+      // 1. 本地儲存
+      try {
+        localStorage.setItem('oshiverse_app_data', JSON.stringify(store));
+      } catch (e) {
+        alert("儲存警告：圖片檔案過大導致瀏覽器儲存空間超出上限，建議縮小圖片！");
+      }
+
+      // 2. 雲端同步 (若已登入)
+      if (currentUser && db) {
+        db.collection('user_oshis').doc(currentUser.uid).set(store).catch(err => {
+          console.error("Firestore sync failed", err);
+        });
+      }
+
+      render();
     }
 
     function loadStore() {
@@ -550,13 +656,14 @@
       render();
     }
 
-    function saveStore() {
-      try {
-        localStorage.setItem('oshiverse_app_data', JSON.stringify(store));
-      } catch (e) {
-        alert("儲存失敗：圖片檔案過大導致瀏覽器儲存空間超出上限，建議壓縮圖片！");
-      }
-      render();
+    function readFileAsBase64(file) {
+      return new Promise((resolve, reject) => {
+        if (!file) resolve(null);
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.onerror = (e) => reject(e);
+        reader.readAsDataURL(file);
+      });
     }
 
     function getCurrentOshi() {
@@ -589,7 +696,6 @@
       emptyNotice.classList.add('hidden');
       profileCard.classList.remove('hidden');
 
-      // 主頁基本資料
       document.getElementById('oshiName').innerText = oshi.name || '未命名';
       document.getElementById('oshiBirthday').innerText = oshi.birthday || '--/--';
       document.getElementById('oshiDebut').innerText = oshi.debutDate || '----/--/--';
@@ -608,7 +714,6 @@
       renderSocialLinks(oshi.socials || {});
       renderAnniversaries(oshi);
 
-      // 週表圖片
       const weeklyBox = document.getElementById('weeklyScheduleBox');
       if (oshi.weeklyImg) {
         weeklyBox.innerHTML = `<img src="${oshi.weeklyImg}" class="w-full h-auto object-cover rounded-xl cursor-pointer" onclick="window.open('${oshi.weeklyImg}')">`;
@@ -621,14 +726,15 @@
       renderGallery();
     }
 
+    // 4. 社群平台連結（支援 Lit.link 與網址辨識）
     function renderSocialLinks(socials) {
       const container = document.getElementById('socialLinksContainer');
       container.innerHTML = '';
+
       const list = [
         { key: 'yt', name: 'YouTube', icon: 'fa-brands fa-youtube', color: 'hover:bg-red-600' },
         { key: 'twitch', name: 'Twitch', icon: 'fa-brands fa-twitch', color: 'hover:bg-purple-600' },
         { key: 'x', name: 'X (Twitter)', icon: 'fa-brands fa-x-twitter', color: 'hover:bg-zinc-700' },
-        { key: 'ig', name: 'Instagram', icon: 'fa-brands fa-instagram', color: 'hover:bg-pink-600' }
       ];
 
       list.forEach(s => {
@@ -641,19 +747,32 @@
         }
       });
 
+      // 處理 Lit.link 或 IG
+      if (socials.ig) {
+        const url = socials.ig;
+        const isLitLink = url.includes('lit.link');
+        const label = isLitLink ? 'Lit.link' : 'Instagram';
+        const icon = isLitLink ? 'fa-solid fa-link' : 'fa-brands fa-instagram';
+        const hoverBg = isLitLink ? 'hover:bg-emerald-600' : 'hover:bg-pink-600';
+
+        container.innerHTML += `
+          <a href="${url}" target="_blank" class="px-3 py-1.5 rounded-xl bg-zinc-800 text-xs text-gray-200 border border-themeBorder transition ${hoverBg} flex items-center gap-1.5">
+            <i class="${icon}"></i>${label}
+          </a>
+        `;
+      }
+
       if (container.innerHTML === '') {
         container.innerHTML = `<span class="text-xs text-gray-500">尚未填寫社群連結</span>`;
       }
     }
 
-    // 紀念日自動計算與呈現
     function renderAnniversaries(oshi) {
       const box = document.getElementById('anniversaryBox');
       box.innerHTML = '';
       const today = new Date();
       const items = [];
 
-      // 生日倒數
       if (oshi.birthday && oshi.birthday.includes('/')) {
         const [m, d] = oshi.birthday.split('/').map(Number);
         let nextBday = new Date(today.getFullYear(), m - 1, d);
@@ -662,7 +781,6 @@
         items.push({ name: '下一次生日', days });
       }
 
-      // 出道百日/千日紀念
       if (oshi.debutDate) {
         const debut = new Date(oshi.debutDate);
         const daysPassed = Math.floor((today - debut) / (1000 * 60 * 60 * 24));
@@ -687,22 +805,72 @@
       });
     }
 
-    // YouTube 頻道與直播資料抓取 (使用 oEmbed 免 API Key)
+    // 1. 自動抓取頻道資訊（修復解析與多重備援 API 邏輯）
     async function autoFetchYtChannel() {
-      const url = document.getElementById('inYtChannelUrl').value.trim();
-      if (!url) return alert('請輸入 YouTube 頻道網址');
+      let input = document.getElementById('inYtChannelUrl').value.trim();
+      if (!input) return alert('請輸入 YouTube 頻道網址或 @Handle');
 
+      const spinner = document.getElementById('fetchSpinner');
+      const fetchBtn = document.getElementById('fetchYtBtn');
+      spinner.classList.remove('hidden');
+      fetchBtn.disabled = true;
+
+      // 格式標準化處理
+      let targetUrl = input;
+      if (input.startsWith('@')) {
+        targetUrl = `https://www.youtube.com/${input}`;
+      } else if (!input.startsWith('http://') && !input.startsWith('https://')) {
+        targetUrl = `https://www.youtube.com/@${input}`;
+      }
+
+      let fetchedName = '';
+      let fetchedAvatar = '';
+      let success = false;
+
+      // 嘗試 1：使用 YouTube oEmbed API
       try {
-        const res = await fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent(url)}&format=json`);
-        if (!res.ok) throw new Error();
-        const data = await res.json();
-
-        if (data.author_name) document.getElementById('inOshiName').value = data.author_name;
-        if (data.thumbnail_url) document.getElementById('inOshiAvatar').value = data.thumbnail_url;
-        document.getElementById('inSocialYT').value = url;
-        alert(`成功抓取頻道資料：${data.author_name}`);
+        const res = await fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent(targetUrl)}&format=json`);
+        if (res.ok) {
+          const data = await res.json();
+          if (data.author_name) fetchedName = data.author_name;
+          if (data.thumbnail_url) fetchedAvatar = data.thumbnail_url;
+          if (fetchedName) success = true;
+        }
       } catch (e) {
-        alert('抓取失敗，請確認連結正確性，或手動填寫名稱與圖片 URL。');
+        console.warn("oEmbed fetch failed, trying fallback...", e);
+      }
+
+      // 嘗試 2：Noembed 備援 API
+      if (!success) {
+        try {
+          const res = await fetch(`https://noembed.com/embed?url=${encodeURIComponent(targetUrl)}`);
+          if (res.ok) {
+            const data = await res.json();
+            if (data.author_name) fetchedName = data.author_name;
+            if (data.thumbnail_url) fetchedAvatar = data.thumbnail_url;
+            if (fetchedName) success = true;
+          }
+        } catch (e) {
+          console.warn("Noembed fallback failed", e);
+        }
+      }
+
+      spinner.classList.add('hidden');
+      fetchBtn.disabled = false;
+
+      // 容錯帶入機制
+      if (success || fetchedName || fetchedAvatar) {
+        if (fetchedName) document.getElementById('inOshiName').value = fetchedName;
+        if (fetchedAvatar) document.getElementById('inOshiAvatar').value = fetchedAvatar;
+        document.getElementById('inSocialYT').value = targetUrl;
+
+        let msg = '頻道資訊抓取成功！';
+        if (!fetchedAvatar) msg = '已帶入頻道名稱與連結，頭像請手動設定。';
+        alert(msg);
+      } else {
+        // 即使解析失敗，仍帶入產生的 URL，不跳出全盤失敗警告
+        document.getElementById('inSocialYT').value = targetUrl;
+        alert('無法自動辨識名稱/頭像，已自動幫您帶入 YouTube 連結，請手動填寫頻道名稱。');
       }
     }
 
@@ -770,10 +938,30 @@
     function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
     function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
+    // 3. 表單狀態重置機制 (resetForm)
+    function resetOshiModalForm() {
+      document.getElementById('inYtChannelUrl').value = '';
+      document.getElementById('inOshiName').value = '';
+      document.getElementById('inOshiColor').value = '#dc2626';
+      document.getElementById('inOshiBirthday').value = '';
+      document.getElementById('inOshiDebut').value = '';
+      document.getElementById('inOshiAvatar').value = '';
+      document.getElementById('fileOshiAvatar').value = '';
+      document.getElementById('inOshiBanner').value = '';
+      document.getElementById('fileOshiBanner').value = '';
+      document.getElementById('inSocialYT').value = '';
+      document.getElementById('inSocialTwitch').value = '';
+      document.getElementById('inSocialX').value = '';
+      document.getElementById('inSocialIG').value = '';
+    }
+
     function openOshiModal(mode = 'add') {
       currentModalMode = mode;
       const deleteBtn = document.getElementById('deleteOshiBtn');
       const title = document.getElementById('oshiModalTitle');
+
+      // 每次打開前先徹底重置
+      resetOshiModalForm();
 
       if (mode === 'edit') {
         title.innerText = '編輯主推 VTuber 個人檔案';
@@ -784,9 +972,7 @@
         document.getElementById('inOshiBirthday').value = oshi.birthday || '';
         document.getElementById('inOshiDebut').value = oshi.debutDate || '';
         document.getElementById('inOshiAvatar').value = oshi.avatar || '';
-        document.getElementById('fileOshiAvatar').value = '';
         document.getElementById('inOshiBanner').value = oshi.banner || '';
-        document.getElementById('fileOshiBanner').value = '';
         document.getElementById('inSocialYT').value = oshi.socials?.yt || '';
         document.getElementById('inSocialTwitch').value = oshi.socials?.twitch || '';
         document.getElementById('inSocialX').value = oshi.socials?.x || '';
@@ -794,18 +980,6 @@
       } else {
         title.innerText = '新增主推 VTuber';
         deleteBtn.classList.add('hidden');
-        document.getElementById('inOshiName').value = '';
-        document.getElementById('inOshiColor').value = '#dc2626';
-        document.getElementById('inOshiBirthday').value = '';
-        document.getElementById('inOshiDebut').value = '';
-        document.getElementById('inOshiAvatar').value = '';
-        document.getElementById('fileOshiAvatar').value = '';
-        document.getElementById('inOshiBanner').value = '';
-        document.getElementById('fileOshiBanner').value = '';
-        document.getElementById('inSocialYT').value = '';
-        document.getElementById('inSocialTwitch').value = '';
-        document.getElementById('inSocialX').value = '';
-        document.getElementById('inSocialIG').value = '';
       }
       openModal('oshiModal');
     }
@@ -927,7 +1101,6 @@
       document.getElementById('statPendingSpend').innerText = `NT$ ${pendingSpend.toLocaleString()}`;
       document.getElementById('statTotalItems').innerText = `${oshi.goods.length} 筆`;
 
-      // 類別統計圖表
       const catStats = {};
       oshi.goods.forEach(g => {
         const cat = g.category || '實體周邊';
@@ -1081,7 +1254,6 @@
       eventsList.innerHTML = '';
       const daysInMonth = new Date(year, month + 1, 0).getDate();
 
-      // 整理本月事件與預計到貨
       const monthlyEvents = [];
 
       if (oshi && oshi.events) {
@@ -1096,7 +1268,7 @@
             monthlyEvents.push({
               id: g.id,
               title: `[周邊到貨] ${g.name}`,
-              date: `${currentYearMonth}-15`, // 預設擺在月中展示
+              date: `${currentYearMonth}-15`,
               type: 'goods',
               img: g.img
             });
@@ -1137,7 +1309,6 @@
       }
     }
 
-    // JSON 資料備份與匯入
     function exportData() {
       const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(store, null, 2));
       const a = document.createElement('a');
@@ -1168,7 +1339,6 @@
       reader.readAsText(file);
     }
 
-    // 生成追推名片圖片 (html2canvas)
     async function generateOshiCard() {
       const oshi = getCurrentOshi();
       if (!oshi) return alert('請先新增主推資料');
@@ -1196,7 +1366,10 @@
       link.click();
     }
 
-    window.onload = loadStore;
+    window.onload = () => {
+      loadStore();
+      initAuthListener();
+    };
   </script>
 </body>
 </html>
