@@ -572,6 +572,17 @@
     // --- Firebase Auth & Cloud Sync ---
     function initAuthListener() {
       if (!auth) return;
+
+      // 處理 signInWithRedirect 完返回後的認證結果
+      auth.getRedirectResult().then((result) => {
+        if (result && result.user) {
+          console.log("Redirect login successful:", result.user);
+        }
+      }).catch((error) => {
+        console.error("Redirect login error:", error);
+        alert("Google 登入失敗: " + error.message);
+      });
+
       auth.onAuthStateChanged(async (user) => {
         currentUser = user;
         const loginBtn = document.getElementById('loginBtn');
@@ -602,10 +613,11 @@
       }
       const provider = new firebase.auth.GoogleAuthProvider();
       try {
-        await auth.signInWithPopup(provider);
+        // 使用 signInWithRedirect 避免被瀏覽器跳開視窗阻擋
+        await auth.signInWithRedirect(provider);
       } catch (err) {
-        console.error("Login failed", err);
-        alert("Google 登入失敗: " + err.message);
+        console.error("Login redirect failed", err);
+        alert("Google 登入觸發失敗: " + err.message);
       }
     }
 
