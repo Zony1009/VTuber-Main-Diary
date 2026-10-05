@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>OshiVerse - 我的推界專屬日誌</title>
+  
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- Font Awesome Icons -->
@@ -13,7 +14,7 @@
   <!-- html2canvas for Oshi Card Export -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   
-  <!-- Firebase SDKs (v9/v10 Compat for Single-file HTML integration) -->
+  <!-- Firebase SDKs (Compat v10) -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
@@ -48,7 +49,7 @@
 </head>
 <body class="bg-themeDark text-gray-100 font-sans min-h-screen pb-12">
 
-  <!-- 頂部列：主推切換、雲端帳號登入與備份 -->
+  <!-- 頂部導覽列：主推切換、雲端帳號登入與備份 -->
   <header class="sticky top-0 z-40 glass-header border-b border-themeBorder px-4 py-3 flex items-center justify-between">
     <div class="flex items-center gap-3">
       <select id="oshiSelector" onchange="switchOshi(this.value)" class="bg-themeCard text-white font-bold text-sm md:text-base rounded-xl px-3 py-1.5 border border-themeBorder focus:outline-none focus:border-accent">
@@ -66,7 +67,7 @@
           <i class="fa-brands fa-google text-red-500"></i><span class="hidden md:inline">Google 登入/同步</span>
         </button>
         <div id="userInfo" class="hidden items-center gap-2 bg-zinc-900 border border-themeBorder rounded-xl px-2.5 py-1">
-          <img id="userAvatar" class="w-5 h-5 rounded-full object-cover">
+          <img id="userAvatar" class="w-5 h-5 rounded-full object-cover" alt="User Avatar">
           <span id="userName" class="text-xs text-gray-300 font-semibold max-w-[80px] truncate"></span>
           <button onclick="logoutFirebase()" class="text-xs text-gray-400 hover:text-red-400 ml-1" title="登出"><i class="fa-solid fa-right-from-bracket"></i></button>
         </div>
@@ -74,6 +75,11 @@
 
       <button onclick="generateOshiCard()" class="text-xs bg-themeCard hover:bg-zinc-800 text-gray-300 px-3 py-1.5 rounded-xl border border-themeBorder transition flex items-center gap-1.5">
         <i class="fa-solid fa-id-card text-accent"></i><span class="hidden sm:inline">追推名片</span>
+      </button>
+
+      <!-- 匯出與匯入按鈕組 -->
+      <button onclick="exportCSV()" class="text-xs bg-themeCard hover:bg-zinc-800 text-emerald-400 hover:text-emerald-300 p-2 rounded-xl border border-themeBorder transition" title="匯出 CSV 記帳表">
+        <i class="fa-solid fa-file-csv"></i>
       </button>
       <button onclick="exportData()" class="text-xs bg-themeCard hover:bg-zinc-800 text-gray-400 hover:text-white p-2 rounded-xl border border-themeBorder transition" title="匯出 JSON 備份">
         <i class="fa-solid fa-download"></i>
@@ -119,7 +125,7 @@
           <i class="fa-solid fa-user-plus"></i>
         </div>
         <h3 class="text-lg font-bold text-gray-300">目前尚無主推 VTuber 資料</h3>
-        <p class="text-xs text-gray-500 max-w-sm mx-auto">點擊上方「新增主推」按鈕，填入 YouTube 頻道網址自動抓取資料，開始記錄你的追推日常！</p>
+        <p class="text-xs text-gray-500 max-w-sm mx-auto">點擊上方「新增主推」按鈕，填入 YouTube 或 Twitch 資訊，開始記錄你的追推日常！</p>
         <button onclick="openOshiModal('add')" class="bg-accent text-white text-xs font-bold px-4 py-2 rounded-xl">新增主推</button>
       </div>
 
@@ -132,7 +138,7 @@
         </div>
 
         <div class="relative px-6 pb-6 -mt-16 flex flex-col md:flex-row items-center md:items-end gap-5 text-center md:text-left">
-          <img id="oshiAvatar" src="" class="w-28 h-28 md:w-32 md:h-32 rounded-full border-4 border-themeCard object-cover bg-zinc-800 shadow-xl">
+          <img id="oshiAvatar" src="" alt="Oshi Avatar" class="w-28 h-28 md:w-32 md:h-32 rounded-full border-4 border-themeCard object-cover bg-zinc-800 shadow-xl">
           
           <div class="flex-1 space-y-2">
             <div class="flex flex-col md:flex-row md:items-center gap-2">
@@ -178,7 +184,7 @@
           </div>
         </div>
 
-        <!-- 右側：直播與頻道動態 -->
+        <!-- 右側：直播與頻道動態（支援 YouTube Data API 與 Twitch API） -->
         <div class="md:col-span-2 space-y-6">
           <div class="bg-themeCard border border-themeBorder rounded-2xl p-5 space-y-4">
             <div class="flex items-center justify-between">
@@ -190,20 +196,31 @@
               </button>
             </div>
 
+            <!-- API Key 快速設定視窗區塊 -->
+            <div class="p-3 bg-zinc-900/80 rounded-xl border border-themeBorder text-xs space-y-2">
+              <div class="font-bold text-gray-400 flex items-center gap-1.5">
+                <i class="fa-solid fa-key text-amber-400"></i> API 憑證設定 (進階開播狀態偵測)
+              </div>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <input type="text" id="cfgYtApiKey" placeholder="YouTube Data API Key" onblur="saveApiKeys()" class="bg-themeCard border border-themeBorder rounded-lg px-2.5 py-1 text-white">
+                <input type="text" id="cfgTwitchClientId" placeholder="Twitch Client ID" onblur="saveApiKeys()" class="bg-themeCard border border-themeBorder rounded-lg px-2.5 py-1 text-white">
+              </div>
+            </div>
+
             <div id="liveDisplayCard" class="bg-zinc-900 border border-themeBorder rounded-2xl overflow-hidden p-4 flex flex-col md:flex-row gap-4 items-center">
               <div class="w-full md:w-56 h-32 bg-zinc-800 rounded-xl overflow-hidden relative flex-shrink-0">
-                <img id="liveThumbnail" src="" class="w-full h-full object-cover hidden">
+                <img id="liveThumbnail" src="" alt="Live Thumbnail" class="w-full h-full object-cover hidden">
                 <div id="liveThumbPlaceholder" class="w-full h-full flex items-center justify-center text-gray-600 text-2xl">
                   <i class="fa-solid fa-tv"></i>
                 </div>
               </div>
               <div class="flex-1 space-y-2 text-center md:text-left w-full">
                 <span id="liveBadge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-zinc-800 text-gray-400">未偵測</span>
-                <h4 id="liveTitle" class="text-base font-bold text-gray-200 line-clamp-2">點擊上方按鈕或確認 YouTube Channel ID</h4>
+                <h4 id="liveTitle" class="text-base font-bold text-gray-200 line-clamp-2">點擊上方重新整理按鈕查詢最新開播狀態</h4>
                 <p id="liveTime" class="text-xs text-gray-400">---</p>
                 <div class="pt-2">
                   <a id="liveLink" href="#" target="_blank" class="inline-flex items-center gap-2 text-xs font-bold bg-accent text-white px-4 py-2 rounded-xl transition opacity-50 pointer-events-none">
-                    <i class="fa-brands fa-youtube"></i>前往頻道/直播間
+                    <i class="fa-solid fa-play"></i>前往直播間 / 頻道
                   </a>
                 </div>
               </div>
@@ -319,7 +336,7 @@
   <!-- 隱藏的名片繪製區域 -->
   <div id="oshiCardRenderArea" class="fixed top-[-9999px] left-[-9999px] w-[500px] bg-themeCard p-6 rounded-3xl border-2 border-themeBorder text-white space-y-4">
     <div class="flex items-center gap-4">
-      <img id="cardAvatar" class="w-20 h-20 rounded-full object-cover border-2 border-accent">
+      <img id="cardAvatar" class="w-20 h-20 rounded-full object-cover border-2 border-accent" alt="Card Avatar">
       <div>
         <h2 id="cardName" class="text-xl font-bold">---</h2>
         <p id="cardDays" class="text-xs text-accent font-semibold mt-1">追推 0 天</p>
@@ -397,7 +414,6 @@
           <input type="text" id="inSocialYT" placeholder="YouTube URL" class="bg-zinc-900 border border-themeBorder rounded-xl px-3 py-1.5 text-white">
           <input type="text" id="inSocialTwitch" placeholder="Twitch URL" class="bg-zinc-900 border border-themeBorder rounded-xl px-3 py-1.5 text-white">
           <input type="text" id="inSocialX" placeholder="X (Twitter) URL" class="bg-zinc-900 border border-themeBorder rounded-xl px-3 py-1.5 text-white">
-          <!-- 改良 Lit.link / IG 彈性欄位 -->
           <input type="text" id="inSocialIG" placeholder="Lit.link / Instagram URL" class="bg-zinc-900 border border-themeBorder rounded-xl px-3 py-1.5 text-white">
         </div>
       </div>
@@ -560,7 +576,11 @@
 
     const initialStore = {
       currentOshiId: null,
-      oshis: []
+      oshis: [],
+      apiKeys: {
+        ytApiKey: '',
+        twitchClientId: ''
+      }
     };
 
     let store = initialStore;
@@ -573,7 +593,6 @@
     function initAuthListener() {
       if (!auth) return;
 
-      // 處理 signInWithRedirect 完返回後的認證結果
       auth.getRedirectResult().then((result) => {
         if (result && result.user) {
           console.log("Redirect login successful:", result.user);
@@ -595,13 +614,12 @@
           document.getElementById('userName').innerText = user.displayName || '使用者';
           document.getElementById('userAvatar').src = user.photoURL || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=100';
 
-          // 從雲端載入資料
           await loadCloudData(user.uid);
         } else {
           loginBtn.classList.remove('hidden');
           userInfo.classList.add('hidden');
           userInfo.classList.remove('flex');
-          loadStore(); // 切回 LocalStorage
+          loadStore();
         }
       });
     }
@@ -613,7 +631,6 @@
       }
       const provider = new firebase.auth.GoogleAuthProvider();
       try {
-        // 使用 signInWithRedirect 避免被瀏覽器跳開視窗阻擋
         await auth.signInWithRedirect(provider);
       } catch (err) {
         console.error("Login redirect failed", err);
@@ -633,7 +650,6 @@
           store = doc.data();
           render();
         } else {
-          // 若無雲端紀錄，將目前本地資料上傳同步
           saveStore();
         }
       } catch (e) {
@@ -643,14 +659,12 @@
     }
 
     function saveStore() {
-      // 1. 本地儲存
       try {
         localStorage.setItem('oshiverse_app_data', JSON.stringify(store));
       } catch (e) {
         alert("儲存警告：圖片檔案過大導致瀏覽器儲存空間超出上限，建議縮小圖片！");
       }
 
-      // 2. 雲端同步 (若已登入)
       if (currentUser && db) {
         db.collection('user_oshis').doc(currentUser.uid).set(store).catch(err => {
           console.error("Firestore sync failed", err);
@@ -666,6 +680,13 @@
         try { store = JSON.parse(saved); } catch (e) { console.error("Parse failed", e); }
       }
       render();
+    }
+
+    function saveApiKeys() {
+      if (!store.apiKeys) store.apiKeys = {};
+      store.apiKeys.ytApiKey = document.getElementById('cfgYtApiKey').value.trim();
+      store.apiKeys.twitchClientId = document.getElementById('cfgTwitchClientId').value.trim();
+      saveStore();
     }
 
     function readFileAsBase64(file) {
@@ -690,6 +711,12 @@
     function render() {
       renderOshiSelector();
       const oshi = getCurrentOshi();
+
+      // 填入 API 金鑰設定
+      if (store.apiKeys) {
+        document.getElementById('cfgYtApiKey').value = store.apiKeys.ytApiKey || '';
+        document.getElementById('cfgTwitchClientId').value = store.apiKeys.twitchClientId || '';
+      }
 
       const emptyNotice = document.getElementById('emptyOshiNotice');
       const profileCard = document.getElementById('oshiProfileCard');
@@ -728,7 +755,7 @@
 
       const weeklyBox = document.getElementById('weeklyScheduleBox');
       if (oshi.weeklyImg) {
-        weeklyBox.innerHTML = `<img src="${oshi.weeklyImg}" class="w-full h-auto object-cover rounded-xl cursor-pointer" onclick="window.open('${oshi.weeklyImg}')">`;
+        weeklyBox.innerHTML = `<img src="${oshi.weeklyImg}" alt="Weekly Schedule" class="w-full h-auto object-cover rounded-xl cursor-pointer" onclick="window.open('${oshi.weeklyImg}')">`;
       } else {
         weeklyBox.innerHTML = `尚無周表圖片，點擊右上方更新`;
       }
@@ -738,7 +765,6 @@
       renderGallery();
     }
 
-    // 4. 社群平台連結（支援 Lit.link 與網址辨識）
     function renderSocialLinks(socials) {
       const container = document.getElementById('socialLinksContainer');
       container.innerHTML = '';
@@ -759,7 +785,6 @@
         }
       });
 
-      // 處理 Lit.link 或 IG
       if (socials.ig) {
         const url = socials.ig;
         const isLitLink = url.includes('lit.link');
@@ -817,7 +842,7 @@
       });
     }
 
-    // 1. 自動抓取頻道資訊（修復解析與多重備援 API 邏輯）
+    // 自動抓取 YouTube 頻道資訊
     async function autoFetchYtChannel() {
       let input = document.getElementById('inYtChannelUrl').value.trim();
       if (!input) return alert('請輸入 YouTube 頻道網址或 @Handle');
@@ -827,7 +852,6 @@
       spinner.classList.remove('hidden');
       fetchBtn.disabled = true;
 
-      // 格式標準化處理
       let targetUrl = input;
       if (input.startsWith('@')) {
         targetUrl = `https://www.youtube.com/${input}`;
@@ -839,7 +863,6 @@
       let fetchedAvatar = '';
       let success = false;
 
-      // 嘗試 1：使用 YouTube oEmbed API
       try {
         const res = await fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent(targetUrl)}&format=json`);
         if (res.ok) {
@@ -849,10 +872,9 @@
           if (fetchedName) success = true;
         }
       } catch (e) {
-        console.warn("oEmbed fetch failed, trying fallback...", e);
+        console.warn("oEmbed fetch failed", e);
       }
 
-      // 嘗試 2：Noembed 備援 API
       if (!success) {
         try {
           const res = await fetch(`https://noembed.com/embed?url=${encodeURIComponent(targetUrl)}`);
@@ -870,25 +892,21 @@
       spinner.classList.add('hidden');
       fetchBtn.disabled = false;
 
-      // 容錯帶入機制
       if (success || fetchedName || fetchedAvatar) {
         if (fetchedName) document.getElementById('inOshiName').value = fetchedName;
         if (fetchedAvatar) document.getElementById('inOshiAvatar').value = fetchedAvatar;
         document.getElementById('inSocialYT').value = targetUrl;
-
-        let msg = '頻道資訊抓取成功！';
-        if (!fetchedAvatar) msg = '已帶入頻道名稱與連結，頭像請手動設定。';
-        alert(msg);
+        alert('頻道資訊抓取成功！');
       } else {
-        // 即使解析失敗，仍帶入產生的 URL，不跳出全盤失敗警告
         document.getElementById('inSocialYT').value = targetUrl;
-        alert('無法自動辨識名稱/頭像，已自動幫您帶入 YouTube 連結，請手動填寫頻道名稱。');
+        alert('已幫您帶入 YouTube 連結，請手動填寫頻道名稱。');
       }
     }
 
+    // 整合 YouTube Data API 與 Twitch API 檢測直播狀態
     async function fetchLiveStatus() {
       const oshi = getCurrentOshi();
-      if (!oshi || !oshi.socials?.yt) return alert('請先設定主推的 YouTube 頻道連結');
+      if (!oshi) return alert('請先建立主推資料');
 
       const badge = document.getElementById('liveBadge');
       const title = document.getElementById('liveTitle');
@@ -897,28 +915,92 @@
       const placeholder = document.getElementById('liveThumbPlaceholder');
 
       badge.innerText = '查詢中...';
+      const ytApiKey = store.apiKeys?.ytApiKey;
+      const twitchClientId = store.apiKeys?.twitchClientId;
 
-      try {
-        const res = await fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent(oshi.socials.yt)}&format=json`);
-        const data = await res.json();
-
-        badge.innerText = '頻道正常連線';
-        title.innerText = `${data.author_name} 的 YouTube 主頁`;
-        document.getElementById('liveTime').innerText = `最新動態請前往 YouTube 觀看`;
-        link.href = oshi.socials.yt;
-        link.classList.remove('opacity-50', 'pointer-events-none');
-
-        if (data.thumbnail_url) {
-          thumb.src = data.thumbnail_url;
-          thumb.classList.remove('hidden');
-          placeholder.classList.add('hidden');
+      // 優先檢測 Twitch API
+      if (oshi.socials?.twitch && twitchClientId) {
+        const channelName = oshi.socials.twitch.split('/').pop();
+        try {
+          const res = await fetch(`https://api.twitch.tv/helix/streams?user_login=${channelName}`, {
+            headers: { 'Client-ID': twitchClientId }
+          });
+          if (res.ok) {
+            const data = await res.json();
+            if (data.data && data.data.length > 0) {
+              const stream = data.data[0];
+              badge.innerText = '🔴 Twitch 直播中';
+              badge.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-red-600 text-white animate-pulse";
+              title.innerText = stream.title;
+              document.getElementById('liveTime').innerText = `觀看人數: ${stream.viewer_count} 人`;
+              link.href = `https://www.twitch.tv/${channelName}`;
+              link.classList.remove('opacity-50', 'pointer-events-none');
+              
+              const imgUrl = stream.thumbnail_url.replace('{width}', '400').replace('{height}', '225');
+              thumb.src = imgUrl;
+              thumb.classList.remove('hidden');
+              placeholder.classList.add('hidden');
+              return;
+            }
+          }
+        } catch(e) {
+          console.warn("Twitch API error", e);
         }
-      } catch (e) {
-        badge.innerText = '無法自動獲取';
-        title.innerText = '點擊下方按鈕直接前往頻道';
-        link.href = oshi.socials.yt;
-        link.classList.remove('opacity-50', 'pointer-events-none');
       }
+
+      // 次之檢測 YouTube Data API v3
+      if (oshi.socials?.yt && ytApiKey) {
+        try {
+          const channelHandle = oshi.socials.yt.split('/').pop().replace('@', '');
+          const searchRes = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&eventType=live&type=video&q=${channelHandle}&key=${ytApiKey}`);
+          if (searchRes.ok) {
+            const searchData = await searchRes.json();
+            if (searchData.items && searchData.items.length > 0) {
+              const liveItem = searchData.items[0];
+              badge.innerText = '🔴 YouTube 直播中';
+              badge.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-red-600 text-white animate-pulse";
+              title.innerText = liveItem.snippet.title;
+              document.getElementById('liveTime').innerText = `開播時間: ${new Date(liveItem.snippet.publishedAt).toLocaleString()}`;
+              link.href = `https://www.youtube.com/watch?v=${liveItem.id.videoId}`;
+              link.classList.remove('opacity-50', 'pointer-events-none');
+
+              thumb.src = liveItem.snippet.thumbnails.high.url;
+              thumb.classList.remove('hidden');
+              placeholder.classList.add('hidden');
+              return;
+            }
+          }
+        } catch(e) {
+          console.warn("YouTube API error", e);
+        }
+      }
+
+      // 無 API Key 或是未開播之備援展示
+      if (oshi.socials?.yt) {
+        try {
+          const res = await fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent(oshi.socials.yt)}&format=json`);
+          const data = await res.json();
+
+          badge.innerText = '頻道連線正常';
+          badge.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-zinc-800 text-gray-400";
+          title.innerText = `${data.author_name} 的 YouTube 頻道`;
+          document.getElementById('liveTime').innerText = `點擊下方按鈕前往觀看最新影片與動態`;
+          link.href = oshi.socials.yt;
+          link.classList.remove('opacity-50', 'pointer-events-none');
+
+          if (data.thumbnail_url) {
+            thumb.src = data.thumbnail_url;
+            thumb.classList.remove('hidden');
+            placeholder.classList.add('hidden');
+          }
+          return;
+        } catch (e) {}
+      }
+
+      badge.innerText = '目前未開播';
+      badge.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-zinc-800 text-gray-400";
+      title.innerText = '暫無正在進行的直播';
+      document.getElementById('liveTime').innerText = '可在上方設定 API 憑證以進行精確偵測';
     }
 
     function renderOshiSelector() {
@@ -950,7 +1032,6 @@
     function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
     function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
 
-    // 3. 表單狀態重置機制 (resetForm)
     function resetOshiModalForm() {
       document.getElementById('inYtChannelUrl').value = '';
       document.getElementById('inOshiName').value = '';
@@ -972,7 +1053,6 @@
       const deleteBtn = document.getElementById('deleteOshiBtn');
       const title = document.getElementById('oshiModalTitle');
 
-      // 每次打開前先徹底重置
       resetOshiModalForm();
 
       if (mode === 'edit') {
@@ -1145,7 +1225,7 @@
               ${items.map(item => `
                 <div class="flex items-center justify-between bg-zinc-900/60 p-2.5 rounded-xl text-xs border border-themeBorder/40">
                   <div class="flex items-center gap-3">
-                    ${item.img ? `<img src="${item.img}" class="w-10 h-10 object-cover rounded-lg border border-themeBorder">` : `<div class="w-10 h-10 bg-zinc-800 rounded-lg flex items-center justify-center text-gray-600"><i class="fa-solid fa-box"></i></div>`}
+                    ${item.img ? `<img src="${item.img}" alt="Goods Image" class="w-10 h-10 object-cover rounded-lg border border-themeBorder">` : `<div class="w-10 h-10 bg-zinc-800 rounded-lg flex items-center justify-center text-gray-600"><i class="fa-solid fa-box"></i></div>`}
                     <div>
                       <div class="font-semibold text-gray-200">${item.name} <span class="text-[10px] text-gray-500">(${item.category || '實體周邊'})</span></div>
                       <div class="text-gray-500 text-[10px]">NT$ ${item.price} ×${item.qty}${item.estDate ? `| 預計: ${item.estDate}` : ''}</div>
@@ -1209,7 +1289,7 @@
       container.innerHTML = itemsWithImg.map(item => `
         <div class="bg-themeCard border border-themeBorder rounded-2xl overflow-hidden group">
           <div class="h-36 bg-zinc-800 overflow-hidden">
-            <img src="${item.img}" class="w-full h-full object-cover group-hover:scale-105 transition">
+            <img src="${item.img}" alt="Gallery Item" class="w-full h-full object-cover group-hover:scale-105 transition">
           </div>
           <div class="p-3 text-xs space-y-1">
             <div class="font-bold text-gray-200 truncate">${item.name}</div>
@@ -1297,7 +1377,7 @@
             <span class="text-[10px] font-bold text-gray-400">${i}</span>
             ${dayEvents.length > 0 ? `
               <div class="w-full flex-1 mt-0.5 rounded bg-red-950/80 border border-red-800/60 flex items-center justify-center overflow-hidden">
-                ${dayEvents[0].img ? `<img src="${dayEvents[0].img}" class="w-full h-full object-cover">` : `<span class="text-[9px] text-accent font-bold truncate px-0.5">${dayEvents[0].title}</span>`}
+                ${dayEvents[0].img ? `<img src="${dayEvents[0].img}" alt="Event Thumb" class="w-full h-full object-cover">` : `<span class="text-[9px] text-accent font-bold truncate px-0.5">${dayEvents[0].title}</span>`}
               </div>
             ` : ''}
           </div>
@@ -1319,6 +1399,40 @@
           `;
         });
       }
+    }
+
+    // 匯出 CSV 記帳表
+    function exportCSV() {
+      const oshi = getCurrentOshi();
+      if (!oshi || !oshi.goods || oshi.goods.length === 0) {
+        return alert('目前沒有周邊消費紀錄可匯出');
+      }
+
+      let csvContent = "\uFEFF"; // UTF-8 BOM，防止 Excel 開啟亂碼
+      csvContent += "主推名稱,活動/管道,商品名稱,消費類別,單價,數量,小計,進度狀態,預計到貨年月\n";
+
+      oshi.goods.forEach(g => {
+        const subtotal = g.price * g.qty;
+        const row = [
+          `"${oshi.name}"`,
+          `"${g.event || ''}"`,
+          `"${g.name || ''}"`,
+          `"${g.category || ''}"`,
+          g.price,
+          g.qty,
+          subtotal,
+          `"${g.status || ''}"`,
+          `"${g.estDate || ''}"`
+        ].join(",");
+        csvContent += row + "\n";
+      });
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `${oshi.name}_周邊消費紀錄_${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
     }
 
     function exportData() {
