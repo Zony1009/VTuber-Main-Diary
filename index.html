@@ -1,1501 +1,265 @@
 <!DOCTYPE html>
 <html lang="zh-TW" class="dark">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OshiVerse - 我的推界專屬日誌</title>
-  
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>幸 Sachi - 推活個人主頁</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Font Awesome Icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Chart.js for Expense Analytics -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <!-- html2canvas for Oshi Card Export -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  
-  <!-- Firebase SDKs (Compat v10) -->
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
-
+  <!-- FontAwesome 圖示庫 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <script>
     tailwind.config = {
       darkMode: 'class',
       theme: {
         extend: {
           colors: {
-            themeDark: '#0f0f11',
-            themeCard: '#18181b',
-            themeBorder: '#27272a',
-            themeAccent: 'var(--oshi-accent, #dc2626)'
+            oshi: {
+              main: '#942228',      // 主題色
+              hover: '#b52c34',     // 懸停顏色
+              dark: '#121212',      // 深色背景
+              card: '#1e1e1e',      // 卡片背景
+              border: '#2d2d2d'     // 邊框顏色
+            }
           }
         }
       }
     }
   </script>
   <style>
-    :root {
-      --oshi-accent: #dc2626;
+    /* 自訂滾動條 */
+    ::-webkit-scrollbar {
+      width: 8px;
     }
-    ::-webkit-scrollbar { width: 6px; height: 6px; }
-    ::-webkit-scrollbar-track { background: #0f0f11; }
-    ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
-    .glass-header { background: rgba(15, 15, 17, 0.85); backdrop-filter: blur(12px); }
-    .bg-accent { background-color: var(--oshi-accent); }
-    .text-accent { color: var(--oshi-accent); }
-    .border-accent { border-color: var(--oshi-accent); }
+    ::-webkit-scrollbar-track {
+      background: #121212;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #2d2d2d;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #942228;
+    }
   </style>
 </head>
-<body class="bg-themeDark text-gray-100 font-sans min-h-screen pb-12">
+<body class="bg-oshi-dark text-gray-100 min-h-screen font-sans antialiased pb-12">
 
-  <!-- 頂部導覽列：主推切換、雲端帳號登入與備份 -->
-  <header class="sticky top-0 z-40 glass-header border-b border-themeBorder px-4 py-3 flex items-center justify-between">
-    <div class="flex items-center gap-3">
-      <select id="oshiSelector" onchange="switchOshi(this.value)" class="bg-themeCard text-white font-bold text-sm md:text-base rounded-xl px-3 py-1.5 border border-themeBorder focus:outline-none focus:border-accent">
-        <!-- 動態選單 -->
-      </select>
-      <button onclick="openOshiModal('add')" class="text-xs bg-accent hover:opacity-90 text-white font-medium px-3 py-1.5 rounded-xl transition flex items-center gap-1 shadow-lg" title="新增主推">
-        <i class="fa-solid fa-plus"></i><span class="hidden sm:inline">新增主推</span>
-      </button>
-    </div>
-
-    <div class="flex items-center gap-2">
-      <!-- Firebase 雲端同步/登入狀態 -->
-      <div id="authContainer" class="flex items-center gap-2">
-        <button id="loginBtn" onclick="loginWithGoogle()" class="text-xs bg-zinc-800 hover:bg-zinc-700 text-white font-medium px-3 py-1.5 rounded-xl border border-themeBorder transition flex items-center gap-1.5">
-          <i class="fa-brands fa-google text-red-500"></i><span class="hidden md:inline">Google 登入/同步</span>
-        </button>
-        <div id="userInfo" class="hidden items-center gap-2 bg-zinc-900 border border-themeBorder rounded-xl px-2.5 py-1">
-          <img id="userAvatar" class="w-5 h-5 rounded-full object-cover" alt="User Avatar">
-          <span id="userName" class="text-xs text-gray-300 font-semibold max-w-[80px] truncate"></span>
-          <button onclick="logoutFirebase()" class="text-xs text-gray-400 hover:text-red-400 ml-1" title="登出"><i class="fa-solid fa-right-from-bracket"></i></button>
-        </div>
+  <!-- 1. 頂部 Banner 區 (Hero Section) -->
+  <header class="relative w-full h-64 md:h-80 overflow-hidden">
+    <!-- Banner 背景圖 (帶有模糊效果) -->
+    <img 
+      src="https://images.unsplash.com/photo-1514525253161-7a46d19cd819?auto=format&fit=crop&w=1200&q=80" 
+      alt="Banner Background" 
+      class="w-full h-full object-cover opacity-40 blur-xs scale-105"
+    />
+    <div class="absolute inset-0 bg-gradient-to-b from-transparent via-oshi-dark/50 to-oshi-dark"></div>
+    
+    <!-- 頂部標題與快速導覽 -->
+    <div class="absolute top-4 left-4 right-4 flex justify-between items-center max-w-4xl mx-auto px-4">
+      <span class="text-xs font-semibold tracking-widest text-oshi-main bg-oshi-main/10 border border-oshi-main/30 px-3 py-1 rounded-full backdrop-blur-md">
+        #OSHI PROFILE
+      </span>
+      <div class="text-xs text-gray-400">
+        <i class="fa-regular fa-clock mr-1"></i>推活進行中
       </div>
-
-      <button onclick="generateOshiCard()" class="text-xs bg-themeCard hover:bg-zinc-800 text-gray-300 px-3 py-1.5 rounded-xl border border-themeBorder transition flex items-center gap-1.5">
-        <i class="fa-solid fa-id-card text-accent"></i><span class="hidden sm:inline">追推名片</span>
-      </button>
-
-      <!-- 匯出與匯入按鈕組 -->
-      <button onclick="exportCSV()" class="text-xs bg-themeCard hover:bg-zinc-800 text-emerald-400 hover:text-emerald-300 p-2 rounded-xl border border-themeBorder transition" title="匯出 CSV 記帳表">
-        <i class="fa-solid fa-file-csv"></i>
-      </button>
-      <button onclick="exportData()" class="text-xs bg-themeCard hover:bg-zinc-800 text-gray-400 hover:text-white p-2 rounded-xl border border-themeBorder transition" title="匯出 JSON 備份">
-        <i class="fa-solid fa-download"></i>
-      </button>
-      <label class="text-xs bg-themeCard hover:bg-zinc-800 text-gray-400 hover:text-white p-2 rounded-xl border border-themeBorder transition cursor-pointer" title="匯入 JSON 備份">
-        <i class="fa-solid fa-upload"></i>
-        <input type="file" id="importFileInput" accept=".json" class="hidden" onchange="importData(event)">
-      </label>
     </div>
   </header>
 
-  <!-- 頁籤導覽 Tab列 -->
-  <nav class="max-w-6xl mx-auto px-4 pt-3">
-    <div class="flex border-b border-themeBorder text-base font-semibold overflow-x-auto">
-      <button id="tabBtn-1" onclick="switchTab(1)" title="主頁與動態" aria-label="主頁與動態" class="flex-1 py-3 min-w-[50px] text-center border-b-2 border-accent text-accent">
-        <i class="fa-solid fa-heart"></i>
-      </button>
-      <button id="tabBtn-2" onclick="switchTab(2)" title="行事曆與紀念日" aria-label="行事曆與紀念日" class="flex-1 py-3 min-w-[50px] text-center border-b-2 border-transparent text-gray-400 hover:text-gray-200">
-        <i class="fa-solid fa-calendar-days"></i>
-      </button>
-      <button id="tabBtn-3" onclick="switchTab(3)" title="周邊與消費分析" aria-label="周邊與消費分析" class="flex-1 py-3 min-w-[50px] text-center border-b-2 border-transparent text-gray-400 hover:text-gray-200">
-        <i class="fa-solid fa-bag-shopping"></i>
-      </button>
-      <button id="tabBtn-4" onclick="switchTab(4)" title="數位展示櫃" aria-label="數位展示櫃" class="flex-1 py-3 min-w-[50px] text-center border-b-2 border-transparent text-gray-400 hover:text-gray-200">
-        <i class="fa-solid fa-images"></i>
-      </button>
-    </div>
-  </nav>
+  <!-- 主要內容區域 -->
+  <main class="max-w-4xl mx-auto px-4 -mt-24 relative z-10 space-y-6">
 
-  <main class="max-w-6xl mx-auto px-4 py-6">
-
-    <!-- ========================================== -->
-    <!-- 分頁 1：主頁與動態 -->
-    <!-- ========================================== -->
-    <section id="tab-1" class="space-y-6">
-      <div class="flex items-center gap-2">
-        <i class="fa-solid fa-heart text-accent text-lg"></i>
-        <h2 class="text-lg font-bold text-white">主頁與動態</h2>
-      </div>
-
-      <div id="emptyOshiNotice" class="hidden bg-themeCard border border-dashed border-zinc-700 rounded-3xl p-12 text-center space-y-4">
-        <div class="w-16 h-16 bg-zinc-800 rounded-full flex items-center justify-center mx-auto text-gray-500 text-2xl">
-          <i class="fa-solid fa-user-plus"></i>
-        </div>
-        <h3 class="text-lg font-bold text-gray-300">目前尚無主推 VTuber 資料</h3>
-        <p class="text-xs text-gray-500 max-w-sm mx-auto">點擊上方「新增主推」按鈕，填入 YouTube 或 Twitch 資訊，開始記錄你的追推日常！</p>
-        <button onclick="openOshiModal('add')" class="bg-accent text-white text-xs font-bold px-4 py-2 rounded-xl">新增主推</button>
-      </div>
-
-      <div id="oshiProfileCard" class="relative rounded-3xl overflow-hidden bg-themeCard border border-themeBorder shadow-2xl">
-        <div id="oshiBanner" class="h-44 md:h-60 w-full bg-cover bg-center relative bg-zinc-800">
-          <div class="absolute inset-0 bg-gradient-to-t from-themeCard via-themeCard/30 to-transparent"></div>
-          <button onclick="openOshiModal('edit')" class="absolute top-4 right-4 bg-black/60 backdrop-blur-md text-xs text-gray-300 px-3 py-1.5 rounded-xl border border-white/10 hover:bg-black/80 transition">
-            <i class="fa-solid fa-pen mr-1"></i>編輯資料
-          </button>
+    <!-- 2. 主推形象卡片 (Oshi Profile Card) -->
+    <section class="bg-oshi-card/90 backdrop-blur-md border border-oshi-border rounded-2xl p-6 shadow-2xl transition-all duration-300">
+      <div class="flex flex-col md:flex-row items-center md:items-start gap-6">
+        
+        <!-- 大頭貼 -->
+        <div class="relative group">
+          <div class="w-28 h-28 md:w-36 md:h-36 rounded-full overflow-hidden border-4 border-oshi-main/80 shadow-lg shadow-oshi-main/20">
+            <img 
+              src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=400&q=80" 
+              alt="幸 Sachi" 
+              class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+            />
+          </div>
+          <span class="absolute bottom-1 right-1 bg-oshi-main text-white text-xs px-2 py-0.5 rounded-full shadow-md">
+            VTuber
+          </span>
         </div>
 
-        <div class="relative px-6 pb-6 -mt-16 flex flex-col md:flex-row items-center md:items-end gap-5 text-center md:text-left">
-          <img id="oshiAvatar" src="" alt="Oshi Avatar" class="w-28 h-28 md:w-32 md:h-32 rounded-full border-4 border-themeCard object-cover bg-zinc-800 shadow-xl">
-          
-          <div class="flex-1 space-y-2">
-            <div class="flex flex-col md:flex-row md:items-center gap-2">
-              <h1 id="oshiName" class="text-2xl md:text-3xl font-extrabold text-white">---</h1>
-              <span id="oshiDays" class="inline-flex items-center justify-center px-3 py-1 rounded-full text-xs font-semibold bg-red-950/80 text-accent border border-red-800/40 self-center md:self-auto">
-                <i class="fa-solid fa-heart mr-1.5 text-accent"></i>追推 0 天
+        <!-- 角色資訊細節 -->
+        <div class="flex-1 text-center md:text-left space-y-3">
+          <div>
+            <h1 class="text-2xl md:text-3xl font-bold text-white tracking-wide">幸 Sachi</h1>
+            <p class="text-sm text-gray-400 mt-1">「今夜も一緒に歌いましょう！」</p>
+          </div>
+
+          <!-- 關鍵數據面板 (生日 / 推活天數) -->
+          <div class="grid grid-cols-2 gap-3 max-w-md my-4">
+            <div class="bg-oshi-dark/60 border border-oshi-border p-3 rounded-xl text-center md:text-left">
+              <span class="text-xs text-gray-400 block mb-0.5">
+                <i class="fa-solid fa-cake-candles text-oshi-main mr-1"></i>生日
+              </span>
+              <span class="text-sm font-semibold text-gray-200">5月10日</span>
+            </div>
+            <div class="bg-oshi-dark/60 border border-oshi-border p-3 rounded-xl text-center md:text-left">
+              <span class="text-xs text-gray-400 block mb-0.5">
+                <i class="fa-solid fa-heart text-oshi-main mr-1"></i>開始追本命的日子
+              </span>
+              <span class="text-sm font-semibold text-gray-200" id="daysCounter">計算中...</span>
+            </div>
+          </div>
+
+          <!-- 簡介與 Tag -->
+          <p class="text-sm text-gray-300 leading-relaxed">
+            主要以歌回、雜談與遊戲實況為主的個人勢 VTuber。喜歡古典歌劇與流行搖滾音樂，每週定期開播！
+          </p>
+          <div class="flex flex-wrap justify-center md:justify-start gap-2 pt-1">
+            <span class="bg-oshi-dark text-xs text-gray-400 px-2.5 py-1 rounded-md border border-oshi-border">#歌枠</span>
+            <span class="bg-oshi-dark text-xs text-gray-400 px-2.5 py-1 rounded-md border border-oshi-border">#幸SachiLive</span>
+            <span class="bg-oshi-dark text-xs text-gray-400 px-2.5 py-1 rounded-md border border-oshi-border">#SachiArt</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. 社群連結按鈕區 (Social Links) -->
+    <section class="space-y-3">
+      <h2 class="text-base font-semibold text-gray-300 flex items-center px-1">
+        <i class="fa-solid fa-link text-oshi-main mr-2"></i>社群與頻道連結
+      </h2>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <!-- YouTube -->
+        <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-between p-4 bg-oshi-card border border-oshi-border rounded-xl hover:border-red-600/50 hover:bg-oshi-card/80 transition-all group">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-lg bg-red-600/10 flex items-center justify-center text-red-500 group-hover:scale-110 transition-transform">
+              <i class="fa-brands fa-youtube text-xl"></i>
+            </div>
+            <div>
+              <div class="text-sm font-semibold text-white">YouTube 頻道</div>
+              <div class="text-xs text-gray-400">幸Sachi Channel (53.8k 訂閱)</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-xs text-gray-500 group-hover:text-white transition-colors"></i>
+        </a>
+
+        <!-- Twitch -->
+        <a href="https://twitch.tv" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-between p-4 bg-oshi-card border border-oshi-border rounded-xl hover:border-purple-600/50 hover:bg-oshi-card/80 transition-all group">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-lg bg-purple-600/10 flex items-center justify-center text-purple-400 group-hover:scale-110 transition-transform">
+              <i class="fa-brands fa-twitch text-xl"></i>
+            </div>
+            <div>
+              <div class="text-sm font-semibold text-white">Twitch 直播台</div>
+              <div class="text-xs text-gray-400">幸さち_序境</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-xs text-gray-500 group-hover:text-white transition-colors"></i>
+        </a>
+
+        <!-- X (Twitter) -->
+        <a href="https://x.com" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-between p-4 bg-oshi-card border border-oshi-border rounded-xl hover:border-gray-400/50 hover:bg-oshi-card/80 transition-all group">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-lg bg-gray-800 flex items-center justify-center text-white group-hover:scale-110 transition-transform">
+              <i class="fa-brands fa-x-twitter text-xl"></i>
+            </div>
+            <div>
+              <div class="text-sm font-semibold text-white">X (Twitter)</div>
+              <div class="text-xs text-gray-400">@sachi_official</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-xs text-gray-500 group-hover:text-white transition-colors"></i>
+        </a>
+
+        <!-- 官方周邊商店 -->
+        <a href="#" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-between p-4 bg-oshi-card border border-oshi-border rounded-xl hover:border-oshi-main/50 hover:bg-oshi-card/80 transition-all group">
+          <div class="flex items-center space-x-3">
+            <div class="w-10 h-10 rounded-lg bg-oshi-main/10 flex items-center justify-center text-oshi-main group-hover:scale-110 transition-transform">
+              <i class="fa-solid fa-store text-xl"></i>
+            </div>
+            <div>
+              <div class="text-sm font-semibold text-white">BOOTH 官方商店</div>
+              <div class="text-xs text-gray-400">購買實體周邊與聲音包</div>
+            </div>
+          </div>
+          <i class="fa-solid fa-chevron-right text-xs text-gray-500 group-hover:text-white transition-colors"></i>
+        </a>
+      </div>
+    </section>
+
+    <!-- 4. 直播預告與最新影片區 (Live Stream / Videos) -->
+    <section class="space-y-3">
+      <div class="flex justify-between items-center px-1">
+        <h2 class="text-base font-semibold text-gray-300 flex items-center">
+          <i class="fa-solid fa-video text-oshi-main mr-2"></i>最新直播與存檔
+        </h2>
+        <span class="text-xs text-gray-500">自動更新</span>
+      </div>
+
+      <!-- 直播卡片 -->
+      <div class="bg-oshi-card border border-oshi-border rounded-2xl overflow-hidden shadow-lg">
+        <div class="relative aspect-video w-full overflow-hidden bg-black/50">
+          <img 
+            src="https://images.unsplash.com/photo-1511671782779-c97d3d27a1d4?auto=format&fit=crop&w=800&q=80" 
+            alt="Stream Thumbnail" 
+            class="w-full h-full object-cover"
+          />
+          <div class="absolute top-3 left-3 bg-oshi-main text-white text-xs font-bold px-2.5 py-1 rounded-md shadow-md flex items-center">
+            <span class="w-2 h-2 rounded-full bg-white animate-pulse mr-1.5"></span>
+            週年回顧 / 歌枠
+          </div>
+        </div>
+
+        <div class="p-5 space-y-4">
+          <div>
+            <span class="text-xs text-gray-400 font-mono">1 天前發布</span>
+            <h3 class="text-base md:text-lg font-bold text-white mt-1 leading-snug">
+              【一周年回顧】隔了一年再來唱同樣的歌，還有我想唱但最後沒唱的歌
+            </h3>
+          </div>
+
+          <div class="flex items-center justify-between pt-2 border-t border-oshi-border">
+            <div class="flex items-center space-x-2">
+              <span class="text-xs text-gray-400">平台:</span>
+              <span class="text-xs text-red-500 font-semibold flex items-center">
+                <i class="fa-brands fa-youtube mr-1"></i> YouTube
               </span>
             </div>
-            <div class="flex flex-wrap justify-center md:justify-start gap-4 text-xs text-gray-400 pt-1">
-              <span><i class="fa-solid fa-cake-candles mr-1 text-accent"></i>生日: <strong id="oshiBirthday" class="text-gray-200">--/--</strong></span>
-              <span><i class="fa-solid fa-rocket mr-1 text-accent"></i>出道日: <strong id="oshiDebut" class="text-gray-200">----/--/--</strong></span>
-              <span><i class="fa-solid fa-clock mr-1 text-accent"></i>出道歷時: <strong id="oshiDebutMonths" class="text-gray-200">0 個月</strong></span>
-            </div>
+            
+            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" 
+               class="inline-flex items-center px-4 py-2 rounded-xl bg-oshi-main hover:bg-oshi-hover text-white text-xs font-medium transition-colors shadow-md">
+              <i class="fa-solid fa-play mr-1.5"></i> 前往觀看
+            </a>
           </div>
         </div>
-
-        <div id="socialLinksContainer" class="px-6 py-4 bg-zinc-900/60 border-t border-themeBorder/60 flex flex-wrap gap-2.5 justify-center md:justify-start"></div>
       </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="space-y-6">
-          <!-- 紀念日倒數卡片 -->
-          <div class="bg-themeCard border border-themeBorder rounded-2xl p-4 space-y-3">
-            <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
-              <i class="fa-solid fa-hourglass-half text-accent"></i>紀念日倒數
-            </h3>
-            <div id="anniversaryBox" class="space-y-2 text-xs">
-              <!-- 動態內容 -->
-            </div>
-          </div>
-
-          <!-- 週表卡片 -->
-          <div class="bg-themeCard border border-themeBorder rounded-2xl p-4 space-y-3">
-            <div class="flex items-center justify-between">
-              <h3 class="text-xs font-bold text-gray-400 uppercase tracking-wider flex items-center gap-2">
-                <i class="fa-solid fa-calendar-week text-accent"></i>本週行程周表
-              </h3>
-              <button onclick="openWeeklyModal()" class="text-xs text-accent hover:underline">更新周表</button>
-            </div>
-            <div id="weeklyScheduleBox" class="rounded-xl overflow-hidden bg-zinc-900 border border-themeBorder min-h-[160px] flex items-center justify-center text-xs text-gray-500 p-2">
-              尚無周表圖片，點擊右上方更新
-            </div>
-          </div>
-        </div>
-
-        <!-- 右側：直播與頻道動態（支援 YouTube Data API 與 Twitch API） -->
-        <div class="md:col-span-2 space-y-6">
-          <div class="bg-themeCard border border-themeBorder rounded-2xl p-5 space-y-4">
-            <div class="flex items-center justify-between">
-              <h3 class="text-sm font-bold text-white flex items-center gap-2">
-                <i class="fa-solid fa-tower-broadcast text-accent"></i>當前直播與頻道動態
-              </h3>
-              <button onclick="fetchLiveStatus()" class="px-2.5 py-1 rounded-xl text-xs font-bold bg-zinc-800 text-gray-300 hover:text-white transition">
-                <i class="fa-solid fa-rotate-right mr-1"></i>重新整理
-              </button>
-            </div>
-
-            <!-- API Key 快速設定視窗區塊 -->
-            <div class="p-3 bg-zinc-900/80 rounded-xl border border-themeBorder text-xs space-y-2">
-              <div class="font-bold text-gray-400 flex items-center gap-1.5">
-                <i class="fa-solid fa-key text-amber-400"></i> API 憑證設定 (進階開播狀態偵測)
-              </div>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
-                <input type="text" id="cfgYtApiKey" placeholder="YouTube Data API Key" onblur="saveApiKeys()" class="bg-themeCard border border-themeBorder rounded-lg px-2.5 py-1 text-white">
-                <input type="text" id="cfgTwitchClientId" placeholder="Twitch Client ID" onblur="saveApiKeys()" class="bg-themeCard border border-themeBorder rounded-lg px-2.5 py-1 text-white">
-              </div>
-            </div>
-
-            <div id="liveDisplayCard" class="bg-zinc-900 border border-themeBorder rounded-2xl overflow-hidden p-4 flex flex-col md:flex-row gap-4 items-center">
-              <div class="w-full md:w-56 h-32 bg-zinc-800 rounded-xl overflow-hidden relative flex-shrink-0">
-                <img id="liveThumbnail" src="" alt="Live Thumbnail" class="w-full h-full object-cover hidden">
-                <div id="liveThumbPlaceholder" class="w-full h-full flex items-center justify-center text-gray-600 text-2xl">
-                  <i class="fa-solid fa-tv"></i>
-                </div>
-              </div>
-              <div class="flex-1 space-y-2 text-center md:text-left w-full">
-                <span id="liveBadge" class="px-2 py-0.5 rounded text-[10px] font-bold bg-zinc-800 text-gray-400">未偵測</span>
-                <h4 id="liveTitle" class="text-base font-bold text-gray-200 line-clamp-2">點擊上方重新整理按鈕查詢最新開播狀態</h4>
-                <p id="liveTime" class="text-xs text-gray-400">---</p>
-                <div class="pt-2">
-                  <a id="liveLink" href="#" target="_blank" class="inline-flex items-center gap-2 text-xs font-bold bg-accent text-white px-4 py-2 rounded-xl transition opacity-50 pointer-events-none">
-                    <i class="fa-solid fa-play"></i>前往直播間 / 頻道
-                  </a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- ========================================== -->
-    <!-- 分頁 2：歷史行事曆與大事記 -->
-    <!-- ========================================== -->
-    <section id="tab-2" class="space-y-6 hidden">
-      <div class="flex items-center justify-between gap-3">
-        <div class="flex items-center gap-2">
-          <i class="fa-solid fa-calendar-days text-accent text-lg"></i>
-          <div>
-            <h2 class="text-lg font-bold text-white">行事曆與紀念日</h2>
-            <p class="text-xs text-gray-400">登錄大事記、演唱會，或自動連動周邊預計到貨時間</p>
-          </div>
-        </div>
-        <button onclick="openCalendarEventModal()" class="bg-accent text-white text-xs font-bold px-3.5 py-2 rounded-xl transition whitespace-nowrap shrink-0">
-          新增事件
-        </button>
-      </div>
-
-      <div class="bg-themeCard border border-themeBorder rounded-2xl p-4 md:p-6 shadow-xl space-y-4">
-        <div class="flex items-center justify-between border-b border-themeBorder pb-4">
-          <button onclick="changeMonth(-1)" class="p-2 bg-zinc-800 hover:bg-zinc-700 rounded-xl text-gray-300 text-xs"><i class="fa-solid fa-chevron-left"></i> 上個月</button>
-          <span id="calendarMonthTitle" class="font-extrabold text-base md:text-lg text-white">2026 年 10 月</span>
-          <button onclick="changeMonth(1)" class="p-2 bg-zinc-800 hover:bg-zinc-700 rounded-xl text-gray-300 text-xs">下個月 <i class="fa-solid fa-chevron-right"></i></button>
-        </div>
-
-        <div class="grid grid-cols-7 gap-1 text-center text-xs font-bold text-gray-400 py-1">
-          <div class="text-red-400">日</div><div>一</div><div>二</div><div>三</div><div>四</div><div>五</div><div class="text-red-400">六</div>
-        </div>
-
-        <div id="calendarGrid" class="grid grid-cols-7 gap-1.5 md:gap-2"></div>
-      </div>
-
-      <div class="bg-themeCard border border-themeBorder rounded-2xl p-5 space-y-3">
-        <h3 class="text-xs font-bold text-gray-400 uppercase">本月紀錄與預計到貨明細</h3>
-        <div id="calendarEventsList" class="space-y-2"></div>
-      </div>
-    </section>
-
-    <!-- ========================================== -->
-    <!-- 分頁 3：周邊與消費分析 -->
-    <!-- ========================================== -->
-    <section id="tab-3" class="space-y-6 hidden">
-      <div class="flex items-center gap-2">
-        <i class="fa-solid fa-bag-shopping text-accent text-lg"></i>
-        <h2 class="text-lg font-bold text-white">周邊與消費分析</h2>
-      </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-        <div class="bg-themeCard border border-themeBorder p-4 rounded-2xl">
-          <div class="text-xs text-gray-400 mb-1">追星總支出</div>
-          <div id="statTotalSpend" class="text-2xl font-black text-accent">NT$ 0</div>
-        </div>
-        <div class="bg-themeCard border border-themeBorder p-4 rounded-2xl">
-          <div class="text-xs text-gray-400 mb-1">未到貨/預購總額</div>
-          <div id="statPendingSpend" class="text-2xl font-black text-amber-400">NT$ 0</div>
-        </div>
-        <div class="bg-themeCard border border-themeBorder p-4 rounded-2xl">
-          <div class="text-xs text-gray-400 mb-1">記錄商品總筆數</div>
-          <div id="statTotalItems" class="text-2xl font-black text-emerald-400">0 筆</div>
-        </div>
-      </div>
-
-      <div class="bg-themeCard border border-themeBorder rounded-2xl p-5 space-y-3">
-        <h3 class="text-xs font-bold text-gray-400 uppercase">消費類型比例圖表</h3>
-        <div class="h-48 flex justify-center">
-          <canvas id="expenseChart"></canvas>
-        </div>
-      </div>
-
-      <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3">
-        <div class="flex border border-themeBorder bg-themeCard rounded-xl p-1 text-xs font-semibold overflow-x-auto">
-          <button onclick="filterGoods('全部')" class="goods-filter-btn px-3 py-1.5 rounded-lg bg-zinc-800 text-white">全部</button>
-          <button onclick="filterGoods('預購中')" class="goods-filter-btn px-3 py-1.5 rounded-lg text-gray-400 hover:text-white">預購中</button>
-          <button onclick="filterGoods('已發貨')" class="goods-filter-btn px-3 py-1.5 rounded-lg text-gray-400 hover:text-white">已發貨</button>
-          <button onclick="filterGoods('已入手')" class="goods-filter-btn px-3 py-1.5 rounded-lg text-gray-400 hover:text-white">已入手</button>
-        </div>
-
-        <button onclick="openGoodsModal()" class="bg-accent hover:opacity-90 text-white text-xs font-bold px-4 py-2.5 rounded-xl transition flex items-center justify-center gap-1.5">
-          <i class="fa-solid fa-plus"></i>新增記帳項目
-        </button>
-      </div>
-
-      <div class="bg-themeCard border border-themeBorder rounded-2xl overflow-hidden shadow-xl">
-        <div id="goodsListContainer" class="divide-y divide-themeBorder"></div>
-      </div>
-    </section>
-
-    <!-- ========================================== -->
-    <!-- 分頁 4：數位展示櫃 (Gallery) -->
-    <!-- ========================================== -->
-    <section id="tab-4" class="space-y-6 hidden">
-      <div class="flex items-center gap-2">
-        <i class="fa-solid fa-images text-accent text-lg"></i>
-        <div>
-          <h2 class="text-lg font-bold text-white">數位展示櫃</h2>
-          <p class="text-xs text-gray-400">視覺化展示所有已入手珍藏與戰利品照片</p>
-        </div>
-      </div>
-      <div id="galleryContainer" class="grid grid-cols-2 md:grid-cols-4 gap-4"></div>
     </section>
 
   </main>
 
-  <!-- 隱藏的名片繪製區域 -->
-  <div id="oshiCardRenderArea" class="fixed top-[-9999px] left-[-9999px] w-[500px] bg-themeCard p-6 rounded-3xl border-2 border-themeBorder text-white space-y-4">
-    <div class="flex items-center gap-4">
-      <img id="cardAvatar" class="w-20 h-20 rounded-full object-cover border-2 border-accent" alt="Card Avatar">
-      <div>
-        <h2 id="cardName" class="text-xl font-bold">---</h2>
-        <p id="cardDays" class="text-xs text-accent font-semibold mt-1">追推 0 天</p>
-      </div>
-    </div>
-    <div class="grid grid-cols-2 gap-2 text-xs bg-zinc-900/80 p-3 rounded-xl border border-themeBorder">
-      <div>生日: <span id="cardBirthday" class="font-bold">--/--</span></div>
-      <div>出道日: <span id="cardDebut" class="font-bold">----/--/--</span></div>
-      <div>收藏筆數: <span id="cardGoodsCount" class="font-bold">0 筆</span></div>
-      <div>周邊總和: <span id="cardTotalSpend" class="font-bold">NT$ 0</span></div>
-    </div>
-    <div class="text-[10px] text-gray-500 text-center">Generated by OshiVerse - 我的推界專屬日誌</div>
-  </div>
+  <!-- 頁尾 -->
+  <footer class="mt-12 text-center text-xs text-gray-500 space-y-1">
+    <p>© 2026 OSHI Fan Site. Powered by Tailwind CSS.</p>
+    <p>Designed for GitHub & Vercel Deployment</p>
+  </footer>
 
-  <!-- ========================================== -->
-  <!-- 彈出視窗 (Modals) -->
-  <!-- ========================================== -->
-
-  <!-- Modal 1: 編輯/新增主推 -->
-  <div id="oshiModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-themeCard border border-themeBorder w-full max-w-lg rounded-3xl p-6 space-y-4 max-h-[90vh] overflow-y-auto">
-      <h3 id="oshiModalTitle" class="text-lg font-bold text-white">新增主推 VTuber</h3>
-      <div class="space-y-3 text-xs">
-        <div class="bg-zinc-900 p-3 rounded-xl border border-themeBorder space-y-2">
-          <label class="block font-bold text-accent">YouTube 頻道網址 / @Handle / ID</label>
-          <div class="flex gap-2">
-            <input type="text" id="inYtChannelUrl" placeholder="例如：https://www.youtube.com/@SachiTeRaz 或 @SachiTeRaz" class="flex-1 bg-themeCard border border-themeBorder rounded-xl px-3 py-1.5 text-white">
-            <button id="fetchYtBtn" onclick="autoFetchYtChannel()" class="bg-accent text-white px-3 py-1.5 rounded-xl font-bold transition flex items-center gap-1">
-              <span id="fetchSpinner" class="hidden"><i class="fa-solid fa-spinner fa-spin"></i></span>
-              <span>自動抓取</span>
-            </button>
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-gray-400 mb-1">主推名稱</label>
-          <input type="text" id="inOshiName" placeholder="例如：幸Sachi" class="w-full bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
-        </div>
-
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-gray-400 mb-1">代表色 (Accent Color)</label>
-            <input type="color" id="inOshiColor" value="#dc2626" class="w-full h-9 bg-zinc-900 border border-themeBorder rounded-xl p-1 cursor-pointer">
-          </div>
-          <div>
-            <label class="block text-gray-400 mb-1">生日 (MM/DD)</label>
-            <input type="text" id="inOshiBirthday" placeholder="10/03" class="w-full bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-gray-400 mb-1">出道日期</label>
-          <input type="date" id="inOshiDebut" class="w-full bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
-        </div>
-
-        <div>
-          <label class="block text-gray-400 mb-1">頭像圖片</label>
-          <div class="flex items-center gap-2">
-            <input type="file" id="fileOshiAvatar" accept="image/*" class="w-full text-gray-400 bg-zinc-900 border border-themeBorder rounded-xl file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-zinc-800 file:text-gray-200">
-            <input type="text" id="inOshiAvatar" placeholder="或 URL" class="w-1/2 bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-gray-400 mb-1">Banner 封面圖片</label>
-          <div class="flex items-center gap-2">
-            <input type="file" id="fileOshiBanner" accept="image/*" class="w-full text-gray-400 bg-zinc-900 border border-themeBorder rounded-xl file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-zinc-800 file:text-gray-200">
-            <input type="text" id="inOshiBanner" placeholder="或 URL" class="w-1/2 bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
-          </div>
-        </div>
-
-        <hr class="border-themeBorder">
-        <h4 class="font-bold text-gray-300">社群平台連結 (留空自動隱藏)</h4>
-        <div class="grid grid-cols-2 gap-2">
-          <input type="text" id="inSocialYT" placeholder="YouTube URL" class="bg-zinc-900 border border-themeBorder rounded-xl px-3 py-1.5 text-white">
-          <input type="text" id="inSocialTwitch" placeholder="Twitch URL" class="bg-zinc-900 border border-themeBorder rounded-xl px-3 py-1.5 text-white">
-          <input type="text" id="inSocialX" placeholder="X (Twitter) URL" class="bg-zinc-900 border border-themeBorder rounded-xl px-3 py-1.5 text-white">
-          <input type="text" id="inSocialIG" placeholder="Lit.link / Instagram URL" class="bg-zinc-900 border border-themeBorder rounded-xl px-3 py-1.5 text-white">
-        </div>
-      </div>
-
-      <div class="flex justify-between items-center pt-2">
-        <button id="deleteOshiBtn" onclick="deleteCurrentOshi()" class="px-3 py-2 bg-red-950/60 hover:bg-red-900 text-red-400 rounded-xl text-xs font-semibold border border-red-800/50 hidden">
-          <i class="fa-solid fa-trash mr-1"></i>刪除此主推
-        </button>
-        <div class="flex gap-2 ml-auto">
-          <button onclick="closeModal('oshiModal')" class="px-4 py-2 bg-zinc-800 text-gray-300 rounded-xl text-xs">取消</button>
-          <button onclick="saveOshiData()" class="px-4 py-2 bg-accent text-white rounded-xl text-xs font-bold">儲存設定</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal 2: 周表圖片 -->
-  <div id="weeklyModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-themeCard border border-themeBorder w-full max-w-md rounded-3xl p-6 space-y-4">
-      <h3 class="text-lg font-bold text-white">更新本週行程周表</h3>
-      <div class="text-xs space-y-3">
-        <input type="file" id="fileWeeklyImg" accept="image/*" class="w-full text-gray-400 bg-zinc-900 border border-themeBorder rounded-xl file:mr-3 file:py-2 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-zinc-800 file:text-gray-200">
-        <div class="text-center text-gray-500 font-bold my-1">- 或 -</div>
-        <input type="text" id="inWeeklyImg" placeholder="輸入圖片網址 URL" class="w-full bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
-      </div>
-      <div class="flex justify-end gap-2 pt-2">
-        <button onclick="closeModal('weeklyModal')" class="px-4 py-2 bg-zinc-800 text-gray-300 rounded-xl text-xs">取消</button>
-        <button onclick="saveWeeklyImg()" class="px-4 py-2 bg-accent text-white rounded-xl text-xs font-bold">儲存</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal 3: 周邊記帳 -->
-  <div id="goodsModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-themeCard border border-themeBorder w-full max-w-md rounded-3xl p-6 space-y-4 max-h-[90vh] overflow-y-auto">
-      <h3 class="text-lg font-bold text-white">新增周邊消費紀錄</h3>
-      <div class="space-y-3 text-xs">
-        <div>
-          <label class="block text-gray-400 mb-1">管道/活動名稱</label>
-          <input type="text" id="inGoodsEvent" placeholder="例如：安利美特 / 週年快閃店" class="w-full bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
-        </div>
-        <div>
-          <label class="block text-gray-400 mb-1">商品名稱</label>
-          <input type="text" id="inGoodsName" placeholder="例如：壓克力立牌" class="w-full bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
-        </div>
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-gray-400 mb-1">消費類別</label>
-            <select id="inGoodsCategory" class="w-full bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
-              <option value="實體周邊">實體周邊</option>
-              <option value="數位/語音">數位/語音</option>
-              <option value="SuperChat/SC">SuperChat/SC</option>
-              <option value="門票/演唱會">門票/演唱會</option>
-              <option value="同人/二手">同人/二手</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-gray-400 mb-1">進度狀態</label>
-            <select id="inGoodsStatus" class="w-full bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
-              <option value="預購中">預購中</option>
-              <option value="已發貨">已發貨</option>
-              <option value="已入手">已入手</option>
-            </select>
-          </div>
-        </div>
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-gray-400 mb-1">單價 (NT$)</label>
-            <input type="number" id="inGoodsPrice" value="0" class="w-full bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
-          </div>
-          <div>
-            <label class="block text-gray-400 mb-1">數量</label>
-            <input type="number" id="inGoodsQty" value="1" class="w-full bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
-          </div>
-        </div>
-        <div>
-          <label class="block text-gray-400 mb-1">預計發售/到貨年月 (選擇性)</label>
-          <input type="month" id="inGoodsEstDate" class="w-full bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
-        </div>
-        <div>
-          <label class="block text-gray-400 mb-1">商品圖片/開箱照</label>
-          <div class="flex items-center gap-2">
-            <input type="file" id="fileGoodsImg" accept="image/*" class="w-full text-gray-400 bg-zinc-900 border border-themeBorder rounded-xl file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-zinc-800 file:text-gray-200">
-            <input type="text" id="inGoodsImg" placeholder="或 URL" class="w-1/2 bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
-          </div>
-        </div>
-      </div>
-      <div class="flex justify-end gap-2 pt-2">
-        <button onclick="closeModal('goodsModal')" class="px-4 py-2 bg-zinc-800 text-gray-300 rounded-xl text-xs">取消</button>
-        <button onclick="saveGoodsItem()" class="px-4 py-2 bg-accent text-white rounded-xl text-xs font-bold">儲存紀錄</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Modal 4: 新增行事曆事件 -->
-  <div id="calendarEventModal" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-themeCard border border-themeBorder w-full max-w-md rounded-3xl p-6 space-y-4">
-      <h3 class="text-lg font-bold text-white">新增歷史事件/大事記</h3>
-      <div class="space-y-3 text-xs">
-        <div>
-          <label class="block text-gray-400 mb-1">事件名稱</label>
-          <input type="text" id="inEventTitle" placeholder="例如：10萬訂閱耐久 / 週年 live" class="w-full bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
-        </div>
-        <div class="grid grid-cols-2 gap-3">
-          <div>
-            <label class="block text-gray-400 mb-1">事件日期</label>
-            <input type="date" id="inEventDate" class="w-full bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
-          </div>
-          <div>
-            <label class="block text-gray-400 mb-1">事件標籤</label>
-            <select id="inEventTag" class="w-full bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
-              <option value="里程碑">里程碑</option>
-              <option value="歌回/Live">歌回/Live</option>
-              <option value="新衣裝">新衣裝</option>
-              <option value="連動">連動</option>
-              <option value="其他">其他</option>
-            </select>
-          </div>
-        </div>
-        <div>
-          <label class="block text-gray-400 mb-1">宣傳圖/現場相片</label>
-          <div class="flex items-center gap-2">
-            <input type="file" id="fileEventImg" accept="image/*" class="w-full text-gray-400 bg-zinc-900 border border-themeBorder rounded-xl file:mr-3 file:py-1.5 file:px-3 file:rounded-lg file:border-0 file:text-xs file:bg-zinc-800 file:text-gray-200">
-            <input type="text" id="inEventImg" placeholder="或 URL" class="w-1/2 bg-zinc-900 border border-themeBorder rounded-xl px-3 py-2 text-white">
-          </div>
-        </div>
-      </div>
-      <div class="flex justify-end gap-2 pt-2">
-        <button onclick="closeModal('calendarEventModal')" class="px-4 py-2 bg-zinc-800 text-gray-300 rounded-xl text-xs">取消</button>
-        <button onclick="saveCalendarEvent()" class="px-4 py-2 bg-accent text-white rounded-xl text-xs font-bold">新增事件</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- JavaScript 核心邏輯 -->
+  <!-- 簡易 JavaScript：動態計算追星天數 -->
   <script>
-    // --- Firebase 雲端配置 ---
-    const firebaseConfig = {
-      apiKey: "AIzaSyDemoConfigKeyForOshiVerse001",
-      authDomain: "oshiverse-app.firebaseapp.com",
-      projectId: "oshiverse-app",
-      storageBucket: "oshiverse-app.appspot.com",
-      messagingSenderId: "1234567890",
-      appId: "1:1234567890:web:abcdef123456"
-    };
-
-    let db = null;
-    let auth = null;
-    let currentUser = null;
-
-    try {
-      if (typeof firebase !== 'undefined' && firebase.initializeApp) {
-        firebase.initializeApp(firebaseConfig);
-        auth = firebase.auth();
-        db = firebase.firestore();
-      }
-    } catch(e) {
-      console.warn("Firebase 初始化提示：使用模擬/本地模式", e);
-    }
-
-    const initialStore = {
-      currentOshiId: null,
-      oshis: [],
-      apiKeys: {
-        ytApiKey: '',
-        twitchClientId: ''
-      }
-    };
-
-    let store = initialStore;
-    let currentFilterStatus = '全部';
-    let currentCalendarDate = new Date();
-    let currentModalMode = 'add';
-    let chartInstance = null;
-
-    // --- Firebase Auth & Cloud Sync ---
-    function initAuthListener() {
-      if (!auth) return;
-
-      auth.getRedirectResult().then((result) => {
-        if (result && result.user) {
-          console.log("Redirect login successful:", result.user);
-        }
-      }).catch((error) => {
-        console.error("Redirect login error:", error);
-        alert("Google 登入失敗: " + error.message);
-      });
-
-      auth.onAuthStateChanged(async (user) => {
-        currentUser = user;
-        const loginBtn = document.getElementById('loginBtn');
-        const userInfo = document.getElementById('userInfo');
-
-        if (user) {
-          loginBtn.classList.add('hidden');
-          userInfo.classList.remove('hidden');
-          userInfo.classList.add('flex');
-          document.getElementById('userName').innerText = user.displayName || '使用者';
-          document.getElementById('userAvatar').src = user.photoURL || 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?q=80&w=100';
-
-          await loadCloudData(user.uid);
-        } else {
-          loginBtn.classList.remove('hidden');
-          userInfo.classList.add('hidden');
-          userInfo.classList.remove('flex');
-          loadStore();
-        }
-      });
-    }
-
-    async function loginWithGoogle() {
-      if (!auth) {
-        alert("目前未設定有效的 Firebase API 憑證，系統將繼續以本機 LocalStorage 儲存資料。");
-        return;
-      }
-      const provider = new firebase.auth.GoogleAuthProvider();
-      try {
-        await auth.signInWithRedirect(provider);
-      } catch (err) {
-        console.error("Login redirect failed", err);
-        alert("Google 登入觸發失敗: " + err.message);
-      }
-    }
-
-    function logoutFirebase() {
-      if (auth) auth.signOut();
-    }
-
-    async function loadCloudData(uid) {
-      if (!db) return;
-      try {
-        const doc = await db.collection('user_oshis').doc(uid).get();
-        if (doc.exists) {
-          store = doc.data();
-          render();
-        } else {
-          saveStore();
-        }
-      } catch (e) {
-        console.error("Cloud fetch error:", e);
-        loadStore();
-      }
-    }
-
-    function saveStore() {
-      try {
-        localStorage.setItem('oshiverse_app_data', JSON.stringify(store));
-      } catch (e) {
-        alert("儲存警告：圖片檔案過大導致瀏覽器儲存空間超出上限，建議縮小圖片！");
-      }
-
-      if (currentUser && db) {
-        db.collection('user_oshis').doc(currentUser.uid).set(store).catch(err => {
-          console.error("Firestore sync failed", err);
-        });
-      }
-
-      render();
-    }
-
-    function loadStore() {
-      const saved = localStorage.getItem('oshiverse_app_data');
-      if (saved) {
-        try { store = JSON.parse(saved); } catch (e) { console.error("Parse failed", e); }
-      }
-      render();
-    }
-
-    function saveApiKeys() {
-      if (!store.apiKeys) store.apiKeys = {};
-      store.apiKeys.ytApiKey = document.getElementById('cfgYtApiKey').value.trim();
-      store.apiKeys.twitchClientId = document.getElementById('cfgTwitchClientId').value.trim();
-      saveStore();
-    }
-
-    function readFileAsBase64(file) {
-      return new Promise((resolve, reject) => {
-        if (!file) resolve(null);
-        const reader = new FileReader();
-        reader.onload = (e) => resolve(e.target.result);
-        reader.onerror = (e) => reject(e);
-        reader.readAsDataURL(file);
-      });
-    }
-
-    function getCurrentOshi() {
-      if (!store.currentOshiId || store.oshis.length === 0) return null;
-      return store.oshis.find(o => o.id === store.currentOshiId) || null;
-    }
-
-    function applyAccentColor(color) {
-      document.documentElement.style.setProperty('--oshi-accent', color || '#dc2626');
-    }
-
-    function render() {
-      renderOshiSelector();
-      const oshi = getCurrentOshi();
-
-      // 填入 API 金鑰設定
-      if (store.apiKeys) {
-        document.getElementById('cfgYtApiKey').value = store.apiKeys.ytApiKey || '';
-        document.getElementById('cfgTwitchClientId').value = store.apiKeys.twitchClientId || '';
-      }
-
-      const emptyNotice = document.getElementById('emptyOshiNotice');
-      const profileCard = document.getElementById('oshiProfileCard');
-
-      if (!oshi) {
-        emptyNotice.classList.remove('hidden');
-        profileCard.classList.add('hidden');
-        document.getElementById('socialLinksContainer').innerHTML = '';
-        document.getElementById('anniversaryBox').innerHTML = '<span class="text-xs text-gray-500">尚無紀念日資料</span>';
-        document.getElementById('goodsListContainer').innerHTML = '<div class="p-8 text-center text-xs text-gray-500">尚無記帳紀錄</div>';
-        return;
-      }
-
-      applyAccentColor(oshi.color);
-
-      emptyNotice.classList.add('hidden');
-      profileCard.classList.remove('hidden');
-
-      document.getElementById('oshiName').innerText = oshi.name || '未命名';
-      document.getElementById('oshiBirthday').innerText = oshi.birthday || '--/--';
-      document.getElementById('oshiDebut').innerText = oshi.debutDate || '----/--/--';
-      document.getElementById('oshiAvatar').src = oshi.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=300';
-      document.getElementById('oshiBanner').style.backgroundImage = `url('${oshi.banner || 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?q=80&w=1000'}')`;
-
-      if (oshi.debutDate) {
-        const start = new Date(oshi.debutDate);
-        const today = new Date();
-        const diffDays = Math.max(0, Math.floor((today - start) / (1000 * 60 * 60 * 24)));
-        const diffMonths = Math.max(0, Math.floor(diffDays / 30.4));
-        document.getElementById('oshiDays').innerHTML = `<i class="fa-solid fa-heart mr-1.5 text-accent"></i>追推 ${diffDays} 天`;
-        document.getElementById('oshiDebutMonths').innerText = `${diffMonths} 個月`;
-      }
-
-      renderSocialLinks(oshi.socials || {});
-      renderAnniversaries(oshi);
-
-      const weeklyBox = document.getElementById('weeklyScheduleBox');
-      if (oshi.weeklyImg) {
-        weeklyBox.innerHTML = `<img src="${oshi.weeklyImg}" alt="Weekly Schedule" class="w-full h-auto object-cover rounded-xl cursor-pointer" onclick="window.open('${oshi.weeklyImg}')">`;
-      } else {
-        weeklyBox.innerHTML = `尚無周表圖片，點擊右上方更新`;
-      }
-
-      renderCalendar();
-      renderGoods();
-      renderGallery();
-    }
-
-    function renderSocialLinks(socials) {
-      const container = document.getElementById('socialLinksContainer');
-      container.innerHTML = '';
-
-      const list = [
-        { key: 'yt', name: 'YouTube', icon: 'fa-brands fa-youtube', color: 'hover:bg-red-600' },
-        { key: 'twitch', name: 'Twitch', icon: 'fa-brands fa-twitch', color: 'hover:bg-purple-600' },
-        { key: 'x', name: 'X (Twitter)', icon: 'fa-brands fa-x-twitter', color: 'hover:bg-zinc-700' },
-      ];
-
-      list.forEach(s => {
-        if (socials[s.key]) {
-          container.innerHTML += `
-            <a href="${socials[s.key]}" target="_blank" class="px-3 py-1.5 rounded-xl bg-zinc-800 text-xs text-gray-200 border border-themeBorder transition ${s.color} flex items-center gap-1.5">
-              <i class="${s.icon}"></i>${s.name}
-            </a>
-          `;
-        }
-      });
-
-      if (socials.ig) {
-        const url = socials.ig;
-        const isLitLink = url.includes('lit.link');
-        const label = isLitLink ? 'Lit.link' : 'Instagram';
-        const icon = isLitLink ? 'fa-solid fa-link' : 'fa-brands fa-instagram';
-        const hoverBg = isLitLink ? 'hover:bg-emerald-600' : 'hover:bg-pink-600';
-
-        container.innerHTML += `
-          <a href="${url}" target="_blank" class="px-3 py-1.5 rounded-xl bg-zinc-800 text-xs text-gray-200 border border-themeBorder transition ${hoverBg} flex items-center gap-1.5">
-            <i class="${icon}"></i>${label}
-          </a>
-        `;
-      }
-
-      if (container.innerHTML === '') {
-        container.innerHTML = `<span class="text-xs text-gray-500">尚未填寫社群連結</span>`;
-      }
-    }
-
-    function renderAnniversaries(oshi) {
-      const box = document.getElementById('anniversaryBox');
-      box.innerHTML = '';
-      const today = new Date();
-      const items = [];
-
-      if (oshi.birthday && oshi.birthday.includes('/')) {
-        const [m, d] = oshi.birthday.split('/').map(Number);
-        let nextBday = new Date(today.getFullYear(), m - 1, d);
-        if (nextBday < today) nextBday.setFullYear(today.getFullYear() + 1);
-        const days = Math.ceil((nextBday - today) / (1000 * 60 * 60 * 24));
-        items.push({ name: '下一次生日', days });
-      }
-
-      if (oshi.debutDate) {
-        const debut = new Date(oshi.debutDate);
-        const daysPassed = Math.floor((today - debut) / (1000 * 60 * 60 * 24));
-        const nextMilestoneDays = (Math.floor(daysPassed / 100) + 1) * 100;
-        const targetDate = new Date(debut.getTime() + nextMilestoneDays * 24 * 60 * 60 * 1000);
-        const daysLeft = Math.ceil((targetDate - today) / (1000 * 60 * 60 * 24));
-        items.push({ name: `出道 ${nextMilestoneDays} 天紀念`, days: daysLeft });
-      }
-
-      if (items.length === 0) {
-        box.innerHTML = '<span class="text-gray-500">尚未設定生日或出道日</span>';
-        return;
-      }
-
-      items.forEach(item => {
-        box.innerHTML += `
-          <div class="flex items-center justify-between bg-zinc-900/80 p-2.5 rounded-xl border border-themeBorder">
-            <span class="text-gray-300">${item.name}</span>
-            <span class="font-bold text-accent">${item.days} 天後</span>
-          </div>
-        `;
-      });
-    }
-
-    // 自動抓取 YouTube 頻道資訊
-    async function autoFetchYtChannel() {
-      let input = document.getElementById('inYtChannelUrl').value.trim();
-      if (!input) return alert('請輸入 YouTube 頻道網址或 @Handle');
-
-      const spinner = document.getElementById('fetchSpinner');
-      const fetchBtn = document.getElementById('fetchYtBtn');
-      spinner.classList.remove('hidden');
-      fetchBtn.disabled = true;
-
-      let targetUrl = input;
-      if (input.startsWith('@')) {
-        targetUrl = `https://www.youtube.com/${input}`;
-      } else if (!input.startsWith('http://') && !input.startsWith('https://')) {
-        targetUrl = `https://www.youtube.com/@${input}`;
-      }
-
-      let fetchedName = '';
-      let fetchedAvatar = '';
-      let success = false;
-
-      try {
-        const res = await fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent(targetUrl)}&format=json`);
-        if (res.ok) {
-          const data = await res.json();
-          if (data.author_name) fetchedName = data.author_name;
-          if (data.thumbnail_url) fetchedAvatar = data.thumbnail_url;
-          if (fetchedName) success = true;
-        }
-      } catch (e) {
-        console.warn("oEmbed fetch failed", e);
-      }
-
-      if (!success) {
-        try {
-          const res = await fetch(`https://noembed.com/embed?url=${encodeURIComponent(targetUrl)}`);
-          if (res.ok) {
-            const data = await res.json();
-            if (data.author_name) fetchedName = data.author_name;
-            if (data.thumbnail_url) fetchedAvatar = data.thumbnail_url;
-            if (fetchedName) success = true;
-          }
-        } catch (e) {
-          console.warn("Noembed fallback failed", e);
-        }
-      }
-
-      spinner.classList.add('hidden');
-      fetchBtn.disabled = false;
-
-      if (success || fetchedName || fetchedAvatar) {
-        if (fetchedName) document.getElementById('inOshiName').value = fetchedName;
-        if (fetchedAvatar) document.getElementById('inOshiAvatar').value = fetchedAvatar;
-        document.getElementById('inSocialYT').value = targetUrl;
-        alert('頻道資訊抓取成功！');
-      } else {
-        document.getElementById('inSocialYT').value = targetUrl;
-        alert('已幫您帶入 YouTube 連結，請手動填寫頻道名稱。');
-      }
-    }
-
-    // 整合 YouTube Data API 與 Twitch API 檢測直播狀態
-    async function fetchLiveStatus() {
-      const oshi = getCurrentOshi();
-      if (!oshi) return alert('請先建立主推資料');
-
-      const badge = document.getElementById('liveBadge');
-      const title = document.getElementById('liveTitle');
-      const link = document.getElementById('liveLink');
-      const thumb = document.getElementById('liveThumbnail');
-      const placeholder = document.getElementById('liveThumbPlaceholder');
-
-      badge.innerText = '查詢中...';
-      const ytApiKey = store.apiKeys?.ytApiKey;
-      const twitchClientId = store.apiKeys?.twitchClientId;
-
-      // 優先檢測 Twitch API
-      if (oshi.socials?.twitch && twitchClientId) {
-        const channelName = oshi.socials.twitch.split('/').pop();
-        try {
-          const res = await fetch(`https://api.twitch.tv/helix/streams?user_login=${channelName}`, {
-            headers: { 'Client-ID': twitchClientId }
-          });
-          if (res.ok) {
-            const data = await res.json();
-            if (data.data && data.data.length > 0) {
-              const stream = data.data[0];
-              badge.innerText = '🔴 Twitch 直播中';
-              badge.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-red-600 text-white animate-pulse";
-              title.innerText = stream.title;
-              document.getElementById('liveTime').innerText = `觀看人數: ${stream.viewer_count} 人`;
-              link.href = `https://www.twitch.tv/${channelName}`;
-              link.classList.remove('opacity-50', 'pointer-events-none');
-              
-              const imgUrl = stream.thumbnail_url.replace('{width}', '400').replace('{height}', '225');
-              thumb.src = imgUrl;
-              thumb.classList.remove('hidden');
-              placeholder.classList.add('hidden');
-              return;
-            }
-          }
-        } catch(e) {
-          console.warn("Twitch API error", e);
-        }
-      }
-
-      // 次之檢測 YouTube Data API v3
-      if (oshi.socials?.yt && ytApiKey) {
-        try {
-          const channelHandle = oshi.socials.yt.split('/').pop().replace('@', '');
-          const searchRes = await fetch(`https://www.googleapis.com/youtube/v3/search?part=snippet&eventType=live&type=video&q=${channelHandle}&key=${ytApiKey}`);
-          if (searchRes.ok) {
-            const searchData = await searchRes.json();
-            if (searchData.items && searchData.items.length > 0) {
-              const liveItem = searchData.items[0];
-              badge.innerText = '🔴 YouTube 直播中';
-              badge.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-red-600 text-white animate-pulse";
-              title.innerText = liveItem.snippet.title;
-              document.getElementById('liveTime').innerText = `開播時間: ${new Date(liveItem.snippet.publishedAt).toLocaleString()}`;
-              link.href = `https://www.youtube.com/watch?v=${liveItem.id.videoId}`;
-              link.classList.remove('opacity-50', 'pointer-events-none');
-
-              thumb.src = liveItem.snippet.thumbnails.high.url;
-              thumb.classList.remove('hidden');
-              placeholder.classList.add('hidden');
-              return;
-            }
-          }
-        } catch(e) {
-          console.warn("YouTube API error", e);
-        }
-      }
-
-      // 無 API Key 或是未開播之備援展示
-      if (oshi.socials?.yt) {
-        try {
-          const res = await fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent(oshi.socials.yt)}&format=json`);
-          const data = await res.json();
-
-          badge.innerText = '頻道連線正常';
-          badge.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-zinc-800 text-gray-400";
-          title.innerText = `${data.author_name} 的 YouTube 頻道`;
-          document.getElementById('liveTime').innerText = `點擊下方按鈕前往觀看最新影片與動態`;
-          link.href = oshi.socials.yt;
-          link.classList.remove('opacity-50', 'pointer-events-none');
-
-          if (data.thumbnail_url) {
-            thumb.src = data.thumbnail_url;
-            thumb.classList.remove('hidden');
-            placeholder.classList.add('hidden');
-          }
-          return;
-        } catch (e) {}
-      }
-
-      badge.innerText = '目前未開播';
-      badge.className = "px-2 py-0.5 rounded text-[10px] font-bold bg-zinc-800 text-gray-400";
-      title.innerText = '暫無正在進行的直播';
-      document.getElementById('liveTime').innerText = '可在上方設定 API 憑證以進行精確偵測';
-    }
-
-    function renderOshiSelector() {
-      const select = document.getElementById('oshiSelector');
-      if (store.oshis.length === 0) {
-        select.innerHTML = `<option value="">尚未建立主推</option>`;
-        return;
-      }
-      select.innerHTML = store.oshis.map(o => 
-        `<option value="${o.id}" ${o.id === store.currentOshiId ? 'selected' : ''}>${o.name}</option>`
-      ).join('');
-    }
-
-    function switchOshi(id) {
-      store.currentOshiId = id;
-      saveStore();
-    }
-
-    function switchTab(tabIndex) {
-      for (let i = 1; i <= 4; i++) {
-        document.getElementById(`tab-${i}`).classList.toggle('hidden', i !== tabIndex);
-        const btn = document.getElementById(`tabBtn-${i}`);
-        btn.className = i === tabIndex 
-          ? "flex-1 py-3 min-w-[50px] text-center border-b-2 border-accent text-accent font-bold"
-          : "flex-1 py-3 min-w-[50px] text-center border-b-2 border-transparent text-gray-400 hover:text-gray-200";
-      }
-    }
-
-    function openModal(id) { document.getElementById(id).classList.remove('hidden'); }
-    function closeModal(id) { document.getElementById(id).classList.add('hidden'); }
-
-    function resetOshiModalForm() {
-      document.getElementById('inYtChannelUrl').value = '';
-      document.getElementById('inOshiName').value = '';
-      document.getElementById('inOshiColor').value = '#dc2626';
-      document.getElementById('inOshiBirthday').value = '';
-      document.getElementById('inOshiDebut').value = '';
-      document.getElementById('inOshiAvatar').value = '';
-      document.getElementById('fileOshiAvatar').value = '';
-      document.getElementById('inOshiBanner').value = '';
-      document.getElementById('fileOshiBanner').value = '';
-      document.getElementById('inSocialYT').value = '';
-      document.getElementById('inSocialTwitch').value = '';
-      document.getElementById('inSocialX').value = '';
-      document.getElementById('inSocialIG').value = '';
-    }
-
-    function openOshiModal(mode = 'add') {
-      currentModalMode = mode;
-      const deleteBtn = document.getElementById('deleteOshiBtn');
-      const title = document.getElementById('oshiModalTitle');
-
-      resetOshiModalForm();
-
-      if (mode === 'edit') {
-        title.innerText = '編輯主推 VTuber 個人檔案';
-        deleteBtn.classList.remove('hidden');
-        const oshi = getCurrentOshi() || {};
-        document.getElementById('inOshiName').value = oshi.name || '';
-        document.getElementById('inOshiColor').value = oshi.color || '#dc2626';
-        document.getElementById('inOshiBirthday').value = oshi.birthday || '';
-        document.getElementById('inOshiDebut').value = oshi.debutDate || '';
-        document.getElementById('inOshiAvatar').value = oshi.avatar || '';
-        document.getElementById('inOshiBanner').value = oshi.banner || '';
-        document.getElementById('inSocialYT').value = oshi.socials?.yt || '';
-        document.getElementById('inSocialTwitch').value = oshi.socials?.twitch || '';
-        document.getElementById('inSocialX').value = oshi.socials?.x || '';
-        document.getElementById('inSocialIG').value = oshi.socials?.ig || '';
-      } else {
-        title.innerText = '新增主推 VTuber';
-        deleteBtn.classList.add('hidden');
-      }
-      openModal('oshiModal');
-    }
-
-    async function saveOshiData() {
-      const name = document.getElementById('inOshiName').value.trim();
-      if (!name) return alert('請輸入主推名稱');
-
-      let oshi;
-      if (currentModalMode === 'add') {
-        oshi = { id: 'oshi_' + Date.now(), goods: [], events: [] };
-        store.oshis.push(oshi);
-        store.currentOshiId = oshi.id;
-      } else {
-        oshi = getCurrentOshi() || { id: 'oshi_' + Date.now(), goods: [], events: [] };
-      }
-
-      const fileAvatar = document.getElementById('fileOshiAvatar').files[0];
-      if (fileAvatar) oshi.avatar = await readFileAsBase64(fileAvatar);
-      else oshi.avatar = document.getElementById('inOshiAvatar').value || oshi.avatar || '';
-
-      const fileBanner = document.getElementById('fileOshiBanner').files[0];
-      if (fileBanner) oshi.banner = await readFileAsBase64(fileBanner);
-      else oshi.banner = document.getElementById('inOshiBanner').value || oshi.banner || '';
-
-      oshi.name = name;
-      oshi.color = document.getElementById('inOshiColor').value;
-      oshi.birthday = document.getElementById('inOshiBirthday').value;
-      oshi.debutDate = document.getElementById('inOshiDebut').value;
-      oshi.socials = {
-        yt: document.getElementById('inSocialYT').value,
-        twitch: document.getElementById('inSocialTwitch').value,
-        x: document.getElementById('inSocialX').value,
-        ig: document.getElementById('inSocialIG').value
-      };
-
-      closeModal('oshiModal');
-      saveStore();
-    }
-
-    function deleteCurrentOshi() {
-      const oshi = getCurrentOshi();
-      if (!oshi) return;
-      if (confirm(`確定要刪除「${oshi.name}」的所有資料與記錄嗎？`)) {
-        store.oshis = store.oshis.filter(o => o.id !== oshi.id);
-        store.currentOshiId = store.oshis.length > 0 ? store.oshis[0].id : null;
-        closeModal('oshiModal');
-        saveStore();
-      }
-    }
-
-    function openWeeklyModal() { 
-      document.getElementById('inWeeklyImg').value = '';
-      document.getElementById('fileWeeklyImg').value = '';
-      openModal('weeklyModal'); 
-    }
+    // 設定開始追星的日期（可自訂修正：YYYY-MM-DD）
+    const startDate = new Date('2025-10-03');
+    const today = new Date();
     
-    async function saveWeeklyImg() {
-      const oshi = getCurrentOshi();
-      if (!oshi) return;
-      const file = document.getElementById('fileWeeklyImg').files[0];
-      if (file) oshi.weeklyImg = await readFileAsBase64(file);
-      else oshi.weeklyImg = document.getElementById('inWeeklyImg').value;
-      closeModal('weeklyModal');
-      saveStore();
-    }
-
-    function openGoodsModal() { 
-      document.getElementById('fileGoodsImg').value = '';
-      document.getElementById('inGoodsImg').value = '';
-      openModal('goodsModal'); 
-    }
-
-    async function saveGoodsItem() {
-      const oshi = getCurrentOshi();
-      if (!oshi) return alert('請先建立主推資料');
-
-      const event = document.getElementById('inGoodsEvent').value.trim() || '日常周邊';
-      const name = document.getElementById('inGoodsName').value.trim();
-      const category = document.getElementById('inGoodsCategory').value;
-      const price = parseFloat(document.getElementById('inGoodsPrice').value) || 0;
-      const qty = parseInt(document.getElementById('inGoodsQty').value) || 1;
-      const status = document.getElementById('inGoodsStatus').value;
-      const estDate = document.getElementById('inGoodsEstDate').value;
-      
-      let img = document.getElementById('inGoodsImg').value;
-      const file = document.getElementById('fileGoodsImg').files[0];
-      if (file) img = await readFileAsBase64(file);
-
-      if (!name) return alert('請輸入商品名稱');
-
-      if (!oshi.goods) oshi.goods = [];
-      oshi.goods.push({ id: 'g_' + Date.now(), event, name, category, price, qty, status, estDate, img });
-
-      closeModal('goodsModal');
-      saveStore();
-    }
-
-    function filterGoods(status) {
-      currentFilterStatus = status;
-      renderGoods();
-    }
-
-    function renderGoods() {
-      const oshi = getCurrentOshi();
-      const container = document.getElementById('goodsListContainer');
-      if (!oshi || !oshi.goods || oshi.goods.length === 0) {
-        container.innerHTML = `<div class="p-8 text-center text-xs text-gray-500">尚無周邊消費紀錄</div>`;
-        document.getElementById('statTotalSpend').innerText = 'NT$ 0';
-        document.getElementById('statPendingSpend').innerText = 'NT$ 0';
-        document.getElementById('statTotalItems').innerText = '0 筆';
-        renderExpenseChart({});
-        return;
-      }
-
-      const totalSpend = oshi.goods.reduce((s, g) => s + (g.price * g.qty), 0);
-      const pendingSpend = oshi.goods.filter(g => g.status === '預購中').reduce((s, g) => s + (g.price * g.qty), 0);
-      document.getElementById('statTotalSpend').innerText = `NT$ ${totalSpend.toLocaleString()}`;
-      document.getElementById('statPendingSpend').innerText = `NT$ ${pendingSpend.toLocaleString()}`;
-      document.getElementById('statTotalItems').innerText = `${oshi.goods.length} 筆`;
-
-      const catStats = {};
-      oshi.goods.forEach(g => {
-        const cat = g.category || '實體周邊';
-        catStats[cat] = (catStats[cat] || 0) + (g.price * g.qty);
-      });
-      renderExpenseChart(catStats);
-
-      const filtered = currentFilterStatus === '全部' ? oshi.goods : oshi.goods.filter(g => g.status === currentFilterStatus);
-      const grouped = {};
-      filtered.forEach(g => {
-        if (!grouped[g.event]) grouped[g.event] = [];
-        grouped[g.event].push(g);
-      });
-
-      if (Object.keys(grouped).length === 0) {
-        container.innerHTML = `<div class="p-8 text-center text-xs text-gray-500">此分類無符合紀錄</div>`;
-        return;
-      }
-
-      container.innerHTML = Object.keys(grouped).map(eventGroup => {
-        const items = grouped[eventGroup];
-        const groupTotal = items.reduce((s, i) => s + (i.price * i.qty), 0);
-        return `
-          <div class="p-4 space-y-3">
-            <div class="flex items-center justify-between border-b border-themeBorder/60 pb-2">
-              <span class="font-bold text-xs text-gray-300 flex items-center gap-1.5"><i class="fa-solid fa-tag text-accent"></i>${eventGroup}</span>
-              <span class="text-xs font-bold text-accent">小計: NT$ ${groupTotal.toLocaleString()}</span>
-            </div>
-            <div class="space-y-2">
-              ${items.map(item => `
-                <div class="flex items-center justify-between bg-zinc-900/60 p-2.5 rounded-xl text-xs border border-themeBorder/40">
-                  <div class="flex items-center gap-3">
-                    ${item.img ? `<img src="${item.img}" alt="Goods Image" class="w-10 h-10 object-cover rounded-lg border border-themeBorder">` : `<div class="w-10 h-10 bg-zinc-800 rounded-lg flex items-center justify-center text-gray-600"><i class="fa-solid fa-box"></i></div>`}
-                    <div>
-                      <div class="font-semibold text-gray-200">${item.name} <span class="text-[10px] text-gray-500">(${item.category || '實體周邊'})</span></div>
-                      <div class="text-gray-500 text-[10px]">NT$ ${item.price} ×${item.qty}${item.estDate ? `| 預計: ${item.estDate}` : ''}</div>
-                    </div>
-                  </div>
-                  <div class="flex items-center gap-3">
-                    <span class="px-2 py-0.5 rounded text-[10px] font-bold ${item.status === '預購中' ? 'bg-amber-950 text-amber-400 border border-amber-800' : 'bg-zinc-800 text-gray-300'}">${item.status}</span>
-                    <span class="font-bold text-gray-200">NT$ ${item.price * item.qty}</span>
-                  </div>
-                </div>
-              `).join('')}
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
-
-    function renderExpenseChart(data) {
-      const ctx = document.getElementById('expenseChart');
-      if (!ctx) return;
-      if (chartInstance) chartInstance.destroy();
-
-      const labels = Object.keys(data);
-      const values = Object.values(data);
-
-      if (labels.length === 0) return;
-
-      chartInstance = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels,
-          datasets: [{
-            data: values,
-            backgroundColor: ['#dc2626', '#3b82f6', '#10b981', '#f59e0b', '#8b5cf6']
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          plugins: {
-            legend: { labels: { color: '#d1d5db', font: { size: 10 } } }
-          }
-        }
-      });
-    }
-
-    function renderGallery() {
-      const oshi = getCurrentOshi();
-      const container = document.getElementById('galleryContainer');
-      if (!oshi || !oshi.goods) {
-        container.innerHTML = '<div class="col-span-full text-center text-xs text-gray-500 py-8">尚無已入手商品照片</div>';
-        return;
-      }
-
-      const itemsWithImg = oshi.goods.filter(g => g.status === '已入手' && g.img);
-      if (itemsWithImg.length === 0) {
-        container.innerHTML = '<div class="col-span-full text-center text-xs text-gray-500 py-8">尚未上傳已入手商品的開箱照</div>';
-        return;
-      }
-
-      container.innerHTML = itemsWithImg.map(item => `
-        <div class="bg-themeCard border border-themeBorder rounded-2xl overflow-hidden group">
-          <div class="h-36 bg-zinc-800 overflow-hidden">
-            <img src="${item.img}" alt="Gallery Item" class="w-full h-full object-cover group-hover:scale-105 transition">
-          </div>
-          <div class="p-3 text-xs space-y-1">
-            <div class="font-bold text-gray-200 truncate">${item.name}</div>
-            <div class="text-[10px] text-gray-500">${item.event}</div>
-          </div>
-        </div>
-      `).join('');
-    }
-
-    function openCalendarEventModal() { 
-      document.getElementById('fileEventImg').value = '';
-      document.getElementById('inEventImg').value = '';
-      openModal('calendarEventModal'); 
-    }
-
-    async function saveCalendarEvent() {
-      const oshi = getCurrentOshi();
-      if (!oshi) return;
-      const title = document.getElementById('inEventTitle').value.trim();
-      const date = document.getElementById('inEventDate').value;
-      const tag = document.getElementById('inEventTag').value;
-      
-      let img = document.getElementById('inEventImg').value;
-      const file = document.getElementById('fileEventImg').files[0];
-      if (file) img = await readFileAsBase64(file);
-
-      if (!title || !date) return alert('請填寫事件名稱與日期');
-
-      if (!oshi.events) oshi.events = [];
-      oshi.events.push({ id: 'e_' + Date.now(), title, date, tag, img });
-
-      closeModal('calendarEventModal');
-      saveStore();
-    }
-
-    function changeMonth(delta) {
-      currentCalendarDate.setMonth(currentCalendarDate.getMonth() + delta);
-      renderCalendar();
-    }
-
-    function renderCalendar() {
-      const oshi = getCurrentOshi();
-      const grid = document.getElementById('calendarGrid');
-      const title = document.getElementById('calendarMonthTitle');
-      const eventsList = document.getElementById('calendarEventsList');
-      if (!grid) return;
-
-      const year = currentCalendarDate.getFullYear();
-      const month = currentCalendarDate.getMonth();
-      const currentYearMonth = `${year}-${(month + 1).toString().padStart(2, '0')}`;
-      title.innerText = `${year} 年 ${month + 1} 月`;
-
-      grid.innerHTML = '';
-      eventsList.innerHTML = '';
-      const daysInMonth = new Date(year, month + 1, 0).getDate();
-
-      const monthlyEvents = [];
-
-      if (oshi && oshi.events) {
-        oshi.events.forEach(e => {
-          if (e.date.startsWith(currentYearMonth)) monthlyEvents.push({ ...e, type: 'event' });
-        });
-      }
-
-      if (oshi && oshi.goods) {
-        oshi.goods.forEach(g => {
-          if (g.estDate === currentYearMonth) {
-            monthlyEvents.push({
-              id: g.id,
-              title: `[周邊到貨] ${g.name}`,
-              date: `${currentYearMonth}-15`,
-              type: 'goods',
-              img: g.img
-            });
-          }
-        });
-      }
-
-      for (let i = 1; i <= daysInMonth; i++) {
-        const dateStr = `${currentYearMonth}-${i.toString().padStart(2, '0')}`;
-        const dayEvents = monthlyEvents.filter(e => e.date === dateStr);
-
-        grid.innerHTML += `
-          <div class="h-12 md:h-16 bg-zinc-900/60 border border-themeBorder/40 rounded-xl p-1 flex flex-col justify-between items-center relative overflow-hidden">
-            <span class="text-[10px] font-bold text-gray-400">${i}</span>
-            ${dayEvents.length > 0 ? `
-              <div class="w-full flex-1 mt-0.5 rounded bg-red-950/80 border border-red-800/60 flex items-center justify-center overflow-hidden">
-                ${dayEvents[0].img ? `<img src="${dayEvents[0].img}" alt="Event Thumb" class="w-full h-full object-cover">` : `<span class="text-[9px] text-accent font-bold truncate px-0.5">${dayEvents[0].title}</span>`}
-              </div>
-            ` : ''}
-          </div>
-        `;
-      }
-
-      if (monthlyEvents.length === 0) {
-        eventsList.innerHTML = '<div class="text-xs text-gray-500">本月無事件或預計到貨周邊</div>';
-      } else {
-        monthlyEvents.forEach(e => {
-          eventsList.innerHTML += `
-            <div class="flex items-center justify-between p-2.5 bg-zinc-900/60 rounded-xl border border-themeBorder/40 text-xs">
-              <div class="flex items-center gap-2">
-                <span class="px-2 py-0.5 rounded text-[10px] font-bold ${e.type === 'goods' ? 'bg-amber-950 text-amber-400' : 'bg-zinc-800 text-gray-300'}">${e.type === 'goods' ? '到貨預定' : (e.tag || '大事記')}</span>
-                <span class="font-bold text-gray-200">${e.title}</span>
-              </div>
-              <span class="text-gray-500">${e.date}</span>
-            </div>
-          `;
-        });
-      }
-    }
-
-    // 匯出 CSV 記帳表
-    function exportCSV() {
-      const oshi = getCurrentOshi();
-      if (!oshi || !oshi.goods || oshi.goods.length === 0) {
-        return alert('目前沒有周邊消費紀錄可匯出');
-      }
-
-      let csvContent = "\uFEFF"; // UTF-8 BOM，防止 Excel 開啟亂碼
-      csvContent += "主推名稱,活動/管道,商品名稱,消費類別,單價,數量,小計,進度狀態,預計到貨年月\n";
-
-      oshi.goods.forEach(g => {
-        const subtotal = g.price * g.qty;
-        const row = [
-          `"${oshi.name}"`,
-          `"${g.event || ''}"`,
-          `"${g.name || ''}"`,
-          `"${g.category || ''}"`,
-          g.price,
-          g.qty,
-          subtotal,
-          `"${g.status || ''}"`,
-          `"${g.estDate || ''}"`
-        ].join(",");
-        csvContent += row + "\n";
-      });
-
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${oshi.name}_周邊消費紀錄_${new Date().toISOString().slice(0,10)}.csv`;
-      a.click();
-    }
-
-    function exportData() {
-      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(store, null, 2));
-      const a = document.createElement('a');
-      a.href = dataStr;
-      a.download = `oshiverse_backup_${new Date().toISOString().slice(0,10)}.json`;
-      a.click();
-    }
-
-    function importData(event) {
-      const file = event.target.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        try {
-          const importedStore = JSON.parse(e.target.result);
-          if (importedStore.oshis) {
-            store = importedStore;
-            saveStore();
-            alert('成功匯入備份資料！');
-          } else {
-            alert('無效的備份檔案格式');
-          }
-        } catch (err) {
-          alert('解析 JSON 檔案失敗');
-        }
-      };
-      reader.readAsText(file);
-    }
-
-    async function generateOshiCard() {
-      const oshi = getCurrentOshi();
-      if (!oshi) return alert('請先新增主推資料');
-
-      document.getElementById('cardName').innerText = oshi.name;
-      document.getElementById('cardAvatar').src = oshi.avatar || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=300';
-      document.getElementById('cardBirthday').innerText = oshi.birthday || '--/--';
-      document.getElementById('cardDebut').innerText = oshi.debutDate || '----/--/--';
-
-      const totalSpend = oshi.goods ? oshi.goods.reduce((s, g) => s + (g.price * g.qty), 0) : 0;
-      const totalItems = oshi.goods ? oshi.goods.length : 0;
-      document.getElementById('cardGoodsCount').innerText = `${totalItems} 筆`;
-      document.getElementById('cardTotalSpend').innerText = `NT$ ${totalSpend.toLocaleString()}`;
-
-      if (oshi.debutDate) {
-        const diff = Math.max(0, Math.floor((new Date() - new Date(oshi.debutDate)) / (1000 * 60 * 60 * 24)));
-        document.getElementById('cardDays').innerText = `追推 ${diff} 天`;
-      }
-
-      const element = document.getElementById('oshiCardRenderArea');
-      const canvas = await html2canvas(element);
-      const link = document.createElement('a');
-      link.download = `${oshi.name}_oshi_card.png`;
-      link.href = canvas.toDataURL();
-      link.click();
-    }
-
-    window.onload = () => {
-      loadStore();
-      initAuthListener();
-    };
+    // 計算毫秒差並轉為天數
+    const diffTime = Math.abs(today - startDate);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    // 渲染天數與計算年份
+    document.getElementById('daysCounter').innerText = `${diffDays} 天`;
   </script>
 </body>
 </html>
